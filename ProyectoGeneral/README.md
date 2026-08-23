@@ -19,10 +19,10 @@ Para mantener el código ordenado y escalable, se recomienda seguir una estructu
 ```text
 ProyectoGeneral/
 ├── README.md               # Este archivo informativo
-├── client/                 # Código fuente del Frontend (React, Vue, HTML/CSS/JS, etc.)
+├── client-front/                 # Código fuente del Frontend (Angular, HTML/CSS/JS, etc.)
 │   ├── public/
 │   └── src/
-├── server/                 # Código fuente del Backend / API (Node.js, Python, PHP, etc.)
+├── api/                 # Código fuente del Backend / API (Java)
 │   ├── config/
 │   ├── controllers/
 │   └── models/
