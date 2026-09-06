@@ -39,14 +39,21 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- 4. Driver de PostgreSQL -->
+        <!-- 4. Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- 5. Driver de PostgreSQL -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- 5. Flyway para Migraciones de BD -->
+        <!-- 6. Flyway para Migraciones de BD -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
@@ -56,7 +63,7 @@
             <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
 
-        <!-- 6. DevTools -->
+        <!-- 7. DevTools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -64,14 +71,14 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- 7. Starter de Pruebas Unitarias e Integración  -->
+        <!-- 8. Starter de Pruebas Unitarias e Integración  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 		
-		<!-- 8. Documentacion y Pruebas manuales -->
+		<!-- 9. Documentacion y Pruebas manuales -->
 		<dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
