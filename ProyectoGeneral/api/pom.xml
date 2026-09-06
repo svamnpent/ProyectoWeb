@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version> <!-- Versión estable de Spring Boot con soporte total para Java 21 -->
+        <version>3.3.4</version>
         <relativePath/>
     </parent>
 
