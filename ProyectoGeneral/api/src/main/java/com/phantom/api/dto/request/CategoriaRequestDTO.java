@@ -1,4 +1,4 @@
-package com.phantom.api.dto;
+package com.phantom.api.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class CategoriaRequestDTO {
 
     @NotBlank(message = "El nombre de la categoría es obligatorio")
-    @Size(max = 100, message = "El nombre no puede superar los 100 caracteres")
+    @Size(max = 100, message = "El nombre no puede exceder los 100 caracteres")
     private String nombre;
 
-    @Size(max = 255, message = "La descripción no puede superar los 255 caracteres")
+    @Size(max = 255, message = "La descripción no puede exceder los 255 caracteres")
     private String descripcion;
 }

@@ -1,7 +1,7 @@
 package com.phantom.api.service.impl;
 
 import com.phantom.api.dto.CategoriaDTO;
-import com.phantom.api.dto.CategoriaRequestDTO;
+import com.phantom.api.dto.request.CategoriaRequestDTO;
 import com.phantom.api.entity.Categoria;
 import com.phantom.api.exception.ResourceNotFoundException;
 import com.phantom.api.repository.CategoriaRepository;

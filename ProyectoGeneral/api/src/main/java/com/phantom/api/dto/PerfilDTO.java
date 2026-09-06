@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoriaDTO {
+public class PerfilDTO {
     private Long id;
-    private String nombre;
-    private String descripcion;
+    private String avatarUrl;
+    private String biografia;
+    private Long usuarioId;
 }

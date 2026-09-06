@@ -1,7 +1,7 @@
 package com.phantom.api.service;
 
 import com.phantom.api.dto.CategoriaDTO;
-import com.phantom.api.dto.CategoriaRequestDTO;
+import com.phantom.api.dto.request.CategoriaRequestDTO;
 
 import java.util.List;
 

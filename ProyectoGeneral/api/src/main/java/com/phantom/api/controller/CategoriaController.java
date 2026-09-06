@@ -1,7 +1,7 @@
 package com.phantom.api.controller;
 
 import com.phantom.api.dto.CategoriaDTO;
-import com.phantom.api.dto.CategoriaRequestDTO;
+import com.phantom.api.dto.request.CategoriaRequestDTO;
 import com.phantom.api.service.CategoriaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
