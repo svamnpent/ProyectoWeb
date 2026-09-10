@@ -11,6 +11,8 @@ import java.util.Optional;
 @Repository
 public interface EtiquetaRepository extends JpaRepository<Etiqueta, Long> {
 
+    List<Etiqueta> findByIdIn(List<Long> ids);
+
     Optional<Etiqueta> findByNombreIgnoreCase(String nombre);
 
     List<Etiqueta> findByNombreIn(List<String> nombres);
