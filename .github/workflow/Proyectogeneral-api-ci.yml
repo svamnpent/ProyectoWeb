@@ -4,11 +4,11 @@ on:
   push:
     branches: [ "main", "develop" ]
     paths:
-      - 'ProyectoGeneral/api/**'
+      - 'ProyectoWeb/ProyectoGeneral/api/**'
   pull_request:
     branches: [ "main", "develop" ]
     paths:
-      - 'ProyectoGeneral/api/**'
+      - 'ProyectoWeb/ProyectoGeneral/api/**'
 
 jobs:
   build:
