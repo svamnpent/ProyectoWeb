@@ -64,7 +64,7 @@ public class ProductoServiceImpl implements ProductoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con el ID: " + request.getCategoriaId()));
 
         Set<Etiqueta> etiquetas = request.getEtiquetaIds() == null ? Set.of() :
-                etiquetaRepository.findByIdIn(request.getEtiquetaIds()).stream().collect(Collectors.toSet());
+                etiquetaRepository.findByIdIn(new java.util.ArrayList<>(request.getEtiquetaIds())).stream().collect(Collectors.toSet());
 
         Producto producto = Producto.builder()
                 .nombre(request.getNombre().trim())
@@ -93,8 +93,9 @@ public class ProductoServiceImpl implements ProductoService {
         }
 
         if (request.getEtiquetaIds() != null) {
-            Set<Etiqueta> nuevasEtiquetas = etiquetaRepository.findByIdIn(request.getEtiquetaIds()).stream()
-                    .collect(Collectors.toSet());
+Set<Etiqueta> nuevasEtiquetas = request.getEtiquetaIds() == null ? Set.of() :
+                etiquetaRepository.findByIdIn(new java.util.ArrayList<>(request.getEtiquetaIds())).stream()
+                        .collect(Collectors.toSet());
             producto.setEtiquetas(nuevasEtiquetas);
         }
 

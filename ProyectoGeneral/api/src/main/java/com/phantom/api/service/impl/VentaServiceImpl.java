@@ -61,6 +61,7 @@ public class VentaServiceImpl implements VentaService {
                 .build();
         // Save provisional venta to get generated ID
         venta = ventaRepository.save(venta);
+        final Venta ventaFinal = venta;
         // Process each detalle
         List<DetalleVenta> detalles = request.getDetalles().stream()
                 .map(detReq -> {
@@ -69,7 +70,7 @@ public class VentaServiceImpl implements VentaService {
                     BigDecimal precioUnitario = producto.getPrecio();
                     BigDecimal subtotal = precioUnitario.multiply(BigDecimal.valueOf(detReq.getCantidad()));
                     return DetalleVenta.builder()
-                            .venta(venta)
+                            .venta(ventaFinal)
                             .producto(producto)
                             .cantidad(detReq.getCantidad())
                             .precioUnitario(precioUnitario)
