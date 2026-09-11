@@ -1,0 +1,2 @@
+com.utp:semana4-api-rest:jar:0.0.1-SNAPSHOT
+\- org.springframework.boot:spring-boot-starter-test:jar:4.1.1:test
