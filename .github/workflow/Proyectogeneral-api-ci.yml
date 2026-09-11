@@ -2,7 +2,7 @@ name: API CI - Spring Boot
 
 on:
   push:
-    branches: ["main", "develop"]
+    branches: ["main", "develop", "Presntacion1"]
     paths:
       - "ProyectoWeb/ProyectoGeneral/api/**"
   pull_request:
