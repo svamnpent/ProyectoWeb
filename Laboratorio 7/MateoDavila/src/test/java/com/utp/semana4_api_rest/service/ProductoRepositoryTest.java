@@ -13,4 +13,11 @@ class ProductoRepositoryTest {
     @Autowired
     private ProductoRepository repository;
 
+    @Test
+    void debeGuardarYRecuperarProducto() {
+        Producto producto = new Producto(null, "Monitor", 900.0, 5);
+        Producto guardado = repository.save(producto);
+        assertThat(guardado.getId()).isNotNull();
+        assertThat(repository.findById(guardado.getId())).isPresent();
+    }
 }

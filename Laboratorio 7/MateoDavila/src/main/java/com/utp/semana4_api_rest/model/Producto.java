@@ -1,7 +1,11 @@
 package com.utp.semana4_api_rest.model;
 
-import java.math.BigDecimal;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "productos")
@@ -11,25 +15,27 @@ public class Producto {
     private Long id;
     @Column(nullable = false, length = 120)
     private String nombre;
-    @Column(nullable = false, length = 80)
-    private String categoria;
-    @Column(nullable = false, precision = 12, scale = 2)
-    private BigDecimal precio;
     @Column(nullable = false)
-    private Integer stock;
+    private double precio;
+    @Column(nullable = false)
+    private int stock;
 
     public Producto() {
     }
 
-    public Producto(String nombre, String categoria, BigDecimal precio, Integer stock) {
+    public Producto(Long id, String nombre, double precio, int stock) {
+        this.id = id;
         this.nombre = nombre;
-        this.categoria = categoria;
         this.precio = precio;
         this.stock = stock;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -40,27 +46,19 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-    public BigDecimal getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(BigDecimal precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 
-    public Integer getStock() {
+    public int getStock() {
         return stock;
     }
 
-    public void setStock(Integer stock) {
+    public void setStock(int stock) {
         this.stock = stock;
     }
 }

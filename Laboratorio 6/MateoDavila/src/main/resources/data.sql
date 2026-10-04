@@ -1,0 +1,26 @@
+insert into productos (
+   nombre,
+   categoria,
+   precio,
+   stock
+) values
+   ( 'Laptop Lenovo ThinkPad',
+     'Tecnologia',
+     4200.00,
+     8 ),
+   ( 'Mouse Logitech MX',
+     'Tecnologia',
+     320.00,
+     20 ),
+   ( 'Silla ergonómica',
+     'Muebles',
+     850.00,
+     6 ),
+   ( 'Escritorio ejecutivo',
+     'Muebles',
+     1200.00,
+     4 ),
+   ( 'Monitor 27 pulgadas',
+     'Tecnologia',
+     1450.00,
+     10 );

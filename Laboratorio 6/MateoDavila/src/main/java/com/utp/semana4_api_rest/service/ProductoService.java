@@ -1,79 +1,83 @@
 package com.utp.semana4_api_rest.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.utp.semana4_api_rest.exception.RecursoNoEncontradoException;
+import com.utp.semana4_api_rest.exception.ReglaNegocioException;
+import com.utp.semana4_api_rest.model.MovimientoStock;
 import com.utp.semana4_api_rest.model.Producto;
+import com.utp.semana4_api_rest.repository.MovimientoStockRepository;
 import com.utp.semana4_api_rest.repository.ProductoRepository;
 
 @Service
 public class ProductoService {
-    private final ProductoRepository repository;
+    private final ProductoRepository productoRepository;
+    private final MovimientoStockRepository movimientoRepository;
 
-    public ProductoService(ProductoRepository repository) {
-        this.repository = repository;
+    public ProductoService(ProductoRepository productoRepository,
+            MovimientoStockRepository movimientoRepository) {
+        this.productoRepository = productoRepository;
+        this.movimientoRepository = movimientoRepository;
     }
 
     @Transactional(readOnly = true)
-    public List<Producto> listar() {
-        return repository.findAll();
+    public List<Producto> buscarPorNombre(String texto) {
+        return productoRepository.buscarPorNombre(texto);
     }
 
     @Transactional(readOnly = true)
-    public Optional<Producto> buscarPorId(Long id) {
-        return repository.findById(id);
+    public List<Producto> buscarPorCategoria(String categoria) {
+        return productoRepository.findByCategoriaIgnoreCase(categoria);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Producto> buscarPorRango(BigDecimal min, BigDecimal max) {
+        if (min.compareTo(max) > 0) {
+            throw new ReglaNegocioException("El precio mínimo no puede superar al máximo");
+        }
+        return productoRepository.buscarPorRangoPrecio(min, max);
     }
 
     @Transactional
-    public Producto crear(Producto producto) {
-        validar(producto);
-        producto.setId(null);
-        return repository.save(producto);
+    public Producto registrarSalida(Long productoId, int cantidad) {
+        Producto producto = obtenerProducto(productoId);
+        validarSalida(producto, cantidad);
+        producto.setStock(producto.getStock() - cantidad);
+        MovimientoStock movimiento = new MovimientoStock(
+                producto, "SALIDA", cantidad, LocalDateTime.now());
+        movimientoRepository.save(movimiento);
+        // El producto se actualiza mediante dirty checking al hacer commit.
+        return producto;
     }
 
     @Transactional
-    public Optional<Producto> actualizar(Long id, Producto datos) {
-        validar(datos);
-        return repository.findById(id).map(existente -> {
-            existente.setNombre(datos.getNombre());
-            existente.setPrecio(datos.getPrecio());
-            existente.setStock(datos.getStock());
-            return repository.save(existente);
-        });
+    public void simularSalidaConError(Long productoId, int cantidad) {
+        Producto producto = obtenerProducto(productoId);
+        validarSalida(producto, cantidad);
+        producto.setStock(producto.getStock() - cantidad);
+        movimientoRepository.save(new MovimientoStock(
+                producto, "SALIDA", cantidad, LocalDateTime.now()));
+        throw new IllegalStateException(
+                "Error simulado: la transacción debe hacer rollback");
     }
 
-    @Transactional
-    public Optional<Producto> actualizarPrecio(Long id, double precio) {
-        if (precio <= 0) {
-            throw new IllegalArgumentException("El precio debe ser mayor que cero");
-        }
-        return repository.findById(id).map(existente -> {
-            existente.setPrecio(precio);
-            return repository.save(existente);
-        });
+    private Producto obtenerProducto(Long id) {
+        return productoRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException(
+                        "Producto no encontrado: " + id));
     }
 
-    @Transactional
-    public boolean eliminar(Long id) {
-        if (!repository.existsById(id)) {
-            return false;
+    private void validarSalida(Producto producto, int cantidad) {
+        if (cantidad <= 0) {
+            throw new ReglaNegocioException("La cantidad debe ser mayor que cero");
         }
-        repository.deleteById(id);
-        return true;
-    }
-
-    private void validar(Producto producto) {
-        if (producto.getNombre() == null || producto.getNombre().isBlank()) {
-            throw new IllegalArgumentException("El nombre es obligatorio");
-        }
-        if (producto.getPrecio() <= 0) {
-            throw new IllegalArgumentException("El precio debe ser mayor que cero");
-        }
-        if (producto.getStock() < 0) {
-            throw new IllegalArgumentException("El stock no puede ser negativo");
+        if (producto.getStock() < cantidad) {
+            throw new ReglaNegocioException(
+                    "Stock insuficiente. Disponible: " + producto.getStock());
         }
     }
 }
