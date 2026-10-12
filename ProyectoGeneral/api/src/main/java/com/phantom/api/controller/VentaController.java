@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +19,19 @@ public class VentaController {
 
     private final VentaService ventaService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<VentaDTO>> obtenerTodas() {
         return ResponseEntity.ok(ventaService.obtenerTodas());
     }
 
+    // Historial de compras del usuario autenticado
+    @GetMapping("/mias")
+    public ResponseEntity<List<VentaDTO>> obtenerMisVentas() {
+        return ResponseEntity.ok(ventaService.obtenerMisVentas());
+    }
+
+    // Dueño de la venta o ADMIN (se valida en el servicio)
     @GetMapping("/{id}")
     public ResponseEntity<VentaDTO> obtenerPorId(@PathVariable Long id) {
         return ResponseEntity.ok(ventaService.obtenerPorId(id));
@@ -33,6 +42,7 @@ public class VentaController {
         return new ResponseEntity<>(ventaService.crear(request), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         ventaService.eliminar(id);
