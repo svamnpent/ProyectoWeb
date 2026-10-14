@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class VentaDTO {
     private Long id;
-    private LocalDateTime fecha;
+    private OffsetDateTime fecha;
     private BigDecimal total;
     private Integer cantidadItems;
     private String numeroOrden;

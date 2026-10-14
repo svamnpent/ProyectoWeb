@@ -88,7 +88,6 @@ class AuthServiceImplTest {
         assertEquals("TOKEN", respuesta.getAccessToken());
         assertEquals("Bearer", respuesta.getTokenType());
         assertEquals(3600L, respuesta.getExpiresIn());
-        assertEquals("USER", respuesta.getUsuario().getRol());
     }
 
     @Test
@@ -122,7 +121,7 @@ class AuthServiceImplTest {
         AuthResponseDTO respuesta = service.login(login(" ANA@x.com ", "Secreta123"));
 
         assertEquals("TOKEN", respuesta.getAccessToken());
-        assertEquals(1L, respuesta.getUsuario().getId());
+        assertEquals(3600L, respuesta.getExpiresIn());
         verify(loginAttemptService).registrarExito("ana@x.com");
         verify(loginAttemptService, never()).registrarFallo(any());
     }

@@ -19,4 +19,5 @@ USER app
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-jar", "app.jar"]
+# Zona horaria de Perú para la JVM (logs y fechas)
+ENTRYPOINT ["java", "-Duser.timezone=America/Lima", "-XX:MaxRAMPercentage=75", "-jar", "app.jar"]

@@ -16,9 +16,21 @@ Solo la BD (API desde el IDE): `docker compose up -d db` y exporta `DB_URL`, `DB
 Si ya tienes tu propio contenedor de Postgres, no necesitas el servicio `db` del compose:
 las variables `DB_URL`, `DB_USERNAME` y `DB_PASSWORD` siguen siendo las mismas de siempre.
 
+## Datos de prueba, caché precargada y zona horaria
+
+* **Datos demo** (perfil `demo`, activo por defecto en `.env.example`): 5 categorías, 6 etiquetas, 16 productos
+  (uno agotado), 3 usuarios, 2 perfiles y 5 ventas. Solo se cargan si la BD no tiene categorías.
+  Usuarios: `maria.quispe@demo.local`, `carlos.huaman@demo.local`, `lucia.torres@demo.local`; clave `Demo12345`.
+  **Quita `SPRING_PROFILES_ACTIVE=demo` en producción.** Para recargarlos desde cero: `docker compose down -v`.
+* **Caché precargada** al arrancar (categorías, etiquetas, productos). Desactivar: `APP_CACHE_WARMUP_ENABLED=false`.
+* **Zona horaria: America/Lima (UTC-5).** JVM, Postgres y Hibernate la usan; en BD las fechas son `timestamptz`
+  (instantes absolutos) y la API las devuelve con desfase, p. ej. `2026-10-13T20:47:56-05:00`.
+
 ## Seguridad
 
-Login en `POST /api/v1/auth/login` → `accessToken` → cabecera `Authorization: Bearer <token>`.
+Login en `POST /api/v1/auth/login` → `{accessToken, tokenType, expiresIn}` → cabecera `Authorization: Bearer <token>`.
+La respuesta de login/registro **no** incluye datos del usuario; para eso está `GET /api/v1/auth/me`
+(el rol también viaja dentro del JWT, claim `roles`).
 
 | Recurso | Anónimo | USER | ADMIN |
 |---|---|---|---|

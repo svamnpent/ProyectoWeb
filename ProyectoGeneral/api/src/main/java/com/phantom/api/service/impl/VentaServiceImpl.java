@@ -1,5 +1,6 @@
 package com.phantom.api.service.impl;
 
+import com.phantom.api.config.AppTime;
 import com.phantom.api.config.CacheNames;
 import com.phantom.api.dto.DetalleVentaDTO;
 import com.phantom.api.dto.VentaDTO;
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +97,7 @@ public class VentaServiceImpl implements VentaService {
                 Venta venta = Venta.builder()
                                 .usuario(comprador)
                                 .numeroOrden(generarNumeroOrden())
-                                .fecha(LocalDateTime.now())
+                                .fecha(Instant.now())
                                 .build();
 
                 BigDecimal total = BigDecimal.ZERO;
@@ -206,7 +207,7 @@ public class VentaServiceImpl implements VentaService {
                                 .collect(Collectors.toList());
                 return VentaDTO.builder()
                                 .id(venta.getId())
-                                .fecha(venta.getFecha())
+                                .fecha(AppTime.aLima(venta.getFecha()))
                                 .total(venta.getTotal())
                                 .cantidadItems(venta.getCantidadItems())
                                 .numeroOrden(venta.getNumeroOrden())

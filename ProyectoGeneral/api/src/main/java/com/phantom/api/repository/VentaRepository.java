@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.phantom.api.entity.Usuario;
 import com.phantom.api.entity.Venta;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Optional;
 
 @Repository
@@ -42,6 +42,6 @@ public interface VentaRepository extends JpaRepository<Venta, Long> {
     Page<Venta> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     // Reportes de ventas entre un rango de fechas
-    Page<Venta> findByFechaBetween(LocalDateTime inicio, LocalDateTime fin,
+    Page<Venta> findByFechaBetween(Instant inicio, Instant fin,
             Pageable pageable);
 }
