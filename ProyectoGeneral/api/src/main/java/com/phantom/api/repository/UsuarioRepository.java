@@ -17,6 +17,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     // Crucial para la autenticación / Login
     Optional<Usuario> findByEmail(String email);
 
+    // Login y registro: el email se compara sin distinguir mayúsculas/minúsculas
+    Optional<Usuario> findByEmailIgnoreCase(String email);
+
+    boolean existsByEmailIgnoreCase(String email);
+
     // Validaciones rápidas de registro
     boolean existsByEmail(String email);
 

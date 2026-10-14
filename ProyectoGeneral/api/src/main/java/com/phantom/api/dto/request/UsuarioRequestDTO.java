@@ -25,11 +25,12 @@ public class UsuarioRequestDTO {
     private String email;
 
     @NotBlank(message = "La contraseña es obligatoria")
-    @Size(min = 6, max = 255, message = "La contraseña debe tener entre 6 y 255 caracteres")
+    @Size(min = 8, max = 72, message = "La contraseña debe tener entre 8 y 72 caracteres")
     private String password;
 
-    @Size(max = 50, message = "El rol no puede exceder los 50 caracteres")
-    private String rol; // Opcional, por defecto 'USER' en BD
+    // Opcional (por defecto USER). Solo un ADMIN puede asignar/cambiar roles.
+    @Pattern(regexp = "^(?i)(USER|ADMIN)$", message = "El rol debe ser USER o ADMIN")
+    private String rol;
 
     @Pattern(regexp = "^[0-9]{8,20}$", message = "El DNI debe contener entre 8 y 20 dígitos numéricos")
     private String dni;

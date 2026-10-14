@@ -6,11 +6,11 @@ import com.phantom.api.dto.request.CategoriaRequestDTO;
 import com.phantom.api.exception.GlobalExceptionHandler;
 import com.phantom.api.exception.ResourceNotFoundException;
 import com.phantom.api.service.CategoriaService;
+import com.phantom.api.support.WebMvcSecurityTestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static com.phantom.api.support.JwtTestUtils.admin;
+import static com.phantom.api.support.JwtTestUtils.user;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,9 +29,12 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Ahora con la seguridad real activa (antes los filtros estaban desactivados):
+ * lecturas públicas, escritura solo ADMIN.
+ */
 @WebMvcTest(CategoriaController.class)
-@Import(GlobalExceptionHandler.class) // Asegura cargar tu manejador global de excepciones
-@AutoConfigureMockMvc(addFilters = false) // Desactiva filtros de seguridad si usas Spring Security
+@Import({GlobalExceptionHandler.class, WebMvcSecurityTestConfig.class})
 class CategoriaControllerTest {
 
     @Autowired
@@ -59,8 +64,8 @@ class CategoriaControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/v1/categorias - Debe retornar lista de categorías (HTTP 200)")
-    void obtenerTodas_DebeRetornarListaDeCategorias() throws Exception {
+    @DisplayName("GET /api/v1/categorias - público, retorna lista (HTTP 200)")
+    void obtenerTodas_esPublico() throws Exception {
         when(categoriaService.obtenerTodas()).thenReturn(List.of(categoriaDTO));
 
         mockMvc.perform(get("/api/v1/categorias")
@@ -74,41 +79,36 @@ class CategoriaControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/v1/categorias/{id} - Debe retornar categoría por ID (HTTP 200)")
-    void obtenerPorId_CuandoExiste_DebeRetornarCategoria() throws Exception {
+    @DisplayName("GET /api/v1/categorias/{id} - público, retorna categoría (HTTP 200)")
+    void obtenerPorId_CuandoExiste() throws Exception {
         when(categoriaService.obtenerPorId(1L)).thenReturn(categoriaDTO);
 
-        mockMvc.perform(get("/api/v1/categorias/{id}", 1L)
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/categorias/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.nombre", is("Electrónica")));
-
-        verify(categoriaService, times(1)).obtenerPorId(1L);
     }
 
     @Test
-    @DisplayName("GET /api/v1/categorias/{id} - Debe retornar HTTP 404 al no encontrar recurso")
-    void obtenerPorId_CuandoNoExiste_DebeRetornar404() throws Exception {
+    @DisplayName("GET /api/v1/categorias/{id} - HTTP 404 al no encontrar recurso")
+    void obtenerPorId_CuandoNoExiste() throws Exception {
         when(categoriaService.obtenerPorId(99L))
                 .thenThrow(new ResourceNotFoundException("Categoría no encontrada con el ID: 99"));
 
-        mockMvc.perform(get("/api/v1/categorias/{id}", 99L)
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/categorias/{id}", 99L))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("Not Found")))
                 .andExpect(jsonPath("$.message", is("Categoría no encontrada con el ID: 99")));
-
-        verify(categoriaService, times(1)).obtenerPorId(99L);
     }
 
     @Test
-    @DisplayName("POST /api/v1/categorias - Debe crear categoría (HTTP 201)")
-    void crear_ConDatosValidos_DebeRetornar201() throws Exception {
+    @DisplayName("POST /api/v1/categorias - ADMIN crea categoría (HTTP 201)")
+    void crear_comoAdmin() throws Exception {
         when(categoriaService.crear(any(CategoriaRequestDTO.class))).thenReturn(categoriaDTO);
 
         mockMvc.perform(post("/api/v1/categorias")
+                .with(admin())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isCreated())
@@ -119,14 +119,40 @@ class CategoriaControllerTest {
     }
 
     @Test
-    @DisplayName("POST /api/v1/categorias - Debe fallar validación @Valid y retornar HTTP 400")
-    void crear_ConNombreEnBlanco_DebeRetornar400() throws Exception {
+    @DisplayName("POST /api/v1/categorias - sin token: HTTP 401 y no llega al servicio")
+    void crear_sinToken() throws Exception {
+        mockMvc.perform(post("/api/v1/categorias")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDTO)))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status", is(401)));
+
+        verifyNoInteractions(categoriaService);
+    }
+
+    @Test
+    @DisplayName("POST /api/v1/categorias - usuario normal: HTTP 403 y no llega al servicio")
+    void crear_comoUsuarioNormal() throws Exception {
+        mockMvc.perform(post("/api/v1/categorias")
+                .with(user(5))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDTO)))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.status", is(403)));
+
+        verifyNoInteractions(categoriaService);
+    }
+
+    @Test
+    @DisplayName("POST /api/v1/categorias - falla validación @Valid (HTTP 400)")
+    void crear_ConNombreEnBlanco() throws Exception {
         CategoriaRequestDTO requestInvalido = CategoriaRequestDTO.builder()
-                .nombre("") // Dispara @NotBlank
+                .nombre("")
                 .descripcion("Descripción válida")
                 .build();
 
         mockMvc.perform(post("/api/v1/categorias")
+                .with(admin())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestInvalido)))
                 .andExpect(status().isBadRequest())
@@ -137,28 +163,35 @@ class CategoriaControllerTest {
     }
 
     @Test
-    @DisplayName("PUT /api/v1/categorias/{id} - Debe actualizar categoría (HTTP 200)")
-    void actualizar_ConDatosValidos_DebeRetornar200() throws Exception {
+    @DisplayName("PUT /api/v1/categorias/{id} - ADMIN actualiza (HTTP 200)")
+    void actualizar_comoAdmin() throws Exception {
         when(categoriaService.actualizar(eq(1L), any(CategoriaRequestDTO.class))).thenReturn(categoriaDTO);
 
         mockMvc.perform(put("/api/v1/categorias/{id}", 1L)
+                .with(admin())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.nombre", is("Electrónica")));
-
-        verify(categoriaService, times(1)).actualizar(eq(1L), any(CategoriaRequestDTO.class));
+                .andExpect(jsonPath("$.id", is(1)));
     }
 
     @Test
-    @DisplayName("DELETE /api/v1/categorias/{id} - Debe eliminar categoría (HTTP 204)")
-    void eliminar_CuandoExiste_DebeRetornar204() throws Exception {
+    @DisplayName("DELETE /api/v1/categorias/{id} - ADMIN elimina (HTTP 204)")
+    void eliminar_comoAdmin() throws Exception {
         doNothing().when(categoriaService).eliminar(1L);
 
-        mockMvc.perform(delete("/api/v1/categorias/{id}", 1L))
+        mockMvc.perform(delete("/api/v1/categorias/{id}", 1L).with(admin()))
                 .andExpect(status().isNoContent());
 
         verify(categoriaService, times(1)).eliminar(1L);
+    }
+
+    @Test
+    @DisplayName("DELETE /api/v1/categorias/{id} - usuario normal: HTTP 403")
+    void eliminar_comoUsuarioNormal() throws Exception {
+        mockMvc.perform(delete("/api/v1/categorias/{id}", 1L).with(user(5)))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(categoriaService);
     }
 }

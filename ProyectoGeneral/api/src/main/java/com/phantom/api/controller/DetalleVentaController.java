@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class DetalleVentaController {
     }
 
     // POST /api/v1/ventas/{ventaId}/detalles
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/api/v1/ventas/{ventaId}/detalles")
     public ResponseEntity<DetalleVentaDTO> crear(
             @PathVariable Long ventaId,
@@ -32,6 +34,7 @@ public class DetalleVentaController {
     }
 
     // DELETE /api/v1/detalles/{id}
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/api/v1/detalles/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         detalleVentaService.eliminar(id);
