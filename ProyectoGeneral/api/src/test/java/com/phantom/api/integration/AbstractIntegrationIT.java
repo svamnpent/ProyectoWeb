@@ -92,8 +92,10 @@ abstract class AbstractIntegrationIT {
         ResultActions r = post("/api/v1/auth/register", null,
                 Map.of("nombre", "Usuario Test", "email", email, "password", PASSWORD))
                 .andExpect(status().isCreated());
-        JsonNode body = json(r);
-        return new Sesion(body.get("accessToken").asText(), body.get("usuario").get("id").asLong(), email);
+        String token = json(r).get("accessToken").asText();
+        // La respuesta de register/login solo trae el token; el ID se obtiene de /auth/me
+        long id = json(get("/api/v1/auth/me", token).andExpect(status().isOk())).get("id").asLong();
+        return new Sesion(token, id, email);
     }
 
     protected long crearCategoria(String tokenAdmin) throws Exception {

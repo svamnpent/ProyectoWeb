@@ -43,6 +43,7 @@ class DatabaseConnectionIT extends AbstractIntegrationIT {
 
         assertTrue(versiones.contains("1"), "falta V1: " + versiones);
         assertTrue(versiones.contains("2"), "falta V2: " + versiones);
+        assertTrue(versiones.contains("3"), "falta V3: " + versiones);
     }
 
     @Test
@@ -84,6 +85,73 @@ class DatabaseConnectionIT extends AbstractIntegrationIT {
 
         assertTrue(indices.containsAll(List.of("idx_productos_categoria", "idx_ventas_usuario_fecha",
                 "idx_detalle_venta", "idx_detalle_producto", "idx_pe_etiqueta")), indices.toString());
+    }
+
+    private String tipoColumna(String tabla, String columna) {
+        return jdbc.queryForObject("select data_type from information_schema.columns "
+                + "where table_schema = 'public' and table_name = ? and column_name = ?",
+                String.class, tabla, columna);
+    }
+
+    @Test
+    @DisplayName("V3: las fechas son timestamptz (instante absoluto) y NOT NULL")
+    void fechasConZonaHoraria() {
+        assertEquals("timestamp with time zone", tipoColumna("ventas", "fecha"));
+        assertEquals("timestamp with time zone", tipoColumna("usuarios", "fecha_registro"));
+        for (String[] c : new String[][]{{"ventas", "fecha"}, {"usuarios", "fecha_registro"}}) {
+            assertEquals("NO", jdbc.queryForObject("select is_nullable from information_schema.columns "
+                    + "where table_name = ? and column_name = ?", String.class, c[0], c[1]));
+        }
+    }
+
+    @Test
+    @DisplayName("V3: numero_orden es varchar(30) NOT NULL (antes text nullable)")
+    void numeroOrdenTipado() {
+        assertEquals("character varying", tipoColumna("ventas", "numero_orden"));
+        assertEquals(30, jdbc.queryForObject("select character_maximum_length from information_schema.columns "
+                + "where table_name = 'ventas' and column_name = 'numero_orden'", Integer.class));
+        assertEquals("NO", jdbc.queryForObject("select is_nullable from information_schema.columns "
+                + "where table_name = 'ventas' and column_name = 'numero_orden'", String.class));
+    }
+
+    @Test
+    @DisplayName("V3: avatar_url y biografia admiten 1000 caracteres")
+    void perfilesLongitudes() {
+        for (String col : List.of("avatar_url", "biografia")) {
+            assertEquals(1000, jdbc.queryForObject("select character_maximum_length from information_schema.columns "
+                    + "where table_name = 'perfiles' and column_name = ?", Integer.class, col));
+        }
+    }
+
+    @Test
+    @DisplayName("V3: la BD impide categorías y etiquetas duplicadas (sin distinguir mayúsculas)")
+    void nombresUnicos() {
+        String nombre = unico("Dup");
+        jdbc.update("insert into categorias (nombre) values (?)", nombre);
+        jdbc.update("insert into etiquetas (nombre) values (?)", nombre);
+
+        assertThrows(DataIntegrityViolationException.class,
+                () -> jdbc.update("insert into categorias (nombre) values (?)", nombre.toUpperCase()));
+        assertThrows(DataIntegrityViolationException.class,
+                () -> jdbc.update("insert into etiquetas (nombre) values (?)", nombre.toLowerCase()));
+    }
+
+    @Test
+    @DisplayName("V3: el subtotal de un detalle debe ser cantidad x precio unitario")
+    void subtotalCoherente() {
+        jdbc.update("insert into categorias (nombre) values (?)", unico("cat"));
+        Long cat = jdbc.queryForObject("select max(id) from categorias", Long.class);
+        jdbc.update("insert into productos (nombre, precio, stock, categoria_id) values (?, 10, 5, ?)", unico("p"), cat);
+        Long prod = jdbc.queryForObject("select max(id) from productos", Long.class);
+        jdbc.update("insert into ventas (total, cantidad_items, numero_orden) values (20, 2, ?)", unico("ORD"));
+        Long venta = jdbc.queryForObject("select max(id) from ventas", Long.class);
+
+        assertThrows(DataIntegrityViolationException.class, () -> jdbc.update(
+                "insert into detalle_ventas (venta_id, producto_id, cantidad, precio_unitario, subtotal) "
+                        + "values (?, ?, 2, 10, 999)", venta, prod));
+        assertEquals(1, jdbc.update(
+                "insert into detalle_ventas (venta_id, producto_id, cantidad, precio_unitario, subtotal) "
+                        + "values (?, ?, 2, 10, 20)", venta, prod));
     }
 
     @Test

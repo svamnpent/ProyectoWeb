@@ -15,5 +15,4 @@ public class AuthResponseDTO {
     private String tokenType = "Bearer";
     /** Segundos hasta que expira el token. */
     private long expiresIn;
-    private UsuarioDTO usuario;
 }

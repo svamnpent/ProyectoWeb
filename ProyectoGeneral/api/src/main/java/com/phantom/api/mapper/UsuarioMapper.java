@@ -1,5 +1,6 @@
 package com.phantom.api.mapper;
 
+import com.phantom.api.config.AppTime;
 import com.phantom.api.dto.PerfilDTO;
 import com.phantom.api.dto.UsuarioDTO;
 import com.phantom.api.entity.Usuario;
@@ -39,6 +40,6 @@ public final class UsuarioMapper {
                 .dni(usuario.getDni())
                 .direccion(usuario.getDireccion())
                 .numeroTelefono(usuario.getNumeroTelefono())
-                .fechaRegistro(usuario.getFechaRegistro());
+                .fechaRegistro(AppTime.aLima(usuario.getFechaRegistro()));
     }
 }

@@ -41,8 +41,7 @@ class AuthControllerTest {
     private AuthService authService;
 
     private AuthResponseDTO respuesta() {
-        return AuthResponseDTO.builder().accessToken("TOKEN").tokenType("Bearer").expiresIn(3600)
-                .usuario(UsuarioDTO.builder().id(1L).email("ana@x.com").rol("USER").build()).build();
+        return AuthResponseDTO.builder().accessToken("TOKEN").tokenType("Bearer").expiresIn(3600).build();
     }
 
     @Test
@@ -57,7 +56,10 @@ class AuthControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.accessToken", is("TOKEN")))
                 .andExpect(jsonPath("$.tokenType", is("Bearer")))
-                .andExpect(jsonPath("$.usuario.password").doesNotExist());
+                .andExpect(jsonPath("$.expiresIn", is(3600)))
+                // la respuesta de autenticación NO lleva datos personales: eso es de /auth/me
+                .andExpect(jsonPath("$.usuario").doesNotExist())
+                .andExpect(jsonPath("$.password").doesNotExist());
     }
 
     @Test

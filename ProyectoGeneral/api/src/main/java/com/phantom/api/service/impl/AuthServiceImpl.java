@@ -109,7 +109,6 @@ public class AuthServiceImpl implements AuthService {
                 .accessToken(jwtService.generarToken(usuario))
                 .tokenType("Bearer")
                 .expiresIn(jwtService.getExpiracionSegundos())
-                .usuario(UsuarioMapper.toDTOSinPerfil(usuario))
                 .build();
     }
 }

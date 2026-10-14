@@ -23,8 +23,8 @@ class AuthFlowIT extends AbstractIntegrationIT {
         post("/api/v1/auth/register", null, Map.of("nombre", "Ana", "email", email, "password", PASSWORD))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.tokenType", is("Bearer")))
-                .andExpect(jsonPath("$.usuario.rol", is("USER")))
-                .andExpect(jsonPath("$.usuario.password").doesNotExist());
+                .andExpect(jsonPath("$.accessToken").isNotEmpty())
+                .andExpect(jsonPath("$.usuario").doesNotExist());
 
         String token = json(post("/api/v1/auth/login", null, Map.of("email", email.toUpperCase(), "password", PASSWORD))
                 .andExpect(status().isOk())).get("accessToken").asText();
@@ -32,6 +32,8 @@ class AuthFlowIT extends AbstractIntegrationIT {
         get("/api/v1/auth/me", token)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email", is(email)))
+                .andExpect(jsonPath("$.rol", is("USER")))
+                .andExpect(jsonPath("$.fechaRegistro", org.hamcrest.Matchers.endsWith("-05:00"))) // hora de Perú
                 .andExpect(jsonPath("$.password").doesNotExist());
     }
 
@@ -51,10 +53,12 @@ class AuthFlowIT extends AbstractIntegrationIT {
     void registroNoPermiteElegirRol() throws Exception {
         String email = unico("hack") + "@test.local";
 
-        post("/api/v1/auth/register", null,
+        String token = json(post("/api/v1/auth/register", null,
                 Map.of("nombre", "Hacker", "email", email, "password", PASSWORD, "rol", "ADMIN"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.usuario.rol", is("USER")));
+                .andExpect(status().isCreated())).get("accessToken").asText();
+
+        get("/api/v1/auth/me", token).andExpect(jsonPath("$.rol", is("USER")));
+        get("/api/v1/usuarios", token).andExpect(status().isForbidden());
     }
 
     @Test

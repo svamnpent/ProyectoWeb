@@ -9,6 +9,8 @@ services:
     image: postgres:16-alpine
     container_name: phantom-db
     restart: unless-stopped
+    # Zona horaria de Perú (se aplica siempre, aunque el volumen ya exista)
+    command: ["postgres", "-c", "timezone=America/Lima", "-c", "log_timezone=America/Lima"]
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-phantom_db}
       POSTGRES_USER: ${DB_USERNAME:?Define DB_USERNAME en .env}

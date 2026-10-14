@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PerfilRequestDTO {
 
-    @Size(max = 255, message = "La URL del avatar no puede exceder los 255 caracteres")
+    @Size(max = 1000, message = "La URL del avatar no puede exceder los 1000 caracteres")
     private String avatarUrl;
 
-    @Size(max = 255, message = "La biografía no puede exceder los 255 caracteres")
+    @Size(max = 1000, message = "La biografía no puede exceder los 1000 caracteres")
     private String biografia;
 
     @NotNull(message = "El ID de usuario es obligatorio")
