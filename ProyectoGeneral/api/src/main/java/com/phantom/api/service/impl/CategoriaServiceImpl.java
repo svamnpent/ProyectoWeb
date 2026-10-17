@@ -1,5 +1,9 @@
 package com.phantom.api.service.impl;
 
+import com.phantom.api.config.CacheNames;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import com.phantom.api.dto.CategoriaDTO;
 import com.phantom.api.dto.request.CategoriaRequestDTO;
 import com.phantom.api.entity.Categoria;
@@ -20,6 +24,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = CacheNames.CATEGORIAS, key = "'todas'")
     public List<CategoriaDTO> obtenerTodas() {
         return categoriaRepository.findAll().stream()
                 .map(this::mapToDTO)
@@ -28,6 +33,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = CacheNames.CATEGORIAS, key = "'id:' + #id")
     public CategoriaDTO obtenerPorId(Long id) {
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con el ID: " + id));
@@ -36,6 +42,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = CacheNames.CATEGORIAS, key = "'kw:' + #keyword.toLowerCase()")
     public List<CategoriaDTO> buscarPorNombre(String keyword) {
         return categoriaRepository.findByNombreContainingIgnoreCase(keyword).stream()
                 .map(this::mapToDTO)
@@ -44,6 +51,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheNames.CATEGORIAS, allEntries = true)
     public CategoriaDTO crear(CategoriaRequestDTO request) {
         if (categoriaRepository.existsByNombreIgnoreCase(request.getNombre().trim())) {
             throw new IllegalArgumentException(
@@ -60,6 +68,10 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheNames.CATEGORIAS, allEntries = true),
+            @CacheEvict(cacheNames = CacheNames.PRODUCTOS, allEntries = true) // ProductoDTO embebe la categoría
+    })
     public CategoriaDTO actualizar(Long id, CategoriaRequestDTO request) {
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con el ID: " + id));
@@ -78,6 +90,10 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheNames.CATEGORIAS, allEntries = true),
+            @CacheEvict(cacheNames = CacheNames.PRODUCTOS, allEntries = true) // ProductoDTO embebe la categoría
+    })
     public void eliminar(Long id) {
         if (!categoriaRepository.existsById(id)) {
             throw new ResourceNotFoundException("No se puede eliminar. Categoría no encontrada con el ID: " + id);
