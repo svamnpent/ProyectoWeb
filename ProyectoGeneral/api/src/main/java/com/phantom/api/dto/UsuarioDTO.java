@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 @Builder
@@ -19,6 +19,6 @@ public class UsuarioDTO {
     private String dni;
     private String direccion;
     private String numeroTelefono;
-    private LocalDateTime fechaRegistro;
+    private OffsetDateTime fechaRegistro;
     private PerfilDTO perfil;
 }

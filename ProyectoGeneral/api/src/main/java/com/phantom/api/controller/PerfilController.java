@@ -9,19 +9,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
+/**
+ * TIENDA - el comprador gestiona SU perfil (el servicio valida que sea el dueño).
+ * El listado de todos los perfiles está en BackOfficeController.
+ */
 @RestController
 @RequestMapping("/api/v1/perfiles")
 @RequiredArgsConstructor
 public class PerfilController {
 
     private final PerfilService perfilService;
-
-    @GetMapping
-    public ResponseEntity<List<PerfilDTO>> obtenerTodos() {
-        return ResponseEntity.ok(perfilService.obtenerTodos());
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<PerfilDTO> obtenerPorId(@PathVariable Long id) {

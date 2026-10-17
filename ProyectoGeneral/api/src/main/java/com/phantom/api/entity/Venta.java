@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +21,10 @@ public class Venta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    // timestamptz en BD: un instante absoluto, sin depender de la zona horaria del servidor
+    @Column(nullable = false, updatable = false)
     @Builder.Default
-    private LocalDateTime fecha = LocalDateTime.now();
+    private Instant fecha = Instant.now();
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal total;
@@ -31,7 +32,7 @@ public class Venta {
     @Column(name = "cantidad_items", nullable = false)
     private Integer cantidadItems;
 
-    @Column(name = "numero_orden", unique = true, length = 20)
+    @Column(name = "numero_orden", nullable = false, unique = true, length = 30)
     private String numeroOrden;
 
     // Relación Many-to-One con Usuario (opcional: compra anónima)
