@@ -27,8 +27,7 @@ jobs:
 
       - name: Compilar y Probar con Maven
         working-directory: ./ProyectoGeneral/api
-        # MAVEN_OPTS fuerza a la JVM de los tests a usar la zona horaria de Perú
+        run: mvn -B clean test -DargLine="-Duser.timezone=America/Lima"
         env:
-          MAVEN_OPTS: "-Duser.timezone=America/Lima"
           JWT_SECRET: un_secreto_super_largo_y_seguro_para_los_tests_de_github_actions
-        run: mvn -B clean test
+
