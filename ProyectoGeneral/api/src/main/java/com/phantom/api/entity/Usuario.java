@@ -1,5 +1,6 @@
 package com.phantom.api.entity;
 
+import com.phantom.api.security.Roles;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import lombok.*;
@@ -29,7 +30,7 @@ public class Usuario {
 
     @Column(nullable = false, length = 50)
     @Builder.Default
-    private String rol = "USER";
+    private String rol = Roles.USER;
 
     @Column(unique = true, length = 20)
     private String dni;

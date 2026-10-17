@@ -89,6 +89,29 @@ class UsuarioServiceImplTest {
     }
 
     @Test
+    @DisplayName("crear - se puede dar de alta personal con rol TRABAJADOR")
+    void crear_trabajador() {
+        when(usuarioRepository.existsByEmailIgnoreCase("ana@x.com")).thenReturn(false);
+        when(usuarioRepository.existsByDni("12345678")).thenReturn(false);
+        when(usuarioRepository.save(any(Usuario.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        UsuarioDTO dto = service.crear(request().rol("trabajador").build());
+
+        assertEquals("TRABAJADOR", dto.getRol());
+    }
+
+    @Test
+    @DisplayName("actualizar - un TRABAJADOR no puede ascenderse a ADMIN")
+    void actualizar_trabajadorNoSeAscienda() {
+        usuario.setRol("TRABAJADOR");
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuario));
+        when(currentUser.isAdmin()).thenReturn(false);
+
+        assertThrows(AccessDeniedException.class, () -> service.actualizar(1L, request().rol("ADMIN").build()));
+        assertEquals("TRABAJADOR", usuario.getRol());
+    }
+
+    @Test
     @DisplayName("crear - rol inválido lanza IllegalArgumentException")
     void crear_rolInvalido() {
         when(usuarioRepository.existsByEmailIgnoreCase("ana@x.com")).thenReturn(false);

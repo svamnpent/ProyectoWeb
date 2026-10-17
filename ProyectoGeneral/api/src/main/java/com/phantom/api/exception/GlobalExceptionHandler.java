@@ -1,5 +1,6 @@
 package com.phantom.api.exception;
 
+import com.phantom.api.config.AppTime;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -153,7 +154,7 @@ public class GlobalExceptionHandler {
                         String message,
                         HttpServletRequest request) {
                 ErrorResponse error = ErrorResponse.builder()
-                                .timestamp(LocalDateTime.now())
+                                .timestamp(OffsetDateTime.now(AppTime.ZONA))
                                 .status(status.value())
                                 .error(errorTitle)
                                 .message(message)

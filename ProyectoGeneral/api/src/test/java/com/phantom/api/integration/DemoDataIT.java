@@ -31,8 +31,10 @@ class DemoDataIT extends AbstractIntegrationIT {
         assertEquals(5, jdbc.queryForObject("select count(*) from categorias", Integer.class));
         assertEquals(6, jdbc.queryForObject("select count(*) from etiquetas", Integer.class));
         assertTrue(jdbc.queryForObject("select count(*) from productos", Integer.class) >= 15);
-        assertEquals(3, jdbc.queryForObject(
+        assertEquals(4, jdbc.queryForObject(
                 "select count(*) from usuarios where email like '%@demo.local'", Integer.class));
+        assertEquals(1, jdbc.queryForObject(
+                "select count(*) from usuarios where rol = 'TRABAJADOR'", Integer.class));
         assertEquals(2, jdbc.queryForObject("select count(*) from perfiles", Integer.class));
         assertEquals(5, jdbc.queryForObject("select count(*) from ventas", Integer.class));
     }
@@ -67,6 +69,17 @@ class DemoDataIT extends AbstractIntegrationIT {
         get("/api/v1/categorias", null)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(5))));
+    }
+
+    @Test
+    @DisplayName("el trabajador demo entra al back-office pero no a la gestión de usuarios")
+    void trabajadorDemo() throws Exception {
+        String token = json(post("/api/v1/auth/login", null,
+                Map.of("email", "trabajador@demo.local", "password", "Demo12345"))
+                .andExpect(status().isOk())).get("accessToken").asText();
+
+        get("/api/v1/backoffice/ventas", token).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(5)));
+        get("/api/v1/backoffice/usuarios", token).andExpect(status().isForbidden());
     }
 
     @Test

@@ -98,14 +98,26 @@ abstract class AbstractIntegrationIT {
         return new Sesion(token, id, email);
     }
 
+    /** El ADMIN da de alta a un trabajador (POST /backoffice/usuarios con rol TRABAJADOR) y este inicia sesión. */
+    protected Sesion crearTrabajador() throws Exception {
+        String email = unico("trabajador") + "@test.local";
+        String admin = tokenAdmin();
+        long id = json(post("/api/v1/backoffice/usuarios", admin, Map.of(
+                "nombre", "Trabajador Test", "email", email, "password", PASSWORD, "rol", "TRABAJADOR"))
+                .andExpect(status().isCreated())).get("id").asLong();
+        String token = json(post("/api/v1/auth/login", null, Map.of("email", email, "password", PASSWORD))
+                .andExpect(status().isOk())).get("accessToken").asText();
+        return new Sesion(token, id, email);
+    }
+
     protected long crearCategoria(String tokenAdmin) throws Exception {
-        ResultActions r = post("/api/v1/categorias", tokenAdmin, Map.of("nombre", unico("cat")))
+        ResultActions r = post("/api/v1/backoffice/categorias", tokenAdmin, Map.of("nombre", unico("cat")))
                 .andExpect(status().isCreated());
         return json(r).get("id").asLong();
     }
 
     protected long crearProducto(String tokenAdmin, long categoriaId, int stock, String precio) throws Exception {
-        ResultActions r = post("/api/v1/productos", tokenAdmin, Map.of(
+        ResultActions r = post("/api/v1/backoffice/productos", tokenAdmin, Map.of(
                 "nombre", unico("prod"), "precio", new java.math.BigDecimal(precio),
                 "stock", stock, "categoriaId", categoriaId)).andExpect(status().isCreated());
         return json(r).get("id").asLong();

@@ -87,7 +87,7 @@ class VentaServiceImplTest {
     @Test
     @DisplayName("crear - usuario normal: compra a su nombre (ignora usuarioId), calcula totales y descuenta stock")
     void crear_usuarioNormal() {
-        when(currentUser.isAdmin()).thenReturn(false);
+        when(currentUser.isStaff()).thenReturn(false);
         when(currentUser.getId()).thenReturn(7L);
         when(usuarioRepository.findById(7L)).thenReturn(Optional.of(comprador));
         when(productoRepository.findAllById(any())).thenReturn(List.of(productoA, productoB));
@@ -115,7 +115,7 @@ class VentaServiceImplTest {
     @Test
     @DisplayName("crear - el total y los items quedan seteados ANTES del save (la BD los exige NOT NULL)")
     void crear_totalesSeteadosAntesDelSave() {
-        when(currentUser.isAdmin()).thenReturn(false);
+        when(currentUser.isStaff()).thenReturn(false);
         when(currentUser.getId()).thenReturn(7L);
         when(usuarioRepository.findById(7L)).thenReturn(Optional.of(comprador));
         when(productoRepository.findAllById(any())).thenReturn(List.of(productoA));
@@ -136,7 +136,7 @@ class VentaServiceImplTest {
     @Test
     @DisplayName("crear - une líneas repetidas del mismo producto en una sola")
     void crear_unificaLineasRepetidas() {
-        when(currentUser.isAdmin()).thenReturn(false);
+        when(currentUser.isStaff()).thenReturn(false);
         when(currentUser.getId()).thenReturn(7L);
         when(usuarioRepository.findById(7L)).thenReturn(Optional.of(comprador));
         when(productoRepository.findAllById(any())).thenReturn(List.of(productoA));
@@ -155,7 +155,7 @@ class VentaServiceImplTest {
     @Test
     @DisplayName("crear - ADMIN puede registrar una venta sin usuario")
     void crear_adminSinUsuario() {
-        when(currentUser.isAdmin()).thenReturn(true);
+        when(currentUser.isStaff()).thenReturn(true);
         when(productoRepository.findAllById(any())).thenReturn(List.of(productoA));
         when(productoRepository.descontarStock(1L, 1)).thenReturn(1);
         guardarAsignandoId();
@@ -169,7 +169,7 @@ class VentaServiceImplTest {
     @Test
     @DisplayName("crear - ADMIN puede registrar una venta para otro usuario")
     void crear_adminParaOtroUsuario() {
-        when(currentUser.isAdmin()).thenReturn(true);
+        when(currentUser.isStaff()).thenReturn(true);
         when(usuarioRepository.findById(3L)).thenReturn(Optional.of(
                 Usuario.builder().id(3L).nombre("Luis").email("l@x.com").rol("USER").build()));
         when(productoRepository.findAllById(any())).thenReturn(List.of(productoA));
@@ -185,7 +185,7 @@ class VentaServiceImplTest {
     @Test
     @DisplayName("crear - producto inexistente: no descuenta stock ni guarda")
     void crear_productoInexistente() {
-        when(currentUser.isAdmin()).thenReturn(true);
+        when(currentUser.isStaff()).thenReturn(true);
         when(productoRepository.findAllById(any())).thenReturn(List.of(productoA));
 
         ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class,
@@ -200,7 +200,7 @@ class VentaServiceImplTest {
     @Test
     @DisplayName("crear - stock insuficiente: informa TODOS los productos con problema y no guarda")
     void crear_stockInsuficiente() {
-        when(currentUser.isAdmin()).thenReturn(true);
+        when(currentUser.isStaff()).thenReturn(true);
         when(productoRepository.findAllById(any())).thenReturn(List.of(productoA, productoB));
         when(productoRepository.descontarStock(1L, 9)).thenReturn(0);
         when(productoRepository.descontarStock(2L, 9)).thenReturn(0);
@@ -218,7 +218,7 @@ class VentaServiceImplTest {
     @Test
     @DisplayName("crear - usuario inexistente")
     void crear_usuarioInexistente() {
-        when(currentUser.isAdmin()).thenReturn(false);
+        when(currentUser.isStaff()).thenReturn(false);
         when(currentUser.getId()).thenReturn(7L);
         when(usuarioRepository.findById(7L)).thenReturn(Optional.empty());
 
@@ -238,14 +238,14 @@ class VentaServiceImplTest {
 
         assertEquals(100L, dto.getId());
         assertEquals(2, dto.getDetalles().size());
-        verify(currentUser).requireSelfOrAdmin(7L);
+        verify(currentUser).requireSelfOrStaff(7L);
     }
 
     @Test
     @DisplayName("obtenerPorId - venta de otro usuario es rechazada")
     void obtenerPorId_ajena() {
         when(ventaRepository.findByIdConDetallesYProducto(100L)).thenReturn(Optional.of(ventaExistente(comprador)));
-        doThrow(new AccessDeniedException("no")).when(currentUser).requireSelfOrAdmin(7L);
+        doThrow(new AccessDeniedException("no")).when(currentUser).requireSelfOrStaff(7L);
 
         assertThrows(AccessDeniedException.class, () -> service.obtenerPorId(100L));
     }
@@ -254,7 +254,7 @@ class VentaServiceImplTest {
     @DisplayName("obtenerPorId - venta sin usuario: solo ADMIN")
     void obtenerPorId_anonima() {
         when(ventaRepository.findByIdConDetallesYProducto(100L)).thenReturn(Optional.of(ventaExistente(null)));
-        when(currentUser.isAdmin()).thenReturn(false, true);
+        when(currentUser.isStaff()).thenReturn(false, true);
 
         assertThrows(AccessDeniedException.class, () -> service.obtenerPorId(100L));
         assertDoesNotThrow(() -> service.obtenerPorId(100L));

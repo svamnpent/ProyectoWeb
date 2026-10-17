@@ -44,6 +44,7 @@ class DatabaseConnectionIT extends AbstractIntegrationIT {
         assertTrue(versiones.contains("1"), "falta V1: " + versiones);
         assertTrue(versiones.contains("2"), "falta V2: " + versiones);
         assertTrue(versiones.contains("3"), "falta V3: " + versiones);
+        assertTrue(versiones.contains("4"), "falta V4: " + versiones);
     }
 
     @Test
@@ -75,6 +76,15 @@ class DatabaseConnectionIT extends AbstractIntegrationIT {
         assertThrows(DataIntegrityViolationException.class, () -> jdbc.update(
                 "insert into usuarios (nombre, email, rol) values ('x', ?, 'HACKER')",
                 unico("mail") + "@x.com"));
+    }
+
+    @Test
+    @DisplayName("V4: la BD acepta el rol TRABAJADOR y sigue rechazando roles inexistentes")
+    void rolTrabajador() {
+        assertEquals(1, jdbc.update("insert into usuarios (nombre, email, rol) values ('t', ?, 'TRABAJADOR')",
+                unico("t") + "@x.com"));
+        assertThrows(DataIntegrityViolationException.class, () -> jdbc.update(
+                "insert into usuarios (nombre, email, rol) values ('x', ?, 'JEFE')", unico("j") + "@x.com"));
     }
 
     @Test

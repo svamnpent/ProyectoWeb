@@ -53,7 +53,7 @@ public class AdminBootstrap implements ApplicationRunner {
                 .nombre(nombre)
                 .email(emailNormalizado)
                 .password(passwordEncoder.encode(password))
-                .rol("ADMIN")
+                .rol(Roles.ADMIN)
                 .build());
         log.info("Administrador inicial creado: {}", emailNormalizado);
     }

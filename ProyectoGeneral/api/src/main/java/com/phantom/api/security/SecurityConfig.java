@@ -24,17 +24,24 @@ import java.util.List;
 /**
  * Seguridad stateless con JWT.
  *
- * Reglas de acceso por URL (auditables en un solo lugar). Las reglas de "dueño del recurso"
- * (p. ej. un usuario solo ve SUS ventas) se aplican con @PreAuthorize y en la capa de servicio.
+ * La API tiene DOS zonas bien separadas:
  *
- *  - Público:  login/registro, GET de catálogo (productos, categorías, etiquetas), Swagger, health.
- *  - ADMIN:    escritura del catálogo (POST/PUT/DELETE).
- *  - Autenticado: usuarios, perfiles, ventas y detalles (con reglas finas por método).
+ *  - TIENDA (compradores):  /api/v1/{auth, productos, categorias, etiquetas, usuarios/{id},
+ *                           perfiles, ventas, ...}  -> público (catálogo, login, registro) o
+ *                           usuario autenticado sobre SUS propios recursos.
+ *  - BACK-OFFICE (personal): /api/v1/backoffice/**  -> solo ADMIN o TRABAJADOR (ver BackOfficeController,
+ *                           que define además qué operaciones son solo de ADMIN).
+ *
+ * Las reglas de "dueño del recurso" (un usuario solo ve SUS ventas) se aplican con @PreAuthorize
+ * y en la capa de servicio.
  */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    /** Zona de operaciones internas: solo personal de la tienda. */
+    public static final String BACKOFFICE = "/api/v1/backoffice/**";
 
     private static final String[] CATALOGO = {
             "/api/v1/productos/**", "/api/v1/categorias/**", "/api/v1/etiquetas/**"
@@ -57,7 +64,7 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/api/v1/auth/login", "/api/v1/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, CATALOGO).permitAll()
-                        .requestMatchers(CATALOGO).hasRole("ADMIN")
+                        .requestMatchers(BACKOFFICE).hasAnyRole(Roles.ADMIN, Roles.TRABAJADOR)
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth -> oauth
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))
@@ -81,7 +88,7 @@ public class SecurityConfig {
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter authorities = new JwtGrantedAuthoritiesConverter();
         authorities.setAuthoritiesClaimName(JwtService.CLAIM_ROLES);
-        authorities.setAuthorityPrefix("ROLE_");
+        authorities.setAuthorityPrefix(Roles.AUTHORITY_PREFIX);
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(authorities);
         return converter;

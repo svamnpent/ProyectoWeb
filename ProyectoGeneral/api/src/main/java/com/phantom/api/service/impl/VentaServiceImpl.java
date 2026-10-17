@@ -160,12 +160,12 @@ public class VentaServiceImpl implements VentaService {
         }
 
         /**
-         * Un usuario normal siempre compra a su nombre. Solo un ADMIN puede registrar una venta
-         * para otro usuario (usuarioId) o sin usuario.
+         * Un comprador siempre compra a su nombre. Solo el personal de la tienda (ADMIN o TRABAJADOR)
+         * puede registrar una venta de mostrador para otro usuario (usuarioId) o sin usuario.
          */
         private Usuario resolverComprador(VentaRequestDTO request) {
                 Long usuarioId;
-                if (currentUser.isAdmin()) {
+                if (currentUser.isStaff()) {
                         usuarioId = request.getUsuarioId();
                 } else {
                         usuarioId = currentUser.getId();
@@ -182,12 +182,12 @@ public class VentaServiceImpl implements VentaService {
                 Long duenoId = venta.getUsuario() != null ? venta.getUsuario().getId() : null;
                 if (duenoId == null) {
                         // Venta sin usuario (anónima): solo visible para administradores
-                        if (!currentUser.isAdmin()) {
+                        if (!currentUser.isStaff()) {
                                 throw new AccessDeniedException("No tienes permiso para acceder a esta venta");
                         }
                         return;
                 }
-                currentUser.requireSelfOrAdmin(duenoId);
+                currentUser.requireSelfOrStaff(duenoId);
         }
 
         private String generarNumeroOrden() {
@@ -212,7 +212,7 @@ public class VentaServiceImpl implements VentaService {
                                 .cantidadItems(venta.getCantidadItems())
                                 .numeroOrden(venta.getNumeroOrden())
                                 .usuario(venta.getUsuario() != null
-                                                ? UsuarioMapper.toDTOSinPerfil(venta.getUsuario())
+                                                ? UsuarioMapper.toResumen(venta.getUsuario())
                                                 : null)
                                 .detalles(detalleDTOs)
                                 .build();

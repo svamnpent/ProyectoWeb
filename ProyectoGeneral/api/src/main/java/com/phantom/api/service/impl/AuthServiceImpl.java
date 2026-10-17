@@ -12,6 +12,7 @@ import com.phantom.api.repository.UsuarioRepository;
 import com.phantom.api.security.CurrentUser;
 import com.phantom.api.security.JwtService;
 import com.phantom.api.security.LoginAttemptService;
+import com.phantom.api.security.Roles;
 import com.phantom.api.service.AuthService;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -63,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
                 .nombre(request.getNombre().trim())
                 .email(email)
                 .password(passwordEncoder.encode(request.getPassword()))
-                .rol("USER") // el registro público NUNCA puede crear administradores
+                .rol(Roles.USER) // el registro público NUNCA puede crear administradores
                 .dni(request.getDni())
                 .direccion(request.getDireccion())
                 .numeroTelefono(request.getNumeroTelefono())

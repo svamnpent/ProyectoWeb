@@ -2,6 +2,7 @@ package com.phantom.api.config;
 
 import com.phantom.api.entity.*;
 import com.phantom.api.repository.*;
+import com.phantom.api.security.Roles;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -19,7 +20,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 /**
- * Datos FALSOS de demostración (categorías, etiquetas, productos, usuarios, perfiles y ventas).
+ * Datos FALSOS de demostración (categorías, etiquetas, productos, usuarios, un trabajador, perfiles y ventas).
  * Solo existe con app.seed.enabled=true (perfil "demo"). NUNCA lo actives en producción:
  * crea usuarios con una contraseña conocida.
  *
@@ -126,11 +127,14 @@ public class DemoDataSeeder implements ApplicationRunner, Ordered {
         // ---- Usuarios y perfiles (contraseña de todos: Demo12345)
         String hash = passwordEncoder.encode(DEMO_PASSWORD);
         Usuario maria = usuario("María Quispe", "maria.quispe@demo.local", "71234567",
-                "Av. Arequipa 1234, Lima", "+51987654321", hash);
+                "Av. Arequipa 1234, Lima", "+51987654321", Roles.USER, hash);
         Usuario carlos = usuario("Carlos Huamán", "carlos.huaman@demo.local", "72345678",
-                "Jr. de la Unión 456, Lima", "+51976543210", hash);
+                "Jr. de la Unión 456, Lima", "+51976543210", Roles.USER, hash);
         Usuario lucia = usuario("Lucía Torres", "lucia.torres@demo.local", "73456789",
-                "Calle Los Olivos 789, Arequipa", "+51965432109", hash);
+                "Calle Los Olivos 789, Arequipa", "+51965432109", Roles.USER, hash);
+        // Personal de la tienda (back-office con permisos limitados)
+        usuario("Rosa Mendoza", "trabajador@demo.local", "74567890",
+                "Av. Javier Prado 100, Lima", "+51954321098", Roles.TRABAJADOR, hash);
         perfilRepository.saveAll(List.of(
                 perfil(maria, "Amante de la tecnología y el café.", "https://i.pravatar.cc/300?img=47"),
                 perfil(carlos, "Gamer y fan del fútbol.", "https://i.pravatar.cc/300?img=12")));
@@ -146,7 +150,7 @@ public class DemoDataSeeder implements ApplicationRunner, Ordered {
         productoRepository.saveAll(productos);
         ventaRepository.saveAll(ventas);
 
-        log.info("Datos demo cargados: 5 categorías, 6 etiquetas, {} productos, 3 usuarios (clave: {}), {} ventas",
+        log.info("Datos demo cargados: 5 categorías, 6 etiquetas, {} productos, 4 usuarios, uno TRABAJADOR (clave: {}), {} ventas",
                 productos.size(), DEMO_PASSWORD, ventas.size());
     }
 
@@ -178,10 +182,10 @@ public class DemoDataSeeder implements ApplicationRunner, Ordered {
 
     /** Si el email ya existe se reutiliza ese usuario en lugar de fallar por duplicado. */
     private Usuario usuario(String nombre, String email, String dni, String direccion, String telefono,
-                            String passwordHash) {
+                            String rol, String passwordHash) {
         return usuarioRepository.findByEmailIgnoreCase(email).orElseGet(() ->
                 usuarioRepository.save(Usuario.builder()
-                        .nombre(nombre).email(email).password(passwordHash).rol("USER")
+                        .nombre(nombre).email(email).password(passwordHash).rol(rol)
                         .dni(dni).direccion(direccion).numeroTelefono(telefono).build()));
     }
 

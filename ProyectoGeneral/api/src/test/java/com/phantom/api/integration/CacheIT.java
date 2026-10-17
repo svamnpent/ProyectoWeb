@@ -58,7 +58,7 @@ class CacheIT extends AbstractIntegrationIT {
         long id = crearProducto(admin, categoria, 5, "10.00");
         get("/api/v1/productos/" + id, null).andExpect(status().isOk());
 
-        put("/api/v1/productos/" + id, admin, cuerpoProducto("Nombre-Nuevo", categoria, 5))
+        put("/api/v1/backoffice/productos/" + id, admin, cuerpoProducto("Nombre-Nuevo", categoria, 5))
                 .andExpect(status().isOk());
 
         get("/api/v1/productos/" + id, null)
@@ -75,7 +75,7 @@ class CacheIT extends AbstractIntegrationIT {
         get("/api/v1/productos/" + id, null).andExpect(status().isOk());
         String nuevoNombre = unico("renombrada");
 
-        put("/api/v1/categorias/" + categoria, admin, Map.of("nombre", nuevoNombre)).andExpect(status().isOk());
+        put("/api/v1/backoffice/categorias/" + categoria, admin, Map.of("nombre", nuevoNombre)).andExpect(status().isOk());
 
         get("/api/v1/productos/" + id, null)
                 .andExpect(jsonPath("$.categoria.nombre", is(nuevoNombre)));

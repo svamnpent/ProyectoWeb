@@ -1,5 +1,6 @@
 package com.phantom.api.dto.request;
 
+import com.phantom.api.security.Roles;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -29,7 +30,7 @@ public class UsuarioRequestDTO {
     private String password;
 
     // Opcional (por defecto USER). Solo un ADMIN puede asignar/cambiar roles.
-    @Pattern(regexp = "^(?i)(USER|ADMIN)$", message = "El rol debe ser USER o ADMIN")
+    @Pattern(regexp = Roles.REGEX, message = "El rol debe ser USER, TRABAJADOR o ADMIN")
     private String rol;
 
     @Pattern(regexp = "^[0-9]{8,20}$", message = "El DNI debe contener entre 8 y 20 dígitos numéricos")

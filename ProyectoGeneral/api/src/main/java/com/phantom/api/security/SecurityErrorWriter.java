@@ -1,6 +1,7 @@
 package com.phantom.api.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.phantom.api.config.AppTime;
 import com.phantom.api.exception.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /**
  * Escribe errores de seguridad (401/403) con el mismo formato JSON que GlobalExceptionHandler.
@@ -24,7 +25,7 @@ final class SecurityErrorWriter {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         ErrorResponse body = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(OffsetDateTime.now(AppTime.ZONA))
                 .status(status.value())
                 .error(error)
                 .message(message)
