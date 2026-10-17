@@ -25,7 +25,10 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      
       - name: Compilar y Probar con Maven
         working-directory: ./ProyectoGeneral/api
-        run: mvn -B clean test
+        # Forzamos a Spring a cargar las propiedades de test mediante el argumento -Dspring.config.name
+        run: mvn -B clean test -Dspring.config.name=application-test
+        env:
+          # Inyectamos el secreto necesario para que cargue la configuración de seguridad en el CI
+          JWT_SECRET: $%&123qwerty$%&123qwerty$%&123qwerty$%&123qwerty$%&123qwerty$%&123qwerty$%&123qwerty$%&123qwerty
