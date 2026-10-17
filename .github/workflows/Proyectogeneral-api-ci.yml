@@ -27,8 +27,8 @@ jobs:
 
       - name: Compilar y Probar con Maven
         working-directory: ./ProyectoGeneral/api
-        # Forzamos a Spring a cargar las propiedades de test mediante el argumento -Dspring.config.name
-        run: mvn -B clean test -Dspring.config.name=application-test
+        # MAVEN_OPTS fuerza a la JVM de los tests a usar la zona horaria de Perú
         env:
-          # Inyectamos el secreto necesario para que cargue la configuración de seguridad en el CI
-          JWT_SECRET: $%&123qwerty$%&123qwerty$%&123qwerty$%&123qwerty$%&123qwerty$%&123qwerty$%&123qwerty$%&123qwerty
+          MAVEN_OPTS: "-Duser.timezone=America/Lima"
+          JWT_SECRET: un_secreto_super_largo_y_seguro_para_los_tests_de_github_actions
+        run: mvn -B clean test
