@@ -80,14 +80,15 @@ class DemoDataSeederTest {
         assertTrue(productos.getValue().size() >= 15);
         assertEquals(5, ventas.getValue().size());
 
-        // Usuarios: 3, todos USER y con el password hasheado (nunca en claro)
+        // Usuarios: 3 compradores + 1 trabajador, todos con el password hasheado (nunca en claro)
         ArgumentCaptor<Usuario> usuarios = ArgumentCaptor.forClass(Usuario.class);
-        verify(usuarioRepository, times(3)).save(usuarios.capture());
+        verify(usuarioRepository, times(4)).save(usuarios.capture());
         usuarios.getAllValues().forEach(u -> {
-            assertEquals("USER", u.getRol());
             assertEquals("HASH", u.getPassword());
             assertTrue(u.getEmail().endsWith("@demo.local"));
         });
+        assertEquals(3, usuarios.getAllValues().stream().filter(u -> "USER".equals(u.getRol())).count());
+        assertEquals(1, usuarios.getAllValues().stream().filter(u -> "TRABAJADOR".equals(u.getRol())).count());
         verify(passwordEncoder, times(1)).encode(any());
     }
 
@@ -166,7 +167,7 @@ class DemoDataSeederTest {
 
         seeder.run(null);
 
-        verify(usuarioRepository, times(2)).save(any(Usuario.class)); // solo Carlos y Lucía
+        verify(usuarioRepository, times(3)).save(any(Usuario.class)); // Carlos, Lucía y el trabajador
     }
 
     @Test

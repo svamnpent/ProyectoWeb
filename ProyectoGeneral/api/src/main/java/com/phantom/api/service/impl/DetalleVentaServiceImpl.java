@@ -96,12 +96,12 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
     private void verificarAcceso(Venta venta) {
         Long duenoId = venta.getUsuario() != null ? venta.getUsuario().getId() : null;
         if (duenoId == null) {
-            if (!currentUser.isAdmin()) {
+            if (!currentUser.isStaff()) {
                 throw new AccessDeniedException("No tienes permiso para acceder a esta venta");
             }
             return;
         }
-        currentUser.requireSelfOrAdmin(duenoId);
+        currentUser.requireSelfOrStaff(duenoId);
     }
 
     private DetalleVentaDTO mapToDTO(DetalleVenta detalle) {

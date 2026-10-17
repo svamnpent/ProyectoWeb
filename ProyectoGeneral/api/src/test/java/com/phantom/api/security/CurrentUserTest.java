@@ -51,6 +51,43 @@ class CurrentUserTest {
     }
 
     @Test
+    @DisplayName("isStaff: ADMIN y TRABAJADOR sí; comprador y anónimo no")
+    void personal() {
+        autenticarComo("1", "ROLE_ADMIN");
+        assertTrue(currentUser.isStaff());
+
+        autenticarComo("2", "ROLE_TRABAJADOR");
+        assertTrue(currentUser.isStaff());
+        assertFalse(currentUser.isAdmin(), "un TRABAJADOR no es ADMIN");
+
+        autenticarComo("5", "ROLE_USER");
+        assertFalse(currentUser.isStaff());
+
+        SecurityContextHolder.clearContext();
+        assertFalse(currentUser.isStaff());
+    }
+
+    @Test
+    @DisplayName("requireSelfOrStaff - dueño y personal pasan; otro comprador es rechazado")
+    void requireSelfOrStaff() {
+        autenticarComo("5", "ROLE_USER");
+        assertDoesNotThrow(() -> currentUser.requireSelfOrStaff(5L));
+        assertThrows(AccessDeniedException.class, () -> currentUser.requireSelfOrStaff(6L));
+
+        autenticarComo("2", "ROLE_TRABAJADOR");
+        assertDoesNotThrow(() -> currentUser.requireSelfOrStaff(6L));
+    }
+
+    @Test
+    @DisplayName("requireSelfOrAdmin - un TRABAJADOR NO accede a datos personales de otros")
+    void trabajadorNoVeDatosPersonales() {
+        autenticarComo("2", "ROLE_TRABAJADOR");
+
+        assertThrows(AccessDeniedException.class, () -> currentUser.requireSelfOrAdmin(6L));
+        assertDoesNotThrow(() -> currentUser.requireSelfOrAdmin(2L));
+    }
+
+    @Test
     @DisplayName("requireSelfOrAdmin - dueño y ADMIN pasan; otro usuario es rechazado")
     void requireSelfOrAdmin() {
         autenticarComo("5", "ROLE_USER");

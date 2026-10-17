@@ -269,7 +269,7 @@ class CacheBehaviorTest {
     @DisplayName("ventas: una compra invalida la caché de productos (el stock cambió)")
     void ventas_crearInvalidaProductos() {
         when(productoRepository.findById(10L)).thenReturn(Optional.of(producto));
-        when(currentUser.isAdmin()).thenReturn(true);
+        when(currentUser.isStaff()).thenReturn(true);
         when(productoRepository.findAllById(any())).thenReturn(List.of(producto));
         when(productoRepository.descontarStock(10L, 2)).thenReturn(1);
         when(ventaRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
@@ -290,7 +290,7 @@ class CacheBehaviorTest {
     @DisplayName("ventas: una compra rechazada por falta de stock NO invalida la caché")
     void ventas_compraFallidaNoInvalida() {
         when(productoRepository.findById(10L)).thenReturn(Optional.of(producto));
-        when(currentUser.isAdmin()).thenReturn(true);
+        when(currentUser.isStaff()).thenReturn(true);
         when(productoRepository.findAllById(any())).thenReturn(List.of(producto));
         when(productoRepository.descontarStock(10L, 9)).thenReturn(0);
 

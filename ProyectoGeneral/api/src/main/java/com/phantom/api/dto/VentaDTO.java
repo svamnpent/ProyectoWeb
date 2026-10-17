@@ -19,6 +19,6 @@ public class VentaDTO {
     private BigDecimal total;
     private Integer cantidadItems;
     private String numeroOrden;
-    private UsuarioDTO usuario;
+    private UsuarioResumenDTO usuario;
     private List<DetalleVentaDTO> detalles;
 }

@@ -66,14 +66,14 @@ class DetalleVentaServiceImplTest {
 
         assertEquals(1, resultado.size());
         assertEquals("A", resultado.get(0).getProductoNombre());
-        verify(currentUser).requireSelfOrAdmin(7L);
+        verify(currentUser).requireSelfOrStaff(7L);
     }
 
     @Test
     @DisplayName("obtenerPorVentaId - venta ajena rechazada sin listar detalles")
     void obtenerPorVentaId_ajena() {
         when(ventaRepository.findById(100L)).thenReturn(Optional.of(venta));
-        doThrow(new AccessDeniedException("no")).when(currentUser).requireSelfOrAdmin(7L);
+        doThrow(new AccessDeniedException("no")).when(currentUser).requireSelfOrStaff(7L);
 
         assertThrows(AccessDeniedException.class, () -> service.obtenerPorVentaId(100L));
         verifyNoInteractions(detalleVentaRepository);
@@ -84,7 +84,7 @@ class DetalleVentaServiceImplTest {
     void obtenerPorVentaId_anonima() {
         venta.setUsuario(null);
         when(ventaRepository.findById(100L)).thenReturn(Optional.of(venta));
-        when(currentUser.isAdmin()).thenReturn(false);
+        when(currentUser.isStaff()).thenReturn(false);
 
         assertThrows(AccessDeniedException.class, () -> service.obtenerPorVentaId(100L));
     }

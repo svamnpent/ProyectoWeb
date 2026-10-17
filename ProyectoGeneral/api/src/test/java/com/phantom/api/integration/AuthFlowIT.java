@@ -58,7 +58,7 @@ class AuthFlowIT extends AbstractIntegrationIT {
                 .andExpect(status().isCreated())).get("accessToken").asText();
 
         get("/api/v1/auth/me", token).andExpect(jsonPath("$.rol", is("USER")));
-        get("/api/v1/usuarios", token).andExpect(status().isForbidden());
+        get("/api/v1/backoffice/usuarios", token).andExpect(status().isForbidden());
     }
 
     @Test
@@ -113,7 +113,7 @@ class AuthFlowIT extends AbstractIntegrationIT {
     }
 
     @Test
-    @DisplayName("catálogo: lectura pública, escritura solo ADMIN")
+    @DisplayName("catálogo: lectura pública en la tienda; escritura solo en el back-office (personal)")
     void catalogoPublicoEscrituraAdmin() throws Exception {
         Sesion s = registrarUsuario();
         String admin = tokenAdmin();
@@ -121,21 +121,23 @@ class AuthFlowIT extends AbstractIntegrationIT {
         get("/api/v1/productos", null).andExpect(status().isOk());
         get("/api/v1/categorias", null).andExpect(status().isOk());
 
-        post("/api/v1/categorias", null, Map.of("nombre", unico("cat"))).andExpect(status().isUnauthorized());
-        post("/api/v1/categorias", s.token(), Map.of("nombre", unico("cat"))).andExpect(status().isForbidden());
-        post("/api/v1/categorias", admin, Map.of("nombre", unico("cat"))).andExpect(status().isCreated());
+        post("/api/v1/backoffice/categorias", null, Map.of("nombre", unico("cat"))).andExpect(status().isUnauthorized());
+        post("/api/v1/backoffice/categorias", s.token(), Map.of("nombre", unico("cat"))).andExpect(status().isForbidden());
+        post("/api/v1/backoffice/categorias", admin, Map.of("nombre", unico("cat"))).andExpect(status().isCreated());
+        // la ruta pública ya no acepta escritura, ni siquiera con permisos de admin
+        post("/api/v1/categorias", admin, Map.of("nombre", unico("cat"))).andExpect(status().isMethodNotAllowed());
     }
 
     @Test
-    @DisplayName("usuarios: solo se puede ver/editar el propio perfil; el listado es solo ADMIN")
+    @DisplayName("usuarios: en la tienda solo se ve/edita la propia cuenta; el listado es del back-office (ADMIN)")
     void accesoARecursosDeUsuarios() throws Exception {
         Sesion ana = registrarUsuario();
         Sesion luis = registrarUsuario();
 
         get("/api/v1/usuarios/" + ana.id(), ana.token()).andExpect(status().isOk());
         get("/api/v1/usuarios/" + luis.id(), ana.token()).andExpect(status().isForbidden());
-        get("/api/v1/usuarios", ana.token()).andExpect(status().isForbidden());
-        get("/api/v1/usuarios", tokenAdmin()).andExpect(status().isOk());
+        get("/api/v1/backoffice/usuarios", ana.token()).andExpect(status().isForbidden());
+        get("/api/v1/backoffice/usuarios", tokenAdmin()).andExpect(status().isOk());
     }
 
     @Test

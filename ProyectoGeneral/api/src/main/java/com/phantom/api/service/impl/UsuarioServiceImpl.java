@@ -8,6 +8,7 @@ import com.phantom.api.mapper.UsuarioMapper;
 import com.phantom.api.repository.PerfilRepository;
 import com.phantom.api.repository.UsuarioRepository;
 import com.phantom.api.security.CurrentUser;
+import com.phantom.api.security.Roles;
 import com.phantom.api.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -16,14 +17,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UsuarioServiceImpl implements UsuarioService {
-
-    private static final Set<String> ROLES_VALIDOS = Set.of("USER", "ADMIN");
 
     private final UsuarioRepository usuarioRepository;
     private final PerfilRepository perfilRepository;
@@ -126,11 +124,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private String normalizarRol(String rol) {
         if (rol == null || rol.isBlank()) {
-            return "USER";
+            return Roles.USER;
         }
         String normalizado = rol.trim().toUpperCase();
-        if (!ROLES_VALIDOS.contains(normalizado)) {
-            throw new IllegalArgumentException("Rol inválido: " + rol + ". Valores permitidos: USER, ADMIN");
+        if (!Roles.VALIDOS.contains(normalizado)) {
+            throw new IllegalArgumentException("Rol inválido: " + rol + ". Valores permitidos: " + String.join(", ", Roles.USER, Roles.TRABAJADOR, Roles.ADMIN));
         }
         return normalizado;
     }

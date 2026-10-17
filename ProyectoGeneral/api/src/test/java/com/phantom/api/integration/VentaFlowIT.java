@@ -106,8 +106,8 @@ class VentaFlowIT extends AbstractIntegrationIT {
 
         get("/api/v1/ventas/mias", ana.token()).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1)));
         get("/api/v1/ventas/mias", luis.token()).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(0)));
-        get("/api/v1/ventas", luis.token()).andExpect(status().isForbidden());
-        get("/api/v1/ventas", admin).andExpect(status().isOk());
+        get("/api/v1/backoffice/ventas", luis.token()).andExpect(status().isForbidden());
+        get("/api/v1/backoffice/ventas", admin).andExpect(status().isOk());
     }
 
     @Test
@@ -120,10 +120,10 @@ class VentaFlowIT extends AbstractIntegrationIT {
                 .andExpect(status().isCreated())).get("id").asLong();
         assertEquals(1, stockEnBD(productoId));
 
-        delete("/api/v1/ventas/" + ventaId, ana.token()).andExpect(status().isForbidden());
+        delete("/api/v1/backoffice/ventas/" + ventaId, ana.token()).andExpect(status().isForbidden());
         assertEquals(1, stockEnBD(productoId));
 
-        delete("/api/v1/ventas/" + ventaId, admin).andExpect(status().isNoContent());
+        delete("/api/v1/backoffice/ventas/" + ventaId, admin).andExpect(status().isNoContent());
         assertEquals(5, stockEnBD(productoId));
         assertEquals(0, jdbc.queryForObject("select count(*) from ventas where id = ?", Integer.class, ventaId));
     }
@@ -139,10 +139,10 @@ class VentaFlowIT extends AbstractIntegrationIT {
         long ventaId = json(post("/api/v1/ventas", ana.token(), venta(a, 2))
                 .andExpect(status().isCreated())).get("id").asLong();
 
-        post("/api/v1/ventas/" + ventaId + "/detalles", ana.token(), Map.of("productoId", b, "cantidad", 4))
+        post("/api/v1/backoffice/ventas/" + ventaId + "/detalles", ana.token(), Map.of("productoId", b, "cantidad", 4))
                 .andExpect(status().isForbidden());
 
-        long detalleId = json(post("/api/v1/ventas/" + ventaId + "/detalles", admin,
+        long detalleId = json(post("/api/v1/backoffice/ventas/" + ventaId + "/detalles", admin,
                 Map.of("productoId", b, "cantidad", 4)).andExpect(status().isCreated())).get("id").asLong();
 
         assertEquals(6, stockEnBD(b));
@@ -150,7 +150,7 @@ class VentaFlowIT extends AbstractIntegrationIT {
                 "select total from ventas where id = ?", java.math.BigDecimal.class, ventaId)));
         assertEquals(6, jdbc.queryForObject("select cantidad_items from ventas where id = ?", Integer.class, ventaId));
 
-        delete("/api/v1/detalles/" + detalleId, admin).andExpect(status().isNoContent());
+        delete("/api/v1/backoffice/detalles/" + detalleId, admin).andExpect(status().isNoContent());
 
         assertEquals(10, stockEnBD(b));
         assertEquals(0, new java.math.BigDecimal("20.00").compareTo(jdbc.queryForObject(
@@ -166,7 +166,7 @@ class VentaFlowIT extends AbstractIntegrationIT {
         Sesion ana = registrarUsuario();
         post("/api/v1/ventas", ana.token(), venta(productoId, 1)).andExpect(status().isCreated());
 
-        delete("/api/v1/productos/" + productoId, admin)
+        delete("/api/v1/backoffice/productos/" + productoId, admin)
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.status", is(409)));
     }

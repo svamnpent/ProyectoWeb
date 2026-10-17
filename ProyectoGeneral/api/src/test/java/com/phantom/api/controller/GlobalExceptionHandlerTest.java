@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Verifica que cada tipo de error produce el estado HTTP correcto con el formato ErrorResponse.
  * Antes de la seguridad, un AccessDeniedException o un JSON mal formado acababan en HTTP 500.
  */
-@WebMvcTest(VentaController.class)
+@WebMvcTest({VentaController.class, BackOfficeController.class})
 @Import({GlobalExceptionHandler.class, WebMvcSecurityTestConfig.class})
 class GlobalExceptionHandlerTest {
 
@@ -41,6 +41,13 @@ class GlobalExceptionHandlerTest {
     private MockMvc mockMvc;
     @MockBean
     private VentaService ventaService;
+    // Dependencias de BackOfficeController (no se usan en estos tests)
+    @MockBean private com.phantom.api.service.CategoriaService categoriaService;
+    @MockBean private com.phantom.api.service.EtiquetaService etiquetaService;
+    @MockBean private com.phantom.api.service.ProductoService productoService;
+    @MockBean private com.phantom.api.service.UsuarioService usuarioService;
+    @MockBean private com.phantom.api.service.PerfilService perfilService;
+    @MockBean private com.phantom.api.service.DetalleVentaService detalleVentaService;
 
     private static final String VENTA_VALIDA = "{\"detalles\":[{\"productoId\":1,\"cantidad\":2}]}";
 
@@ -66,7 +73,8 @@ class GlobalExceptionHandlerTest {
         mockMvc.perform(get("/api/v1/ventas/9").with(user(5)))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.status", is(403)))
-                .andExpect(jsonPath("$.error", is("Forbidden")));
+                .andExpect(jsonPath("$.error", is("Forbidden")))
+                .andExpect(jsonPath("$.timestamp", org.hamcrest.Matchers.endsWith("-05:00")));
     }
 
     @Test
@@ -75,7 +83,7 @@ class GlobalExceptionHandlerTest {
         doThrow(new DataIntegrityViolationException("ERROR: update or delete on table \"productos\" violates fk"))
                 .when(ventaService).eliminar(1L);
 
-        mockMvc.perform(delete("/api/v1/ventas/1").with(admin()))
+        mockMvc.perform(delete("/api/v1/backoffice/ventas/1").with(admin()))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.status", is(409)))
                 .andExpect(jsonPath("$.message", not(containsString("productos"))));
