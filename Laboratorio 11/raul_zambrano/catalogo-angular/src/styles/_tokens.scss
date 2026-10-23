@@ -1,0 +1,10 @@
+$navy: #0d2042;
+$blue: #14569b;
+$teal: #008491;
+$surface: #f6f8fb;
+$danger: #b23a3a;
+$text: #243044;
+
+@mixin card-shadow {
+  box-shadow: 0 10px 26px rgba(13, 32, 66, 0.1);
+}

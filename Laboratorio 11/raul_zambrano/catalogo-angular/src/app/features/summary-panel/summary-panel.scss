@@ -1,0 +1,29 @@
+@use '../../../styles/tokens' as *;
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 22px;
+
+  article {
+    padding: 18px 20px;
+    border-radius: 16px;
+    background: white;
+    @include card-shadow;
+
+    span {
+      display: block;
+      color: $blue;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 1.15rem;
+    }
+  }
+}

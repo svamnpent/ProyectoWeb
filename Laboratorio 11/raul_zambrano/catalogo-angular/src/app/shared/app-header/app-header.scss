@@ -1,0 +1,14 @@
+@use '../../../styles/tokens' as *;
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: min(1100px, 92%);
+  margin: 16px auto 0;
+  padding: 14px 24px;
+  border-radius: 14px;
+  color: white;
+  background: $navy;
+  @include card-shadow;
+}
