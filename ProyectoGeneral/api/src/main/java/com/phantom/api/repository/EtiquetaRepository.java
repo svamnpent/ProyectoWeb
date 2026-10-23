@@ -7,11 +7,12 @@ import com.phantom.api.entity.Etiqueta;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface EtiquetaRepository extends JpaRepository<Etiqueta, Long> {
 
-    List<Etiqueta> findByIdIn(List<Long> ids);
+    List<Etiqueta> findByIdIn(Set<Long> ids);
 
     Optional<Etiqueta> findByNombreIgnoreCase(String nombre);
 

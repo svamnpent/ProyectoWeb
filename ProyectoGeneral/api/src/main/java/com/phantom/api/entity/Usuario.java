@@ -1,8 +1,10 @@
 package com.phantom.api.entity;
 
+import com.phantom.api.security.Roles;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import lombok.*;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "usuarios")
@@ -28,7 +30,7 @@ public class Usuario {
 
     @Column(nullable = false, length = 50)
     @Builder.Default
-    private String rol = "USER";
+    private String rol = Roles.USER;
 
     @Column(unique = true, length = 20)
     private String dni;
@@ -39,8 +41,11 @@ public class Usuario {
     @Column(name = "numero_telefono", length = 20)
     private String numeroTelefono;
 
-    @Column(name = "fecha_registro", insertable = false, updatable = false)
-    private LocalDateTime fechaRegistro;
+    // timestamptz en BD. Lo asigna Hibernate al insertar (antes quedaba en null en la respuesta
+    // porque la columna era insertable=false y nunca se refrescaba tras el INSERT).
+    @CreationTimestamp
+    @Column(name = "fecha_registro", nullable = false, updatable = false)
+    private Instant fechaRegistro;
 
     // Relación 1 a 1 bidireccional con Perfil
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)

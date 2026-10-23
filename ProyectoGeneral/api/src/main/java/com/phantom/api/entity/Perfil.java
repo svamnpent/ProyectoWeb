@@ -16,10 +16,10 @@ public class Perfil {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "avatar_url", length = 255)
+    @Column(name = "avatar_url", length = 1000)
     private String avatarUrl;
 
-    @Column(length = 255)
+    @Column(length = 1000)
     private String biografia;
 
     @OneToOne(fetch = FetchType.LAZY)

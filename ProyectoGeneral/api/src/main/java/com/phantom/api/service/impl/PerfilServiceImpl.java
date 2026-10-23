@@ -7,8 +7,10 @@ import com.phantom.api.entity.Usuario;
 import com.phantom.api.exception.ResourceNotFoundException;
 import com.phantom.api.repository.PerfilRepository;
 import com.phantom.api.repository.UsuarioRepository;
+import com.phantom.api.security.CurrentUser;
 import com.phantom.api.service.PerfilService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ public class PerfilServiceImpl implements PerfilService {
 
     private final PerfilRepository perfilRepository;
     private final UsuarioRepository usuarioRepository;
+    private final CurrentUser currentUser;
 
     @Override
     @Transactional(readOnly = true)
@@ -35,15 +38,18 @@ public class PerfilServiceImpl implements PerfilService {
     public PerfilDTO obtenerPorId(Long id) {
         Perfil perfil = perfilRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Perfil no encontrado con el ID: " + id));
+        currentUser.requireSelfOrAdmin(perfil.getUsuario().getId());
         return mapToDTO(perfil);
     }
 
     @Override
     @Transactional
     public PerfilDTO crear(PerfilRequestDTO request) {
+        // Un usuario solo puede crear SU perfil; un ADMIN puede crearlo para cualquiera
+        currentUser.requireSelfOrAdmin(request.getUsuarioId());
+
         Usuario usuario = usuarioRepository.findById(request.getUsuarioId())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el ID: " + request.getUsuarioId()));
-        // Ensure user doesn't already have a profile
         perfilRepository.findByUsuarioId(request.getUsuarioId()).ifPresent(p -> {
             throw new IllegalArgumentException("El usuario ya tiene un perfil asignado");
         });
@@ -60,11 +66,15 @@ public class PerfilServiceImpl implements PerfilService {
     public PerfilDTO actualizar(Long id, PerfilRequestDTO request) {
         Perfil perfil = perfilRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Perfil no encontrado con el ID: " + id));
-        // If userId changes, verify existence and uniqueness
+        currentUser.requireSelfOrAdmin(perfil.getUsuario().getId());
+
         if (!perfil.getUsuario().getId().equals(request.getUsuarioId())) {
+            // Reasignar un perfil a otro usuario es una operación administrativa
+            if (!currentUser.isAdmin()) {
+                throw new AccessDeniedException("Solo un administrador puede reasignar un perfil");
+            }
             Usuario nuevoUsuario = usuarioRepository.findById(request.getUsuarioId())
                     .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el ID: " + request.getUsuarioId()));
-            // Ensure new user has no profile
             perfilRepository.findByUsuarioId(request.getUsuarioId()).ifPresent(p -> {
                 throw new IllegalArgumentException("El nuevo usuario ya tiene un perfil asignado");
             });
@@ -78,10 +88,10 @@ public class PerfilServiceImpl implements PerfilService {
     @Override
     @Transactional
     public void eliminar(Long id) {
-        if (!perfilRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Perfil no encontrado con el ID: " + id);
-        }
-        perfilRepository.deleteById(id);
+        Perfil perfil = perfilRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Perfil no encontrado con el ID: " + id));
+        currentUser.requireSelfOrAdmin(perfil.getUsuario().getId());
+        perfilRepository.delete(perfil);
     }
 
     private PerfilDTO mapToDTO(Perfil perfil) {

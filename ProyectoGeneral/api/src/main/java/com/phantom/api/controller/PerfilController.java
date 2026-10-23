@@ -5,22 +5,21 @@ import com.phantom.api.dto.request.PerfilRequestDTO;
 import com.phantom.api.service.PerfilService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
+/**
+ * TIENDA - el comprador gestiona SU perfil (el servicio valida que sea el dueño).
+ * El listado de todos los perfiles está en BackOfficeController.
+ */
 @RestController
 @RequestMapping("/api/v1/perfiles")
 @RequiredArgsConstructor
 public class PerfilController {
 
     private final PerfilService perfilService;
-
-    @GetMapping
-    public ResponseEntity<List<PerfilDTO>> obtenerTodas() {
-        return ResponseEntity.ok(perfilService.obtenerTodos());
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<PerfilDTO> obtenerPorId(@PathVariable Long id) {
@@ -29,11 +28,13 @@ public class PerfilController {
 
     @PostMapping
     public ResponseEntity<PerfilDTO> crear(@Valid @RequestBody PerfilRequestDTO request) {
-        return ResponseEntity.ok(perfilService.crear(request));
+        return new ResponseEntity<>(perfilService.crear(request), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PerfilDTO> actualizar(@PathVariable Long id, @Valid @RequestBody PerfilRequestDTO request) {
+    public ResponseEntity<PerfilDTO> actualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody PerfilRequestDTO request) {
         return ResponseEntity.ok(perfilService.actualizar(id, request));
     }
 

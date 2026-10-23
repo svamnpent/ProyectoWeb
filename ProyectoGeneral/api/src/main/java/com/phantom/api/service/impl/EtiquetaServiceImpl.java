@@ -1,5 +1,9 @@
 package com.phantom.api.service.impl;
 
+import com.phantom.api.config.CacheNames;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import com.phantom.api.dto.EtiquetaDTO;
 import com.phantom.api.dto.request.EtiquetaRequestDTO;
 import com.phantom.api.entity.Etiqueta;
@@ -21,6 +25,7 @@ public class EtiquetaServiceImpl implements EtiquetaService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = CacheNames.ETIQUETAS, key = "'todas'")
     public List<EtiquetaDTO> obtenerTodas() {
         return etiquetaRepository.findAll().stream()
                 .map(this::mapToDTO)
@@ -29,6 +34,7 @@ public class EtiquetaServiceImpl implements EtiquetaService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = CacheNames.ETIQUETAS, key = "'id:' + #id")
     public EtiquetaDTO obtenerPorId(Long id) {
         Etiqueta etiqueta = etiquetaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Etiqueta no encontrada con el ID: " + id));
@@ -37,6 +43,7 @@ public class EtiquetaServiceImpl implements EtiquetaService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheNames.ETIQUETAS, allEntries = true)
     public EtiquetaDTO crear(EtiquetaRequestDTO request) {
         if (etiquetaRepository.existsByNombreIgnoreCase(request.getNombre().trim())) {
             throw new IllegalArgumentException("Ya existe una etiqueta con el nombre: " + request.getNombre());
@@ -49,6 +56,10 @@ public class EtiquetaServiceImpl implements EtiquetaService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheNames.ETIQUETAS, allEntries = true),
+            @CacheEvict(cacheNames = CacheNames.PRODUCTOS, allEntries = true) // ProductoDTO embebe las etiquetas
+    })
     public EtiquetaDTO actualizar(Long id, EtiquetaRequestDTO request) {
         Etiqueta etiqueta = etiquetaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Etiqueta no encontrada con el ID: " + id));
@@ -62,6 +73,10 @@ public class EtiquetaServiceImpl implements EtiquetaService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheNames.ETIQUETAS, allEntries = true),
+            @CacheEvict(cacheNames = CacheNames.PRODUCTOS, allEntries = true) // ProductoDTO embebe las etiquetas
+    })
     public void eliminar(Long id) {
         if (!etiquetaRepository.existsById(id)) {
             throw new ResourceNotFoundException("Etiqueta no encontrada con el ID: " + id);
