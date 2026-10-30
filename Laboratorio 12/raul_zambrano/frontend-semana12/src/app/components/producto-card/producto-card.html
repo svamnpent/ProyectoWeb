@@ -1,0 +1,15 @@
+<article class="card" [class.destacado]="destacado()">
+  <span class="badge">{{ producto().categoria }}</span>
+  @if (destacado()) {
+    <span class="badge highlight">Destacado</span>
+  }
+  <h2>{{ producto().nombre }}</h2>
+  <p>{{ producto().descripcion }}</p>
+  <strong>{{ producto().precio | currency: 'PEN' : 'symbol' : '1.2-2' }}</strong>
+
+  <div class="actions">
+    <button type="button" (click)="solicitarDetalle()">Ver detalle</button>
+    <button type="button" class="ghost" (click)="marcarFavorito()">Favorito</button>
+    <button type="button" class="ghost" (click)="solicitarComparacion()">Comparar</button>
+  </div>
+</article>

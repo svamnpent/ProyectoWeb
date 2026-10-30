@@ -1,0 +1,16 @@
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">CATÁLOGO</p>
+    <h1>Categorías</h1>
+  </div>
+  <a routerLink="/productos">Ver productos</a>
+</section>
+
+<div class="grid">
+  @for (categoria of categorias; track categoria.nombre) {
+    <article class="card">
+      <h2>{{ categoria.nombre }}</h2>
+      <p>{{ categoria.cantidad }} {{ categoria.cantidad === 1 ? 'producto' : 'productos' }}</p>
+    </article>
+  }
+</div>

@@ -1,0 +1,16 @@
+<header class="topbar">
+  <div>
+    <strong>DevStore</strong>
+    <span>Laboratorio Angular</span>
+  </div>
+
+  <nav>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+    <a routerLink="/productos" routerLinkActive="active">Productos</a>
+    <a routerLink="/categorias" routerLinkActive="active">Categorías</a>
+  </nav>
+</header>
+
+<main class="container">
+  <router-outlet />
+</main>

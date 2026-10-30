@@ -1,0 +1,32 @@
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  color: #168aad;
+  font-weight: 700;
+  margin: 0;
+}
+
+h1 {
+  margin: 0.25rem 0 0;
+  color: #102a43;
+}
+
+.metrics {
+  text-align: right;
+  color: #334e68;
+
+  p {
+    margin: 0.2rem 0;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}

@@ -1,0 +1,27 @@
+.hero {
+  padding: 3rem;
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, #0f3d66, #168aad);
+  color: white;
+
+  .eyebrow {
+    opacity: 0.8;
+    font-weight: 700;
+  }
+
+  h1 {
+    margin: 0.4rem 0 1rem;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+  }
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.6rem;
+  background: white;
+  color: #0f3d66;
+  text-decoration: none;
+  font-weight: 700;
+}

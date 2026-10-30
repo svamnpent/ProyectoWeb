@@ -1,0 +1,49 @@
+.card {
+  background: white;
+  border: 1px solid #d9e2ec;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 10px 25px rgba(15, 61, 102, 0.08);
+
+  &.destacado {
+    border-color: #168aad;
+    box-shadow: 0 12px 28px rgba(22, 138, 173, 0.22);
+  }
+
+  .badge {
+    color: #168aad;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-right: 0.5rem;
+
+    &.highlight {
+      color: #0f3d66;
+    }
+  }
+
+  h2 {
+    margin: 0.5rem 0;
+    color: #102a43;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  button {
+    cursor: pointer;
+    padding: 0.6rem 0.85rem;
+    border-radius: 0.5rem;
+    border: 0;
+    background: #0f3d66;
+    color: white;
+  }
+
+  button.ghost {
+    background: #eaf4fb;
+    color: #0f3d66;
+  }
+}

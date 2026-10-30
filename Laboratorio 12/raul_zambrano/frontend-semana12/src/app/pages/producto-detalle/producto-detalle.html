@@ -1,0 +1,14 @@
+@if (producto; as p) {
+  <section class="detail">
+    <p class="eyebrow">{{ p.categoria }}</p>
+    <h1>{{ p.nombre }}</h1>
+    <p>{{ p.descripcion }}</p>
+    <h2>{{ p.precio | currency: 'PEN' : 'symbol' : '1.2-2' }}</h2>
+    <a routerLink="/productos">← Volver al catálogo</a>
+  </section>
+} @else {
+  <section>
+    <h1>Producto no encontrado</h1>
+    <a routerLink="/productos">Volver al catálogo</a>
+  </section>
+}

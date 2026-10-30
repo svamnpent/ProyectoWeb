@@ -1,0 +1,42 @@
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  color: #168aad;
+  font-weight: 700;
+  margin: 0;
+}
+
+h1 {
+  margin: 0.25rem 0 0;
+  color: #102a43;
+}
+
+a {
+  color: #0f3d66;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background: white;
+  border: 1px solid #d9e2ec;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 10px 25px rgba(15, 61, 102, 0.08);
+
+  h2 {
+    margin: 0 0 0.5rem;
+    color: #102a43;
+  }
+}
