@@ -1,0 +1,139 @@
+.tarjeta {
+  max-width: 900px;
+  margin: auto;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 0.8rem;
+  box-shadow: 0 8px 24px rgba(31, 78, 121, 0.12);
+}
+
+h2 {
+  margin-top: 0;
+  color: #1f4e79;
+}
+
+.introduccion,
+.ayuda {
+  color: #555;
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.campo {
+  display: grid;
+  gap: 0.4rem;
+}
+
+label,
+legend {
+  font-weight: 700;
+}
+
+input {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #9ca3af;
+  border-radius: 0.4rem;
+}
+
+input:focus {
+  outline: 3px solid rgba(31, 78, 121, 0.18);
+  border-color: #1f4e79;
+}
+
+input.ng-invalid.ng-touched {
+  border-color: #b91c1c;
+}
+
+fieldset {
+  margin: 1.25rem 0;
+  padding: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+}
+
+.fila-dinamica {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+
+.campo-check {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.campo-check input {
+  width: auto;
+}
+
+.error {
+  display: grid;
+  gap: 0.2rem;
+  color: #b91c1c;
+  font-size: 0.9rem;
+}
+
+.exito {
+  padding: 0.8rem;
+  color: #166534;
+  background: #dcfce7;
+  border-radius: 0.4rem;
+}
+
+.acciones {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.2rem;
+}
+
+button {
+  padding: 0.7rem 1rem;
+  color: white;
+  cursor: pointer;
+  background: #1f4e79;
+  border: 0;
+  border-radius: 0.4rem;
+}
+
+button.secundario {
+  color: #1f4e79;
+  background: #e8eef5;
+}
+
+button.peligro {
+  background: #b91c1c;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.depuracion {
+  margin-top: 1.5rem;
+  padding: 0.8rem;
+  background: #f4f7fb;
+  border-radius: 0.4rem;
+}
+
+pre {
+  overflow: auto;
+}
+
+@media (max-width: 700px) {
+  .rejilla {
+    grid-template-columns: 1fr;
+  }
+
+  .fila-dinamica {
+    grid-template-columns: 1fr;
+  }
+}

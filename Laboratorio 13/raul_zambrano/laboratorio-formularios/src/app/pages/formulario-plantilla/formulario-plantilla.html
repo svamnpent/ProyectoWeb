@@ -1,0 +1,128 @@
+<section class="tarjeta">
+  <h2>Formulario de contacto</h2>
+  <p class="introduccion">
+    Ejemplo basado en plantillas. La mayoría de las reglas se declaran en HTML.
+  </p>
+
+  <form #contactoForm="ngForm" (ngSubmit)="enviar(contactoForm)" novalidate>
+    <div class="campo">
+      <label for="nombrePlantilla">Nombre completo</label>
+      <input
+        id="nombrePlantilla"
+        name="nombre"
+        type="text"
+        [(ngModel)]="modelo.nombre"
+        #nombre="ngModel"
+        required
+        minlength="3"
+        maxlength="60"
+        autocomplete="name"
+      />
+
+      @if (nombre.invalid && (nombre.touched || contactoForm.submitted)) {
+        <div class="error" role="alert">
+          @if (nombre.hasError('required')) {
+            <span>El nombre es obligatorio.</span>
+          }
+          @if (nombre.hasError('minlength')) {
+            <span>Ingrese al menos 3 caracteres.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="correoPlantilla">Correo electrónico</label>
+      <input
+        id="correoPlantilla"
+        name="correo"
+        type="email"
+        [(ngModel)]="modelo.correo"
+        #correo="ngModel"
+        required
+        email
+        autocomplete="email"
+      />
+
+      @if (correo.invalid && (correo.touched || contactoForm.submitted)) {
+        <div class="error" role="alert">
+          @if (correo.hasError('required')) {
+            <span>El correo es obligatorio.</span>
+          }
+          @if (correo.hasError('email')) {
+            <span>Ingrese un correo con formato válido.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="tipo">Tipo de solicitud</label>
+      <select id="tipo" name="tipo" [(ngModel)]="modelo.tipo">
+        <option value="consulta">Consulta</option>
+        <option value="sugerencia">Sugerencia</option>
+        <option value="reclamo">Reclamo</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for="mensaje">Mensaje</label>
+      <textarea
+        id="mensaje"
+        name="mensaje"
+        rows="5"
+        [(ngModel)]="modelo.mensaje"
+        #mensaje="ngModel"
+        required
+        minlength="10"
+        maxlength="300"
+      ></textarea>
+
+      <small>{{ modelo.mensaje.length }}/300 caracteres</small>
+
+      @if (mensaje.invalid && (mensaje.touched || contactoForm.submitted)) {
+        <div class="error" role="alert">
+          @if (mensaje.hasError('required')) {
+            <span>El mensaje es obligatorio.</span>
+          }
+          @if (mensaje.hasError('minlength')) {
+            <span>Escriba al menos 10 caracteres.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="campo campo-check">
+      <input
+        id="aceptaPlantilla"
+        name="acepta"
+        type="checkbox"
+        [(ngModel)]="modelo.acepta"
+        #acepta="ngModel"
+        required
+      />
+      <label for="aceptaPlantilla">Acepto el tratamiento de mis datos.</label>
+    </div>
+
+    @if (acepta.invalid && (acepta.touched || contactoForm.submitted)) {
+      <div class="error" role="alert">Debe aceptar el tratamiento de datos.</div>
+    }
+
+    <div class="acciones">
+      <button type="submit">Enviar</button>
+      <button type="button" class="secundario" (click)="limpiar(contactoForm)">Limpiar</button>
+    </div>
+  </form>
+
+  @if (mensajeExito) {
+    <p class="exito" role="status">{{ mensajeExito }}</p>
+  }
+
+  <details class="depuracion">
+    <summary>Ver estado del formulario</summary>
+    <p><strong>Válido:</strong> {{ contactoForm.valid }}</p>
+    <p><strong>Tocado:</strong> {{ contactoForm.touched }}</p>
+    <p><strong>Modificado:</strong> {{ contactoForm.dirty }}</p>
+    <pre>{{ modelo | json }}</pre>
+  </details>
+</section>

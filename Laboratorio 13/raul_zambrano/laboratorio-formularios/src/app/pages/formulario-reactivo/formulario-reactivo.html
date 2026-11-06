@@ -1,0 +1,186 @@
+<section class="tarjeta">
+  <h2>Formulario de registro</h2>
+  <p class="introduccion">
+    Ejemplo reactivo. El modelo y las validaciones se definen en TypeScript.
+  </p>
+
+  <form [formGroup]="registroForm" (ngSubmit)="enviar()" novalidate>
+    <div class="rejilla">
+      <div class="campo">
+        <label for="nombreReactivo">Nombre completo</label>
+        <input id="nombreReactivo" type="text" formControlName="nombre" autocomplete="name" />
+
+        @if (registroForm.controls.nombre.invalid && registroForm.controls.nombre.touched) {
+          <div class="error" role="alert">
+            @if (registroForm.controls.nombre.hasError('required')) {
+              <span>El nombre es obligatorio.</span>
+            }
+            @if (registroForm.controls.nombre.hasError('minlength')) {
+              <span>Ingrese al menos 3 caracteres.</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="correoReactivo">Correo electrónico</label>
+        <input id="correoReactivo" type="email" formControlName="correo" autocomplete="email" />
+
+        @if (registroForm.controls.correo.invalid && registroForm.controls.correo.touched) {
+          <div class="error" role="alert">
+            @if (registroForm.controls.correo.hasError('required')) {
+              <span>El correo es obligatorio.</span>
+            }
+            @if (registroForm.controls.correo.hasError('email')) {
+              <span>Ingrese un correo válido.</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="edad">Edad</label>
+        <input id="edad" type="number" formControlName="edad" min="0" />
+
+        @if (registroForm.controls.edad.invalid && registroForm.controls.edad.touched) {
+          <div class="error" role="alert">
+            @if (registroForm.controls.edad.hasError('required')) {
+              <span>La edad es obligatoria.</span>
+            }
+            @if (registroForm.controls.edad.hasError('edadMinima')) {
+              <span>Debe tener al menos 18 años.</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="telefono">Teléfono (opcional)</label>
+        <input
+          id="telefono"
+          type="tel"
+          formControlName="telefono"
+          inputmode="numeric"
+          maxlength="9"
+        />
+
+        @if (
+          registroForm.controls.telefono.hasError('pattern') && registroForm.controls.telefono.touched
+        ) {
+          <div class="error" role="alert">Ingrese exactamente 9 dígitos.</div>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          autocomplete="new-password"
+        />
+
+        @if (registroForm.controls.password.invalid && registroForm.controls.password.touched) {
+          <div class="error" role="alert">
+            @if (registroForm.controls.password.hasError('required')) {
+              <span>La contraseña es obligatoria.</span>
+            }
+            @if (registroForm.controls.password.hasError('minlength')) {
+              <span>Debe tener al menos 8 caracteres.</span>
+            }
+            @if (registroForm.controls.password.hasError('pattern')) {
+              <span>Incluya al menos una mayúscula y un número.</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="confirmar">Confirmar contraseña</label>
+        <input
+          id="confirmar"
+          type="password"
+          formControlName="confirmarPassword"
+          autocomplete="new-password"
+        />
+
+        @if (
+          registroForm.controls.confirmarPassword.hasError('required') &&
+          registroForm.controls.confirmarPassword.touched
+        ) {
+          <div class="error" role="alert">Confirme la contraseña.</div>
+        }
+
+        @if (
+          registroForm.hasError('passwordsNoCoinciden') &&
+          registroForm.controls.confirmarPassword.touched
+        ) {
+          <div class="error" role="alert">Las contraseñas no coinciden.</div>
+        }
+      </div>
+    </div>
+
+    <fieldset formArrayName="habilidades">
+      <legend>Habilidades</legend>
+      <p class="ayuda">Agregue una o más habilidades.</p>
+
+      @for (control of habilidades.controls; track $index; let i = $index) {
+        <div class="fila-dinamica">
+          <div class="campo">
+            <label [for]="'habilidad-' + i">Habilidad {{ i + 1 }}</label>
+            <input [id]="'habilidad-' + i" type="text" [formControlName]="i" />
+
+            @if (control.invalid && control.touched) {
+              <div class="error" role="alert">Ingrese al menos 2 caracteres.</div>
+            }
+          </div>
+
+          <button
+            type="button"
+            class="peligro"
+            (click)="eliminarHabilidad(i)"
+            [disabled]="habilidades.length === 1"
+          >
+            Eliminar
+          </button>
+        </div>
+      }
+
+      <button type="button" class="secundario" (click)="agregarHabilidad()">
+        Agregar habilidad
+      </button>
+    </fieldset>
+
+    <div class="campo campo-check">
+      <input id="aceptaReactivo" type="checkbox" formControlName="aceptaTerminos" />
+      <label for="aceptaReactivo">Acepto los términos y condiciones.</label>
+    </div>
+
+    @if (
+      registroForm.controls.aceptaTerminos.invalid && registroForm.controls.aceptaTerminos.touched
+    ) {
+      <div class="error" role="alert">Debe aceptar los términos y condiciones.</div>
+    }
+
+    <div class="acciones">
+      <button type="submit">Registrar</button>
+      <button type="button" class="secundario" (click)="limpiar()">Limpiar</button>
+    </div>
+  </form>
+
+  @if (mensajeExito) {
+    <p class="exito" role="status">{{ mensajeExito }}</p>
+  }
+
+  <details class="depuracion">
+    <summary>Ver estado del formulario</summary>
+    <p><strong>Estado:</strong> {{ registroForm.status }}</p>
+    <p><strong>Válido:</strong> {{ registroForm.valid }}</p>
+    <p><strong>Tocado:</strong> {{ registroForm.touched }}</p>
+    <p><strong>Modificado:</strong> {{ registroForm.dirty }}</p>
+    <p><strong>Errores del grupo:</strong></p>
+    <pre>{{ registroForm.errors | json }}</pre>
+    <p><strong>Valor:</strong></p>
+    <pre>{{ registroForm.getRawValue() | json }}</pre>
+  </details>
+</section>
