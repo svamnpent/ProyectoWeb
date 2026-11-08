@@ -1,0 +1,29 @@
+<app-header></app-header>
+<main class="page">
+  <header class="hero">
+    <p class="eyebrow">Desarrollo Web Integrado · Semana 11</p>
+    <h1>{{ titulo }}</h1>
+    <p>Primera interfaz desarrollada con Angular 22.</p>
+    <button type="button" (click)="alternarStock()">
+      {{ mostrarStock() ? 'Ocultar stock' : 'Mostrar stock' }}
+    </button>
+  </header>
+  <section class="grid">
+    @for (producto of productos; track producto.id) {
+    <article class="product-card" [class.out-of-stock]="producto.stock === 0">
+      <span class="product-card__id">#{{ producto.id }}</span>
+      <h2>{{ producto.nombre }}</h2>
+      <p class="price">S/ {{ producto.precio }}</p>
+      @if (mostrarStock()) {
+      @if (producto.stock > 0) {
+      <p class="stock ok">Stock disponible: {{ producto.stock }}</p>
+      } @else {
+      <p class="stock danger">Sin stock</p>
+      }
+      }
+    </article>
+    } @empty {
+    <p>No hay productos registrados.</p>
+    }
+  </section>
+</main>
