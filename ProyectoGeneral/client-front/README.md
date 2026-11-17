@@ -1,59 +1,65 @@
-# ClientFront
+## ▶️ Cómo ejecutar el proyecto
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.21.
+### Requisitos
 
-## Development server
+- **Docker Desktop** (levanta la base de datos y la API).
+- **Node.js** `^20.19`, `^22.12` o `>=24` (incluye npm) para el frontend.
+- Java y Maven solo si quieres ejecutar la API desde el IDE (ver `api/README.md`).
 
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### 1. API y base de datos
 
 ```bash
-ng generate component component-name
+cd api
+cp .env.example .env          # en PowerShell: copy .env.example .env
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Edita `.env` y revisa al menos:
+
+- `DB_PASSWORD`, `JWT_SECRET` (mínimo 32 caracteres) y `ADMIN_PASSWORD`.
+- `CORS_ALLOWED_ORIGINS` debe incluir `http://localhost:4200` (origen de Angular).
 
 ```bash
-ng generate --help
+docker compose up -d --build
 ```
 
-## Building
+Comprueba que está arriba:
 
-To build the project run:
+- Salud: <http://localhost:8080/actuator/health> → `{"status":"UP"}`
+- Swagger: <http://localhost:8080/swagger-ui.html>
+
+### 2. Frontend (Angular)
 
 ```bash
-ng build
+cd client-front
+npm install
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Abre <http://localhost:4200> (usa `localhost`, no `127.0.0.1`: CORS los trata como orígenes distintos).
 
-## Running unit tests
+### 3. Usuarios de prueba
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Con `SPRING_PROFILES_ACTIVE=demo` en el `.env` se cargan datos falsos. Clave de todos: `Demo12345`.
+
+| Rol | Correo |
+|---|---|
+| USER | `maria.quispe@demo.local`, `carlos.huaman@demo.local`, `lucia.torres@demo.local` |
+| TRABAJADOR | `trabajador@demo.local` |
+| ADMIN | el `ADMIN_EMAIL` / `ADMIN_PASSWORD` de tu `.env` |
+
+### 4. Pruebas
 
 ```bash
-ng test
+cd client-front && npm test      # frontend (vitest)
+cd api && ./mvnw test            # backend, no necesita Docker
 ```
 
-## Running end-to-end tests
+### 5. Problemas frecuentes
 
-For end-to-end (e2e) testing, run:
+| Síntoma | Causa y solución |
+|---|---|
+| "No se pudo conectar con el servidor" en Angular | API apagada o CORS. Prueba <http://localhost:8080/actuator/health>; si responde `UP`, revisa `CORS_ALLOWED_ORIGINS`. |
+| Cambié el `.env` y nada cambia | Usa `docker compose up -d api`, **no** `restart` (restart conserva las variables antiguas). |
+| Quiero empezar con la BD limpia | `docker compose down -v` borra los datos y los vuelve a cargar al arrancar. |
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+> El archivo `.env` **no se sube a Git**. Si despliegas fuera de clase, cambia `JWT_SECRET` y `ADMIN_PASSWORD`, y quita el perfil `demo`.
