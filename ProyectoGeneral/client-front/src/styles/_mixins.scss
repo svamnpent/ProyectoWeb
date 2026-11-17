@@ -1,0 +1,34 @@
+@use 'sass:color';
+@use 'sass:map';
+@use 'variables' as *;
+
+// Media query mobile-first: @include desde('md') { ... }
+@mixin desde($punto) {
+  @media (min-width: map.get($breakpoints, $punto)) {
+    @content;
+  }
+}
+
+@mixin tarjeta {
+  background: $color-superficie;
+  border-radius: $radio-lg;
+  box-shadow: $sombra-suave;
+  padding: $espacio-5;
+}
+
+@mixin centrar-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Botón de un color; el hover se oscurece automáticamente.
+@mixin boton-variante($fondo, $texto: #ffffff) {
+  background: $fondo;
+  color: $texto;
+
+  &:hover:not(:disabled) {
+    background: color.scale($fondo, $lightness: -12%);
+    color: $texto;
+  }
+}

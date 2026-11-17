@@ -1,0 +1,111 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.encabezado {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: $color-oscuro;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  &__barra {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $espacio-3;
+    padding-block: $espacio-3;
+
+    @include desde('md') {
+      flex-wrap: nowrap;
+    }
+  }
+
+  &__marca {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #ffffff;
+
+    &:hover {
+      color: $color-acento;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    flex: 1;
+    gap: $espacio-4;
+
+    a {
+      color: #ffffff;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+
+      &:hover,
+      &.activo {
+        color: $color-acento;
+      }
+    }
+  }
+
+  &__sesion {
+    display: flex;
+    align-items: center;
+    gap: $espacio-3;
+  }
+
+  &__carrito {
+    color: #ffffff;
+    font-size: 0.9rem;
+  }
+
+  &__insignia {
+    display: inline-block;
+    min-width: 1.4rem;
+    padding: 0 $espacio-2;
+    border-radius: 20px;
+    background: $color-acento;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  &__saludo {
+    color: #ffffff;
+    font-size: 0.9rem;
+
+    strong {
+      color: $color-acento;
+    }
+  }
+
+  // El botón "contorno" está pensado para fondo claro; en el header oscuro se invierte.
+  &__ingresar {
+    color: #ffffff;
+    border-color: #ffffff;
+
+    &:hover {
+      background: #ffffff;
+      color: $color-oscuro;
+    }
+  }
+}
+
+.contenido {
+  flex: 1;
+}
+
+.pie {
+  padding-block: $espacio-5;
+  background: $color-oscuro;
+  color: $color-texto-suave;
+  font-size: 0.875rem;
+  text-align: center;
+}

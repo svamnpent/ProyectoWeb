@@ -1,0 +1,37 @@
+// ── Paleta PHANTOM ───────────────────────────────────────────
+$color-primario: #1a0b3d;
+$color-acento: #cc0000;
+$color-oscuro: #111111;
+$color-exito: #28a745;
+$color-peligro: #dc3545;
+$color-fondo: #f8f9fa;
+$color-superficie: #ffffff;
+$color-texto: #212529;
+$color-texto-suave: #6c757d;
+$color-borde: #dee2e6;
+
+// ── Tipografía ───────────────────────────────────────────────
+$fuente-base: 'Segoe UI', Roboto, sans-serif;
+
+// ── Espaciado (escala de 0.25rem) ────────────────────────────
+$espacio-1: 0.25rem;
+$espacio-2: 0.5rem;
+$espacio-3: 0.75rem;
+$espacio-4: 1rem;
+$espacio-5: 1.5rem;
+$espacio-6: 2rem;
+$espacio-8: 3rem;
+
+// ── Bordes y sombras ─────────────────────────────────────────
+$radio-sm: 6px;
+$radio-md: 10px;
+$radio-lg: 15px;
+$sombra-suave: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+// ── Layout ───────────────────────────────────────────────────
+$ancho-contenedor: 1200px;
+$breakpoints: (
+  'sm': 576px,
+  'md': 768px,
+  'lg': 992px,
+);

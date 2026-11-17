@@ -1,0 +1,31 @@
+<article class="tarjeta">
+  <span class="tarjeta__categoria">{{ producto().categoria.nombre }}</span>
+
+  <div class="tarjeta__imagen">
+    @if (producto().imagenUrl) {
+      <img [src]="producto().imagenUrl" [alt]="producto().nombre" loading="lazy" />
+    } @else {
+      <span class="tarjeta__inicial" aria-hidden="true">{{ inicial() }}</span>
+    }
+  </div>
+
+  <h3 class="tarjeta__nombre">{{ producto().nombre }}</h3>
+  @if (producto().marca) {
+    <p class="tarjeta__marca">{{ producto().marca }}</p>
+  }
+
+  <p class="tarjeta__precio">{{ producto().precio | currency: 'PEN' : 'S/ ' : '1.2-2' }}</p>
+
+  @if (avisoStock(); as aviso) {
+    <p class="tarjeta__stock">{{ aviso }}</p>
+  }
+
+  <button
+    type="button"
+    class="btn btn--bloque tarjeta__boton"
+    [disabled]="agotado()"
+    (click)="alAgregar()"
+  >
+    Agregar al carrito
+  </button>
+</article>

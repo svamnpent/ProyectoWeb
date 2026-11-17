@@ -1,0 +1,81 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.tarjeta {
+  @include tarjeta;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: $espacio-4;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  &__categoria {
+    align-self: flex-start;
+    margin-bottom: $espacio-3;
+    padding: 2px $espacio-3;
+    border-radius: 20px;
+    background: $color-primario;
+    color: #ffffff;
+    font-size: 0.6875rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  &__imagen {
+    @include centrar-flex;
+    height: 180px;
+    margin-bottom: $espacio-3;
+    border-radius: $radio-md;
+    background: $color-fondo;
+    overflow: hidden;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__inicial {
+    font-size: 4rem;
+    font-weight: 700;
+    color: rgba($color-primario, 0.25);
+  }
+
+  &__nombre {
+    min-height: 2.6em;
+    margin: 0 0 $espacio-1;
+    font-size: 1rem;
+    color: $color-texto;
+  }
+
+  &__marca {
+    margin: 0 0 $espacio-2;
+    color: $color-texto-suave;
+    font-size: 0.8125rem;
+  }
+
+  &__precio {
+    margin: 0 0 $espacio-2;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  &__stock {
+    margin: 0 0 $espacio-2;
+    color: $color-acento;
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  &__boton {
+    margin-top: auto;
+  }
+}
