@@ -1,0 +1,66 @@
+/* Configuración de diseño: botones.
+   Variantes: primario, secundario, fantasma y peligro. */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-xs);
+  min-height: 40px;
+  padding: 0 var(--espacio-md);
+  border: 1px solid transparent;
+  border-radius: var(--radio-sm);
+  font-family: var(--fuente-base);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-acento);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primario {
+  background: var(--color-primario);
+  color: var(--color-sobre-primario);
+}
+
+.btn-primario:hover:not(:disabled) {
+  background: var(--color-primario-hover);
+}
+
+.btn-secundario {
+  background: var(--color-superficie);
+  color: var(--color-tinta);
+  border-color: var(--color-linea);
+}
+
+.btn-secundario:hover:not(:disabled) {
+  background: var(--color-superficie-suave);
+}
+
+.btn-fantasma {
+  background: transparent;
+  color: var(--color-primario);
+}
+
+.btn-fantasma:hover:not(:disabled) {
+  background: var(--color-primario-suave);
+}
+
+.btn-peligro {
+  background: var(--color-peligro);
+  color: var(--color-sobre-peligro);
+}
+
+.btn-peligro:hover:not(:disabled) {
+  background: var(--color-peligro-hover);
+}
