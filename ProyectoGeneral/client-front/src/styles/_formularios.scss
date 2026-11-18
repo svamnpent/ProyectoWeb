@@ -1,0 +1,37 @@
+@use 'variables' as *;
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: $espacio-1;
+  margin-bottom: $espacio-4;
+
+  &__etiqueta {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  &__input {
+    padding: $espacio-2 $espacio-3;
+    border: 1px solid $color-borde;
+    border-radius: $radio-sm;
+    font: inherit;
+    background: $color-superficie;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primario;
+      box-shadow: 0 0 0 3px rgba($color-primario, 0.15);
+    }
+  }
+
+  &__error {
+    font-size: 0.8125rem;
+    color: $color-peligro;
+  }
+
+  // Se activa con [class.campo--invalido]="control.invalid && control.touched"
+  &--invalido &__input {
+    border-color: $color-peligro;
+  }
+}

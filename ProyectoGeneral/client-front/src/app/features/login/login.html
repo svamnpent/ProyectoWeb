@@ -1,0 +1,65 @@
+<section class="acceso">
+  <div class="acceso__tarjeta">
+    <h1 class="acceso__titulo">Iniciar sesión</h1>
+
+    @if (error(); as mensaje) {
+      <div class="alerta alerta--error" role="alert">{{ mensaje }}</div>
+    }
+
+    <form #formulario="ngForm" (ngSubmit)="iniciarSesion(formulario)" novalidate>
+      <div
+        class="campo"
+        [class.campo--invalido]="emailCtrl.invalid && (emailCtrl.touched || formulario.submitted)"
+      >
+        <label class="campo__etiqueta" for="email">Correo electrónico</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          class="campo__input"
+          autocomplete="username"
+          required
+          email
+          [(ngModel)]="credenciales.email"
+          #emailCtrl="ngModel"
+        />
+        @if (emailCtrl.invalid && (emailCtrl.touched || formulario.submitted)) {
+          <span class="campo__error">
+            @if (emailCtrl.errors?.['required']) {
+              El correo es obligatorio.
+            } @else {
+              Ingresa un correo válido.
+            }
+          </span>
+        }
+      </div>
+
+      <div
+        class="campo"
+        [class.campo--invalido]="
+          passwordCtrl.invalid && (passwordCtrl.touched || formulario.submitted)
+        "
+      >
+        <label class="campo__etiqueta" for="password">Contraseña</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          class="campo__input"
+          autocomplete="current-password"
+          required
+          maxlength="72"
+          [(ngModel)]="credenciales.password"
+          #passwordCtrl="ngModel"
+        />
+        @if (passwordCtrl.invalid && (passwordCtrl.touched || formulario.submitted)) {
+          <span class="campo__error">La contraseña es obligatoria.</span>
+        }
+      </div>
+
+      <button type="submit" class="btn btn--bloque" [disabled]="enviando()">
+        {{ enviando() ? 'Ingresando…' : 'Ingresar' }}
+      </button>
+    </form>
+  </div>
+</section>

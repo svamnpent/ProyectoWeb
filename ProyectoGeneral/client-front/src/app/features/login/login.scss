@@ -1,0 +1,18 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.acceso {
+  @include centrar-flex;
+  padding: $espacio-8 $espacio-4;
+
+  &__tarjeta {
+    @include tarjeta;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  &__titulo {
+    margin-bottom: $espacio-5;
+    text-align: center;
+  }
+}
