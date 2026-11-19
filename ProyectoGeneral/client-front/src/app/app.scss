@@ -64,6 +64,11 @@
   &__carrito {
     color: #ffffff;
     font-size: 0.9rem;
+
+    &:hover,
+    &.activo {
+      color: $color-acento;
+    }
   }
 
   &__insignia {

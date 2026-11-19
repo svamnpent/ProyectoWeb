@@ -9,10 +9,15 @@
     </nav>
 
     <div class="encabezado__sesion">
-      <span class="encabezado__carrito" aria-label="Productos en el carrito">
+      <a
+        class="encabezado__carrito"
+        routerLink="/carrito"
+        routerLinkActive="activo"
+        aria-label="Ver carrito"
+      >
         Carrito
         <span class="encabezado__insignia">{{ carrito.cantidadTotal() }}</span>
-      </span>
+      </a>
 
       @if (auth.estaAutenticado()) {
         <span class="encabezado__saludo">

@@ -31,6 +31,7 @@ describe('Inicio (catálogo)', () => {
   let el: HTMLElement;
 
   beforeEach(async () => {
+    localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [Inicio],
       providers: [provideHttpClient(), provideHttpClientTesting()],

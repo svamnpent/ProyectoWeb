@@ -1,0 +1,180 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.carrito {
+  padding-block: $espacio-6;
+
+  &__estado {
+    padding-block: $espacio-8;
+    text-align: center;
+    color: $color-texto-suave;
+  }
+
+  &__avisos {
+    margin: 0;
+    padding-left: $espacio-5;
+  }
+
+  &__vacio {
+    @include tarjeta;
+    padding-block: $espacio-8;
+    text-align: center;
+
+    p {
+      margin-bottom: $espacio-4;
+      color: $color-texto-suave;
+    }
+  }
+
+  &__cuerpo {
+    display: grid;
+    gap: $espacio-5;
+
+    @include desde('lg') {
+      grid-template-columns: 1fr 340px;
+      align-items: start;
+    }
+  }
+}
+
+.linea {
+  @include tarjeta;
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: $espacio-3 $espacio-4;
+  align-items: center;
+  margin-bottom: $espacio-3;
+  padding: $espacio-4;
+
+  @include desde('md') {
+    grid-template-columns: 72px 1fr auto 110px auto;
+  }
+
+  &__imagen {
+    @include centrar-flex;
+    width: 72px;
+    height: 72px;
+    border-radius: $radio-md;
+    background: $color-fondo;
+    overflow: hidden;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__inicial {
+    font-size: 2rem;
+    font-weight: 700;
+    color: rgba($color-primario, 0.25);
+  }
+
+  &__nombre {
+    margin: 0 0 $espacio-1;
+    font-size: 1rem;
+    color: $color-texto;
+  }
+
+  &__detalle {
+    margin: 0;
+    color: $color-texto-suave;
+    font-size: 0.8125rem;
+  }
+
+  &__cantidad {
+    display: flex;
+    flex-direction: column;
+    gap: $espacio-1;
+  }
+
+  &__subtotal {
+    margin: 0;
+    font-weight: 700;
+    text-align: right;
+  }
+
+  &__quitar {
+    padding: 0;
+    border: none;
+    background: none;
+    color: $color-acento;
+    font: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.cantidad {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid $color-borde;
+  border-radius: $radio-sm;
+  overflow: hidden;
+
+  &__boton {
+    width: 2rem;
+    height: 2.25rem;
+    border: none;
+    background: $color-fondo;
+    font: inherit;
+    font-size: 1.125rem;
+    cursor: pointer;
+
+    &:hover {
+      background: $color-borde;
+    }
+  }
+
+  &__input {
+    width: 3.5rem;
+    height: 2.25rem;
+    border: none;
+    text-align: center;
+    font: inherit;
+
+    &:focus {
+      outline: 2px solid $color-primario;
+      outline-offset: -2px;
+    }
+  }
+}
+
+.resumen {
+  @include tarjeta;
+
+  @include desde('lg') {
+    position: sticky;
+    top: 5.5rem;
+  }
+
+  &__titulo {
+    font-size: 1.25rem;
+  }
+
+  &__datos {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: $espacio-2 $espacio-4;
+    margin: 0 0 $espacio-5;
+
+    dd {
+      margin: 0;
+      text-align: right;
+    }
+  }
+
+  &__total {
+    font-size: 1.375rem;
+    font-weight: 700;
+  }
+
+  .btn + .btn {
+    margin-top: $espacio-2;
+  }
+}

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -14,11 +15,23 @@ export const routes: Routes = [
     loadComponent: () => import('./features/login/login').then((m) => m.Login),
   },
 
+  {
+    path: 'carrito',
+    title: 'PHANTOM | Carrito',
+    loadComponent: () => import('./features/carrito/carrito').then((m) => m.Carrito),
+  },
+  {
+    // :id llega como input() al componente (withComponentInputBinding)
+    path: 'pedido/:id',
+    title: 'PHANTOM | Pedido',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/pedido/pedido').then((m) => m.Pedido),
+  },
+
   // Rutas previstas (se agregan al construir cada pantalla):
   //   { path: 'registro', ... }                                → formulario reactivo
   //   { path: 'producto/:id', ... }                            → :id llega como input()
   //   { path: 'categoria/:id', ... }
-  //   { path: 'carrito', ... }                                 → FormArray de líneas
   //   { path: 'perfil', canActivate: [authGuard], ... }
   //   { path: 'admin/productos', canActivate: [staffGuard], ... }
 
