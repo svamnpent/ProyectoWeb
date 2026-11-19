@@ -82,3 +82,16 @@ button:disabled {
 [role='status'] {
   padding: 0.45rem 0;
 }
+
+h2 { margin:0 0 1rem; padding-bottom:.8rem; border-bottom:1px solid #dee2e6; font-size:1.65rem; }
+fieldset { margin:0; }
+fieldset > .acciones { margin-bottom:.8rem; }
+.fila { gap:.75rem; padding:1rem .2rem; }
+.fila:last-child { border-bottom:0; }
+.fila small { display:block; color:#54505d; }
+.existencias { display:inline-block; padding:.12rem .5rem; border-radius:.3rem; background:#f1edf7; font-size:.8rem; }
+.agotado { color:#a11020; background:#fff0f0; }
+form, article { background:#f8f9fa; }
+input,select,textarea { background:white; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid #1a0b3d; outline-offset:2px; }
+@media (max-width: 540px) { .fila { align-items:start; } .campos { grid-template-columns:1fr; } }

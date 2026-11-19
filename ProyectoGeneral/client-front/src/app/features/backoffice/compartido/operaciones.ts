@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { AuthService } from '../../core/services/auth.service';
-import { mensajeDeError } from '../../core/utils/http-error';
+import { environment } from '../../../../environments/environment';
+import { AuthService } from '../../../core/services/auth.service';
+import { mensajeDeError } from '../../../core/utils/http-error';
 
 export abstract class Operaciones {
   protected readonly http = inject(HttpClient);

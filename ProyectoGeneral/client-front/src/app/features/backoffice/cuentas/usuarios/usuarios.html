@@ -9,6 +9,7 @@
   <p role="status">Procesando…</p>
 }
 <fieldset [disabled]="ocupado()" aria-label="Usuarios">
+  @if (!abierto) {
   <div class="acciones">
     <button class="principal" (click)="editar()">Crear usuario</button
     ><button (click)="recargar()">Mostrar todos</button>
@@ -24,7 +25,7 @@
     /></label>
     <button type="submit" [disabled]="busqueda.invalid">Buscar</button>
   </form>
-  @if (abierto) {
+  } @else {
     <form #f="ngForm" (ngSubmit)="f.valid && guardar()">
       <h3>{{ id === null ? 'Crear' : 'Editar' }} usuario</h3>
       <div class="campos">
@@ -75,6 +76,7 @@
       </div>
     </form>
   }
+  @if (!abierto) {
   @for (fila of filas; track fila.id) {
     <div class="fila">
       <div>
@@ -91,5 +93,6 @@
     @if (!ocupado() && !error()) {
       <p>No hay registros.</p>
     }
+  }
   }
 </fieldset>

@@ -49,7 +49,7 @@ describe('Acceso por URL al back-office', () => {
     expect(TestBed.inject(Router).url).toBe('/');
   });
 
-  it.each(['usuarios', 'perfiles'])(
+  it.each(['usuarios', 'perfiles', 'auditoria'])(
     'protege %s incluso navegando desde otra sección',
     async (ruta) => {
       rol = 'TRABAJADOR';
@@ -61,7 +61,7 @@ describe('Acceso por URL al back-office', () => {
     },
   );
 
-  it.each(['usuarios', 'perfiles'])('permite %s al administrador', async (ruta) => {
+  it.each(['usuarios', 'perfiles', 'auditoria'])('permite %s al administrador', async (ruta) => {
     rol = 'ADMIN';
     await RouterTestingHarness.create('/backoffice/' + ruta);
     expect(TestBed.inject(Router).url).toBe('/backoffice/' + ruta);

@@ -9,12 +9,12 @@
   <p role="status">Procesando…</p>
 }
 <fieldset [disabled]="ocupado()" aria-label="Productos">
-  <div class="acciones">
-    <button class="principal" (click)="editar()">Crear producto</button
-    ><button (click)="recargar()">Mostrar todos</button>
-  </div>
-
-  @if (abierto) {
+  @if (!abierto) {
+    <div class="acciones">
+      <button class="principal" (click)="editar()">Crear producto</button
+      ><button (click)="recargar()">Recargar</button>
+    </div>
+  } @else {
     <form #f="ngForm" (ngSubmit)="f.valid && guardar()">
       <h3>{{ id === null ? 'Crear' : 'Editar' }} producto</h3>
       <div class="campos">
@@ -72,21 +72,38 @@
       </div>
     </form>
   }
-  @for (fila of filas; track fila.id) {
-    <div class="fila">
-      <div>
-        <strong>{{ fila.nombre }}</strong> S/ {{ fila.precio }} · Stock {{ fila.stock }}
+  @if (!abierto) {
+    @if (totalPaginas > 1) {
+      <nav class="acciones" aria-label="Paginación de productos">
+        <button type="button" (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1">
+          Anterior
+        </button>
+        <span aria-live="polite">Página {{ paginaActual }} de {{ totalPaginas }}</span>
+        <button type="button" (click)="cambiarPagina(1)" [disabled]="paginaActual === totalPaginas">
+          Siguiente
+        </button>
+      </nav>
+    }
+    @for (fila of productosVisibles; track fila.id) {
+      <div class="fila">
+        <div>
+          <strong>{{ fila.nombre }}</strong>
+          <small>{{ fila.categoria.nombre }} · S/ {{ fila.precio }}</small>
+          <span class="existencias" [class.agotado]="fila.stock === 0">{{
+            fila.stock === 0 ? 'Agotado' : fila.stock + ' en stock'
+          }}</span>
+        </div>
+        <div class="acciones">
+          <button (click)="editar(fila)">Editar</button>
+          @if (auth.esAdmin()) {
+            <button class="peligro" (click)="borrar(fila)">Eliminar</button>
+          }
+        </div>
       </div>
-      <div class="acciones">
-        <button (click)="editar(fila)">Editar</button>
-        @if (auth.esAdmin()) {
-          <button class="peligro" (click)="borrar(fila)">Eliminar</button>
-        }
-      </div>
-    </div>
-  } @empty {
-    @if (!ocupado() && !error()) {
-      <p>No hay registros.</p>
+    } @empty {
+      @if (!ocupado() && !error()) {
+        <p>No hay registros.</p>
+      }
     }
   }
 </fieldset>

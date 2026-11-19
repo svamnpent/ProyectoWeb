@@ -1,15 +1,40 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { Categoria, Etiqueta, Producto, ProductoRequest } from '../../core/models/catalogo.model';
-import { Mantenimiento } from './operaciones';
+import {
+  Categoria,
+  Etiqueta,
+  Producto,
+  ProductoRequest,
+} from '../../../../core/models/catalogo.model';
+import { Mantenimiento } from '../../compartido/operaciones';
 
 @Component({
   imports: [FormsModule],
   templateUrl: './productos.html',
-  styleUrl: './pagina.scss',
+  styleUrl: '../../compartido/pagina.scss',
 })
 export class Productos extends Mantenimiento<ProductoRequest, Producto> {
+  protected readonly porPagina = 5;
+  private paginaElegida = 1;
+
+  protected get totalPaginas(): number {
+    return Math.max(1, Math.ceil(this.filas.length / this.porPagina));
+  }
+
+  protected get paginaActual(): number {
+    return Math.min(this.paginaElegida, this.totalPaginas);
+  }
+
+  protected get productosVisibles(): Producto[] {
+    const inicio = (this.paginaActual - 1) * this.porPagina;
+    return this.filas.slice(inicio, inicio + this.porPagina);
+  }
+
+  protected cambiarPagina(paso: number): void {
+    this.paginaElegida = Math.max(1, Math.min(this.totalPaginas, this.paginaActual + paso));
+  }
+
   protected readonly recurso = 'productos';
   protected categorias: Categoria[] = [];
   protected etiquetas: Etiqueta[] = [];

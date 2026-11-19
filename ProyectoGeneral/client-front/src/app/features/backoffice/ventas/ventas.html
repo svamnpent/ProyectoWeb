@@ -9,10 +9,14 @@
   <p role="status">Procesando…</p>
 }
 <fieldset [disabled]="ocupado()" aria-label="Operaciones de venta">
+  @if (!mostrador && !seleccion) {
   <div class="acciones">
     <button class="principal" (click)="nueva()">Venta de mostrador</button>
     <button (click)="actualizar()">Actualizar</button>
   </div>
+  } @else if (seleccion) {
+    <button (click)="seleccion = null">Volver a ventas</button>
+  }
   @if (seleccion; as venta) {
     <article>
       <h3>Venta #{{ venta.numeroOrden || venta.id }}</h3>
@@ -92,6 +96,7 @@
       </div>
     </form>
   }
+  @if (!mostrador && !seleccion) {
   @for (v of ventas; track v.id) {
     <div class="fila">
       <span
@@ -104,5 +109,6 @@
     @if (!ocupado() && !error()) {
       <p>No hay ventas registradas.</p>
     }
+  }
   }
 </fieldset>

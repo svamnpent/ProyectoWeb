@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { Perfil } from '../../core/models/usuario.model';
-import { Operaciones } from './operaciones';
+import { Perfil } from '../../../../core/models/usuario.model';
+import { Operaciones } from '../../compartido/operaciones';
 
 @Component({
   template: ` <h2>Perfiles</h2>
@@ -25,7 +25,7 @@ import { Operaciones } from './operaciones';
         <p>No hay perfiles.</p>
       }
     }`,
-  styleUrl: './pagina.scss',
+  styleUrl: '../../compartido/pagina.scss',
 })
 export class Perfiles extends Operaciones {
   protected perfiles: Perfil[] = [];

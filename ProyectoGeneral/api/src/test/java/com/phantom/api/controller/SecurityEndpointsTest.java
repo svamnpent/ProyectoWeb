@@ -46,6 +46,7 @@ class SecurityEndpointsTest {
     @MockBean private ProductoService productoService;
     @MockBean private UsuarioService usuarioService;
     @MockBean private VentaService ventaService;
+    @MockBean private AuditoriaService auditoriaService;
     @MockBean private AuthService authService;
 
     private static final String PRODUCTO = "{\"nombre\":\"Laptop\",\"precio\":10.50,\"stock\":3,\"categoriaId\":1}";
@@ -131,6 +132,7 @@ class SecurityEndpointsTest {
                 caso(P, BO + "/usuarios", USUARIO, 401, 403, 403, 201),
                 caso(U, BO + "/usuarios/5", USUARIO, 401, 403, 403, 200),
                 caso(D, BO + "/usuarios/5", null, 401, 403, 403, 204),
+                caso(G, BO + "/auditoria?desde=2026-01-01&hasta=2026-01-31", null, 401, 403, 403, 200),
                 caso(G, BO + "/perfiles", null, 401, 403, 403, 200));
     }
 
