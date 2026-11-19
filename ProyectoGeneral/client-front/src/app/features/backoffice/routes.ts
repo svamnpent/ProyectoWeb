@@ -13,6 +13,11 @@ export const backofficeRoutes: Routes = [
       { path: 'etiquetas', loadComponent: () => import('./etiquetas').then((m) => m.Etiquetas) },
       { path: 'ventas', loadComponent: () => import('./ventas').then((m) => m.Ventas) },
       {
+        path: 'auditoria',
+        canActivate: [adminGuard],
+        loadComponent: () => import('./auditoria/auditoria').then((m) => m.Auditoria),
+      },
+      {
         path: 'usuarios',
         canActivate: [adminGuard],
         loadComponent: () => import('./usuarios').then((m) => m.Usuarios),

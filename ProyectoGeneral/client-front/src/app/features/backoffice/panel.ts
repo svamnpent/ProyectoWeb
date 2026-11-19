@@ -18,6 +18,7 @@ import { AuthService } from '../../core/services/auth.service';
         }}</a>
       }
       @if (auth.esAdmin()) {
+        <a routerLink="auditoria" routerLinkActive="actual" ariaCurrentWhenActive="page">Auditoría</a>
         <a routerLink="usuarios" routerLinkActive="actual" ariaCurrentWhenActive="page">Usuarios</a>
         <a routerLink="perfiles" routerLinkActive="actual" ariaCurrentWhenActive="page">Perfiles</a>
       }

@@ -1,0 +1,133 @@
+<div class="controles">
+  <form (ngSubmit)="consultar()" #f="ngForm">
+    <label>Desde<input type="date" name="desde" [(ngModel)]="desde" required /></label>
+    <label>Hasta<input type="date" name="hasta" [(ngModel)]="hasta" required /></label>
+    <button type="submit" [disabled]="ocupado() || f.invalid">Consultar</button>
+  </form>
+  @if (informe()) {
+    <div class="acciones">
+      <button (click)="descargar()">Descargar informe HTML</button
+      ><button (click)="imprimir()">Imprimir / guardar PDF</button>
+    </div>
+  }
+</div>
+@if (ocupado()) {
+  <p role="status">Cargando informe…</p>
+}
+@if (error()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (informe(); as r) {
+  @if (cifras(); as c) {
+    <article #contenido class="informe-comercial">
+      <h2>Auditoría comercial</h2>
+      <p>{{ r.desde }} al {{ r.hasta }} · Hora de Perú</p>
+      <dl>
+        <div>
+          <dt>Ventas netas del período</dt>
+          <dd>{{ c.neto | currency: 'PEN' : 'S/ ' }}</dd>
+        </div>
+        <div>
+          <dt>Ventas registradas</dt>
+          <dd>{{ c.ventas }}</dd>
+        </div>
+        <div>
+          <dt>Anulaciones</dt>
+          <dd>{{ c.anulaciones }}</dd>
+        </div>
+        <div>
+          <dt>Unidades en stock hoy</dt>
+          <dd>{{ c.unidades }}</dd>
+        </div>
+        <div>
+          <dt>Productos agotados hoy</dt>
+          <dd>{{ c.agotados }}</dd>
+        </div>
+      </dl>
+      <h3>Ventas netas por día con actividad</h3>
+      @for (d of c.dias; track d.dia) {
+        <div class="dia">
+          <span>{{ d.dia }}</span>
+          <div class="pista">
+            <span
+              aria-hidden="true"
+              class="barra"
+              [class.negativa]="d.importe < 0"
+              [style.width.%]="d.ancho"
+            ></span>
+          </div>
+          <strong>{{ d.importe | currency: 'PEN' : 'S/ ' }}</strong>
+        </div>
+      } @empty {
+        <p>Sin ventas ni ajustes en el período.</p>
+      }
+      <h3>Movimientos del período</h3>
+      <p>
+        Los importes son variaciones de la venta. Las filas de inventario muestran el cambio en
+        unidades y el saldo del producto tras la operación.
+      </p>
+      <div class="tabla">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha y hora</th>
+              <th>Movimiento</th>
+              <th>Orden / producto</th>
+              <th>Cliente</th>
+              <th>Variación (uds.)</th>
+              <th>Importe</th>
+              <th>Stock final</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (m of r.movimientos; track m.id) {
+              <tr>
+                <td>{{ m.fecha | date: 'dd/MM/yyyy HH:mm' : '-0500' }}</td>
+                <td>{{ etiquetas[m.tipo] }}</td>
+                <td>{{ m.referencia }} (#{{ m.recursoId }})</td>
+                <td>{{ m.clienteId !== null ? '#' + m.clienteId : '—' }}</td>
+                <td>{{ m.unidades }}</td>
+                <td>{{ m.importe === null ? '—' : (m.importe | currency: 'PEN' : 'S/ ') }}</td>
+                <td>{{ m.stockFinal ?? '—' }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="7">Sin movimientos registrados.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="nota">
+        Las ventas históricas reflejan el importe que conservaba cada orden al activar la auditoría.
+        Los ajustes, anulaciones y cambios de stock se registran a partir de su activación.
+      </p>
+      <h3>Inventario al {{ r.consulta | date: 'dd/MM/yyyy HH:mm' : '-0500' }}</h3>
+      <p>Existencias actuales, ordenadas de menor a mayor.</p>
+      <div class="tabla">
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Categoría</th>
+              <th>Stock actual</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of r.inventario; track p.id) {
+              <tr>
+                <td>{{ p.nombre }} (#{{ p.id }})</td>
+                <td>{{ p.categoria }}</td>
+                <td>{{ p.stock === 0 ? '0 · Agotado' : p.stock }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="3">Sin productos.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </article>
+  }
+}
