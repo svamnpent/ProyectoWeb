@@ -1,0 +1,67 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.pedido {
+  padding-block: $espacio-6;
+
+  &__estado {
+    padding-block: $espacio-8;
+    text-align: center;
+    color: $color-texto-suave;
+  }
+
+  &__tarjeta {
+    @include tarjeta;
+    max-width: 720px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  &__titulo {
+    color: $color-exito;
+  }
+
+  &__orden {
+    margin: 0;
+    font-size: 1.125rem;
+  }
+
+  &__fecha {
+    margin: 0 0 $espacio-5;
+    color: $color-texto-suave;
+    font-size: 0.875rem;
+  }
+
+  &__tabla {
+    width: 100%;
+    margin-bottom: $espacio-5;
+    border-collapse: collapse;
+    text-align: left;
+
+    th,
+    td {
+      padding: $espacio-2 $espacio-3;
+      border-bottom: 1px solid $color-borde;
+    }
+
+    th {
+      font-size: 0.8125rem;
+      color: $color-texto-suave;
+      text-transform: uppercase;
+    }
+
+    .numero {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    tfoot td {
+      border-bottom: none;
+      font-weight: 700;
+    }
+  }
+
+  &__total {
+    font-size: 1.25rem;
+  }
+}

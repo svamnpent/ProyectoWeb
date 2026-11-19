@@ -1,59 +1,91 @@
-# ClientFront
+# PHANTOM — Frontend (Angular)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.21.
+Tienda gamer que consume la API REST de `../api`. Angular 21 con componentes standalone, signals, control flow (`@if` / `@for`) y SCSS.
 
-## Development server
+## Requisitos
 
-To start a local development server, run:
+- Node.js `^20.19`, `^22.12` o `>=24`
+- La API corriendo en `http://localhost:8080` (ver el README de la raíz)
 
-```bash
-ng serve
+## Comandos
+
+| Comando | Qué hace |
+|---|---|
+| `npm install` | Instala dependencias |
+| `npm start` | Servidor de desarrollo en <http://localhost:4200> |
+| `npm test` | Pruebas unitarias (vitest). Usa `npm test -- --watch=false` para una sola corrida |
+| `npm run build` | Compilación de producción en `dist/` |
+
+La URL de la API se define en `src/environments/` (`environment.development.ts` para `ng serve`, `environment.ts` para producción).
+
+## Estructura
+
+```text
+src/
+├── styles.scss          # Estilos globales (importa los parciales)
+├── styles/              # Parciales SCSS: _variables, _mixins, _base, _botones, _formularios, _alertas
+├── environments/        # apiUrl por entorno
+└── app/
+    ├── app.*            # Shell: header, footer, <router-outlet>, config y rutas
+    ├── core/            # Lo que usa toda la app
+    │   ├── models/      # Interfaces TypeScript que reflejan los DTOs del backend
+    │   ├── services/    # AuthService, ProductoService, CategoriaService, VentaService, CarritoService
+    │   ├── interceptors/# auth (agrega el Bearer) y error (401 → login)
+    │   ├── guards/      # authGuard, rolGuard, staffGuard, adminGuard
+    │   └── utils/       # mensajeDeError()
+    ├── shared/          # Componentes reutilizables (producto-card)
+    └── features/        # Una carpeta por pantalla (inicio, login, carrito, pedido)
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Rutas
 
-## Code scaffolding
+| Ruta | Pantalla | Acceso |
+|---|---|---|
+| `/` | Catálogo con filtro por categoría y búsqueda | Público |
+| `/login` | Inicio de sesión (formulario template-driven) | Público |
+| `/carrito` | Carrito: cantidades (FormArray), total y compra | Público; para comprar pide iniciar sesión |
+| `/pedido/:id` | Comprobante de la compra (`:id` llega como `input()`) | Con sesión (`authGuard`) |
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Cualquier otra ruta redirige a `/`.
 
-```bash
-ng generate component component-name
-```
+## Autenticación
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- `AuthService.login()` llama a `POST /auth/login` y luego a `GET /auth/me` para conocer el rol.
+- El token se guarda en `localStorage` (`phantom.token`) junto con su vencimiento y se restaura al abrir la app.
+- `authInterceptor` agrega `Authorization: Bearer <token>` **solo** a peticiones hacia `environment.apiUrl`.
+- `errorInterceptor` cierra la sesión y manda a `/login?returnUrl=...` si la API responde 401 con sesión activa.
+- Los guards (`authGuard`, `staffGuard`, `adminGuard`) solo mejoran la experiencia: la seguridad real está en el backend.
+- El login responde 429 tras 5 intentos fallidos (bloqueo de 15 minutos).
 
-```bash
-ng generate --help
-```
+## Carrito y compra
 
-## Building
+- `CarritoService` guarda el carrito en `localStorage` (`phantom.carrito`) y valida su forma al leerlo.
+- Al abrir `/carrito` se consulta `GET /productos` y se **sincroniza**: se quitan productos eliminados o agotados, se ajustan cantidades al stock y se refrescan precios, avisando al usuario.
+- Cada línea es un `FormGroup` dentro de un `FormArray`; la cantidad se valida (entera, ≥ 1 y ≤ stock).
+- Comprar envía `POST /ventas` con `{ usuarioId, detalles: [{ productoId, cantidad }] }`. El **precio lo decide el servidor**.
+- `usuarioId` se envía siempre: para TRABAJADOR/ADMIN es obligatorio, o la venta queda anónima (los compradores normales siempre compran a su nombre).
+- Si no hay stock suficiente la API responde 400 con el detalle; se muestra y se vuelve a sincronizar el carrito.
+- Sin sesión, "Comprar" lleva a `/login?returnUrl=/carrito` y el carrito se conserva.
+- Tras comprar, el carrito se vacía y se navega a `/pedido/:id`.
 
-To build the project run:
+## Convenciones
 
-```bash
-ng build
-```
+- Componentes standalone con `inject()`; estado con `signal()` / `computed()`.
+- Entradas y salidas con `input()` / `input.required()` / `output()`.
+- Un componente = `nombre.ts`, `nombre.html`, `nombre.scss`, `nombre.spec.ts` (se generan con `ng generate component ruta/nombre`).
+- SCSS: en cada archivo `@use 'variables' as *;` y `@use 'mixins' as *;`. Clases en español con BEM (`.tarjeta__precio`, `.btn--acento`).
+- Cada servicio y componente nuevo lleva su `*.spec.ts` junto al archivo.
+- Formato con Prettier (`npx prettier --write "src/**/*.{ts,html,scss}"`).
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Cómo agregar una pantalla
 
-## Running unit tests
+1. `npx ng generate component features/registro/registro`
+2. Registrar la ruta en `app.routes.ts` con `loadComponent`, un `title` y, si hace falta, `canActivate`.
+3. Los parámetros de ruta y de query llegan como `input()` gracias a `withComponentInputBinding()` (ver `Login.returnUrl`).
+4. Consumir la API desde un servicio en `core/services/` y escribir su prueba con `HttpTestingController`.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Pendiente
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Registro (formulario reactivo) y `/producto/:id` (detalle).
+- Perfil e historial (`GET /ventas/mias`); desde el historial se puede enlazar a `/pedido/:id`.
+- Panel de administración (CRUD en `/backoffice/**`), con `staffGuard` y `adminGuard`.

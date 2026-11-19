@@ -25,5 +25,10 @@ export interface DetalleVentaRequest {
 }
 
 export interface VentaRequest {
+  /**
+   * El backend ignora este valor para compradores (siempre compran a su nombre).
+   * Para TRABAJADOR/ADMIN es obligatorio enviarlo; si no, la venta queda anónima.
+   */
+  usuarioId?: number;
   detalles: DetalleVentaRequest[];
 }
