@@ -1,0 +1,159 @@
+<section class="registro">
+  <div class="registro__tarjeta">
+    <h1 class="registro__titulo">Crear cuenta</h1>
+
+    @if (error(); as mensaje) {
+      <div class="alerta alerta--error" role="alert">{{ mensaje }}</div>
+    }
+
+    <form [formGroup]="formulario" (ngSubmit)="registrar()" novalidate>
+      <div class="campo" [class.campo--invalido]="campoInvalido('nombre')">
+        <label class="campo__etiqueta" for="nombre">Nombre completo *</label>
+        <input
+          id="nombre"
+          type="text"
+          class="campo__input"
+          autocomplete="name"
+          maxlength="255"
+          formControlName="nombre"
+        />
+        @if (campoInvalido('nombre')) {
+          <span class="campo__error">
+            @if (formulario.controls.nombre.errors?.['required']) {
+              El nombre es obligatorio.
+            } @else {
+              El nombre no puede exceder los 255 caracteres.
+            }
+          </span>
+        }
+      </div>
+
+      <div class="campo" [class.campo--invalido]="campoInvalido('email')">
+        <label class="campo__etiqueta" for="email">Correo electrónico *</label>
+        <input
+          id="email"
+          type="email"
+          class="campo__input"
+          autocomplete="email"
+          maxlength="255"
+          formControlName="email"
+        />
+        @if (campoInvalido('email')) {
+          <span class="campo__error">
+            @if (formulario.controls.email.errors?.['required']) {
+              El correo electrónico es obligatorio.
+            } @else {
+              Ingresa un correo electrónico válido.
+            }
+          </span>
+        }
+      </div>
+
+      <div class="registro__fila">
+        <div class="campo" [class.campo--invalido]="campoInvalido('password')">
+          <label class="campo__etiqueta" for="password">Contraseña *</label>
+          <input
+            id="password"
+            type="password"
+            class="campo__input"
+            autocomplete="new-password"
+            maxlength="72"
+            formControlName="password"
+          />
+          @if (campoInvalido('password')) {
+            <span class="campo__error">
+              @if (formulario.controls.password.errors?.['required']) {
+                La contraseña es obligatoria.
+              } @else {
+                Debe tener entre 8 y 72 caracteres.
+              }
+            </span>
+          }
+        </div>
+
+        <div
+          class="campo"
+          [class.campo--invalido]="
+            campoInvalido('confirmarPassword') ||
+            (formulario.errors?.['noCoinciden'] && formulario.controls.confirmarPassword.touched)
+          "
+        >
+          <label class="campo__etiqueta" for="confirmarPassword">Confirmar contraseña *</label>
+          <input
+            id="confirmarPassword"
+            type="password"
+            class="campo__input"
+            autocomplete="new-password"
+            maxlength="72"
+            formControlName="confirmarPassword"
+          />
+          @if (campoInvalido('confirmarPassword')) {
+            <span class="campo__error">Confirma tu contraseña.</span>
+          } @else if (
+            formulario.errors?.['noCoinciden'] && formulario.controls.confirmarPassword.touched
+          ) {
+            <span class="campo__error">Las contraseñas no coinciden.</span>
+          }
+        </div>
+      </div>
+
+      <div class="registro__fila">
+        <div class="campo" [class.campo--invalido]="campoInvalido('dni')">
+          <label class="campo__etiqueta" for="dni">DNI (opcional)</label>
+          <input
+            id="dni"
+            type="text"
+            class="campo__input"
+            inputmode="numeric"
+            maxlength="20"
+            placeholder="Ej. 74859612"
+            formControlName="dni"
+          />
+          @if (campoInvalido('dni')) {
+            <span class="campo__error">Debe contener entre 8 y 20 dígitos numéricos.</span>
+          }
+        </div>
+
+        <div class="campo" [class.campo--invalido]="campoInvalido('numeroTelefono')">
+          <label class="campo__etiqueta" for="numeroTelefono">Teléfono (opcional)</label>
+          <input
+            id="numeroTelefono"
+            type="tel"
+            class="campo__input"
+            autocomplete="tel"
+            maxlength="16"
+            placeholder="Ej. 987654321"
+            formControlName="numeroTelefono"
+          />
+          @if (campoInvalido('numeroTelefono')) {
+            <span class="campo__error">Ingresa entre 7 y 15 dígitos (puede iniciar con +).</span>
+          }
+        </div>
+      </div>
+
+      <div class="campo" [class.campo--invalido]="campoInvalido('direccion')">
+        <label class="campo__etiqueta" for="direccion">Dirección (opcional)</label>
+        <input
+          id="direccion"
+          type="text"
+          class="campo__input"
+          autocomplete="street-address"
+          maxlength="255"
+          formControlName="direccion"
+        />
+        @if (campoInvalido('direccion')) {
+          <span class="campo__error">La dirección no puede exceder los 255 caracteres.</span>
+        }
+      </div>
+
+      <button type="submit" class="btn btn--bloque" [disabled]="enviando()">
+        {{ enviando() ? 'Creando cuenta…' : 'Registrarse' }}
+      </button>
+    </form>
+
+    <p class="registro__pie">
+      ¿Ya tienes cuenta?
+      <a routerLink="/login" class="registro__enlace">Inicia sesión aquí</a>
+    </p>
+  </div>
+</section>

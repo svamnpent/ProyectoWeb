@@ -16,6 +16,12 @@ export const routes: Routes = [
   },
 
   {
+    path: 'registro',
+    title: 'PHANTOM | Crear cuenta',
+    loadComponent: () => import('./features/registro/registro').then((m) => m.Registro),
+  },
+
+  {
     path: 'carrito',
     title: 'PHANTOM | Carrito',
     loadComponent: () => import('./features/carrito/carrito').then((m) => m.Carrito),
@@ -41,8 +47,6 @@ export const routes: Routes = [
   },
 
   // Rutas previstas (se agregan al construir cada pantalla):
-  //   { path: 'registro', ... }                                → formulario reactivo
-  //   { path: 'producto/:id', ... }                            → :id llega como input()
   //   { path: 'categoria/:id', ... }
   //   { path: 'perfil', canActivate: [authGuard], ... }
 
