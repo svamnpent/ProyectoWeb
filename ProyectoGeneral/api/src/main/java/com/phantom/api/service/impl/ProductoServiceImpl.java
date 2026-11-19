@@ -125,10 +125,7 @@ public class ProductoServiceImpl implements ProductoService {
                 productoRepository.deleteById(id);
         }
 
-        /**
-         * Resuelve los IDs de etiquetas a entidades (conjunto mutable). Si alguno no existe falla,
-         * en lugar de ignorarlo en silencio como antes.
-         */
+        /** Resuelve las etiquetas y rechaza identificadores inexistentes. */
         private Set<Etiqueta> resolverEtiquetas(Set<Long> ids) {
                 if (ids == null || ids.isEmpty()) {
                         return new HashSet<>();

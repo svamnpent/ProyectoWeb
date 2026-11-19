@@ -15,10 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Arranca la aplicación con los datos demo y la precarga de caché ACTIVADOS (como con el
- * perfil "demo") contra PostgreSQL real. Usa su propio contexto y contenedor.
- */
+/** Prueba el arranque con datos de demostración y precarga. */
 @TestPropertySource(properties = {"app.seed.enabled=true", "app.cache.warmup.enabled=true"})
 class DemoDataIT extends AbstractIntegrationIT {
 

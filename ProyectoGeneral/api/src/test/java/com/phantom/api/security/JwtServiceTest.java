@@ -3,13 +3,19 @@ package com.phantom.api.security;
 import com.phantom.api.entity.Usuario;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.JwtValidationException;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.List;
 
@@ -79,9 +85,18 @@ class JwtServiceTest {
     @Test
     @DisplayName("un token expirado es rechazado")
     void expirado() {
-        String token = servicio(SECRETO, -5, EMISOR).generarToken(usuario);
+        Instant emision = Instant.parse("2020-01-01T12:00:00Z");
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuer(EMISOR)
+                .subject("42")
+                .issuedAt(emision)
+                .expiresAt(emision.plusSeconds(300))
+                .build();
+        JwtEncoder encoder = config.jwtEncoder(new JwtProperties(SECRETO, 5, EMISOR));
+        JwsHeader header = JwsHeader.with(MacAlgorithm.HS256).build();
+        String token = encoder.encode(JwtEncoderParameters.from(header, claims)).getTokenValue();
 
-        assertThrows(JwtException.class, () -> decoder(SECRETO, EMISOR).decode(token));
+        assertThrows(JwtValidationException.class, () -> decoder(SECRETO, EMISOR).decode(token));
     }
 
     @Test

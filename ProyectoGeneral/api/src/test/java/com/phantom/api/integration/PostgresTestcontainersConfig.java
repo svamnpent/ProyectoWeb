@@ -6,12 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
-/**
- * Levanta un PostgreSQL REAL en Docker para los tests de integración y conecta
- * automáticamente DataSource y Flyway a él (@ServiceConnection).
- * Usa la misma versión de imagen que docker-compose.yml.
- * El contenedor se comparte entre todos los tests *IT (un único contexto de Spring).
- */
+/** Proporciona PostgreSQL a las pruebas de integración. */
 @TestConfiguration(proxyBeanMethods = false)
 public class PostgresTestcontainersConfig {
 

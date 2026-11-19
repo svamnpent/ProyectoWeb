@@ -9,10 +9,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-/**
- * Crea el administrador inicial al arrancar si ADMIN_EMAIL y ADMIN_PASSWORD están definidos
- * y todavía no existe un usuario con ese email. Nunca modifica un usuario existente.
- */
+/** Crea el administrador inicial si su correo aún no está registrado. */
 @Slf4j
 @Component
 public class AdminBootstrap implements ApplicationRunner {

@@ -1,0 +1,84 @@
+:host {
+  display: block;
+  background: white;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid #ddd;
+  border-radius: 0.75rem;
+}
+header,
+.acciones,
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+header,
+.fila {
+  justify-content: space-between;
+}
+h2,
+h3 {
+  color: #1a0b3d;
+  margin: 0.5rem 0;
+}
+.fila {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #ddd;
+  overflow-wrap: anywhere;
+}
+fieldset {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+form,
+article {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+}
+.campos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: 0.8rem;
+  margin: 0.8rem 0;
+}
+label {
+  display: grid;
+  align-content: start;
+  gap: 0.25rem;
+  font-weight: 600;
+}
+input,
+select,
+textarea,
+button {
+  font: inherit;
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.35rem;
+  border: 1px solid #aaa;
+  min-width: 0;
+}
+button {
+  cursor: pointer;
+  background: white;
+  color: #1a0b3d;
+}
+button[type='submit'],
+.principal {
+  background: #1a0b3d;
+  color: white;
+}
+button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+[role='alert'],
+.peligro {
+  color: #a11020;
+}
+[role='status'] {
+  padding: 0.45rem 0;
+}

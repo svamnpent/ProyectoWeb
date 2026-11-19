@@ -43,10 +43,7 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Agrega una línea a una venta existente (operación administrativa). Mantiene coherentes
-     * el stock y los totales de la venta, que antes quedaban desactualizados.
-     */
+    /** Actualiza stock y totales al agregar una línea. */
     @Override
     @Transactional
     @CacheEvict(cacheNames = CacheNames.PRODUCTOS, allEntries = true)

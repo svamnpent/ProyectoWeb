@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#280E4D"/>
+      <stop offset="100%" stop-color="#090512"/>
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF2A2A"/>
+      <stop offset="100%" stop-color="#C40000"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded Square Dark Background -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#bgGrad)" stroke="#6C2BD9" stroke-width="2.5"/>
+
+  <!-- Stylized Phantom Silhouette -->
+  <path d="M 32 9 L 51 24 L 47 52 L 39.5 45.5 L 32 53 L 24.5 45.5 L 17 52 L 13 24 Z" fill="#FFFFFF"/>
+
+  <!-- Dark Visor -->
+  <polygon points="18,27 32,32.5 46,27 43,36 32,39.5 21,36" fill="#090512"/>
+
+  <!-- Glowing Red Eyes -->
+  <polygon points="21.5,29.5 30,32.5 22.5,34" fill="#FF1E1E"/>
+  <polygon points="42.5,29.5 34,32.5 41.5,34" fill="#FF1E1E"/>
+
+  <!-- Top Red Crest -->
+  <polygon points="32,9 36.5,16 32,19.5 27.5,16" fill="url(#redGrad)"/>
+</svg>
