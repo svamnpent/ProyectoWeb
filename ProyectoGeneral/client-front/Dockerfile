@@ -16,6 +16,7 @@ RUN npm run build -- --configuration=production
 
 # Etapa 2: Servidor de producción
 FROM nginx:alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copiar los archivos compilados desde la etapa build al directorio de Nginx
 # Nota: En Angular moderno, la salida va a dist/client-front/browser
