@@ -8,9 +8,18 @@ export interface Perfil {
 }
 
 export interface PerfilRequest {
-  avatarUrl?: string;
-  biografia?: string;
+  avatarUrl?: string | null;
+  biografia?: string | null;
   usuarioId: number;
+}
+
+export interface UsuarioRequest {
+  nombre: string;
+  email: string;
+  password: string;
+  dni?: string | null;
+  direccion?: string | null;
+  numeroTelefono?: string | null;
 }
 
 export interface Usuario {

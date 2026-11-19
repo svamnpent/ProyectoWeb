@@ -2,7 +2,7 @@
 
 ## Uso desde Angular
 
-El cliente utiliza 30 de los 44 endpoints (68,2 %). Otros 2 tienen un método HTTP implementado sin una pantalla que lo invoque y 12 carecen de llamada en los servicios del cliente. Se cuenta cada combinación de verbo y ruta de los controladores bajo `/api/v1` una vez. La revisión sigue el código desde las rutas, los componentes y el inicializador de sesión hasta `HttpClient`. Las pruebas, Swagger y Actuator quedan fuera del recuento.
+El cliente utiliza 34 de los 44 endpoints (77,3 %). Otros 2 tienen un método HTTP implementado sin una pantalla que lo invoque y 8 carecen de llamada en los servicios del cliente. Se cuenta cada combinación de verbo y ruta de los controladores bajo `/api/v1` una vez. La revisión sigue el código desde las rutas, los componentes y el inicializador de sesión hasta `HttpClient`. Las pruebas, Swagger y Actuator quedan fuera del recuento.
 
 Inicio filtra por categoría, nombre o marca sobre los productos ya descargados. Pedido recibe los detalles dentro de la venta. Estas dos pantallas cubren sus funciones sin llamar a las rutas específicas de búsqueda ni de líneas de venta.
 
@@ -41,15 +41,15 @@ Inicio filtra por categoría, nombre o marca sobre los productos ya descargados.
 | GET    | `/etiquetas`                            | El personal lista las etiquetas y las asigna a productos.       |
 | GET    | `/etiquetas/{id}`                       | Sin llamada                                                     |
 | GET    | `/perfiles/{id}`                        | Sin llamada                                                     |
-| POST   | `/perfiles`                             | Sin llamada                                                     |
-| PUT    | `/perfiles/{id}`                        | Sin llamada                                                     |
+| POST   | `/perfiles`                             | Perfil crea el perfil público si la cuenta aún no tiene uno.    |
+| PUT    | `/perfiles/{id}`                        | Perfil actualiza avatar y biografía.                            |
 | DELETE | `/perfiles/{id}`                        | Sin llamada                                                     |
 | GET    | `/productos`                            | Inicio carga el catálogo y Carrito sincroniza las existencias.  |
 | GET    | `/productos/{id}`                       | Solo servicio · `ProductoService.obtener`                       |
 | GET    | `/productos/buscar`                     | Sin llamada                                                     |
 | GET    | `/usuarios/{id}`                        | Sin llamada                                                     |
-| PUT    | `/usuarios/{id}`                        | Sin llamada                                                     |
-| GET    | `/ventas/mias`                          | Sin llamada                                                     |
+| PUT    | `/usuarios/{id}`                        | Perfil actualiza los datos de la cuenta propia.                 |
+| GET    | `/ventas/mias`                          | Perfil carga el historial de compras.                           |
 | GET    | `/ventas/{id}`                          | Pedido recupera la compra por su ID.                            |
 | POST   | `/ventas`                               | Carrito confirma la compra y abre el pedido creado.             |
 

@@ -37,7 +37,13 @@
     }
   }
 
-  &__marca img { display: block; width: auto; max-width: 9rem; height: 2.25rem; object-fit: contain; }
+  &__marca img {
+    display: block;
+    width: auto;
+    max-width: 9rem;
+    height: 2.25rem;
+    object-fit: contain;
+  }
 
   &__nav {
     display: flex;
@@ -89,6 +95,11 @@
     font-size: 0.9rem;
 
     strong {
+      color: $color-acento;
+    }
+
+    &.activo,
+    &:hover {
       color: $color-acento;
     }
   }

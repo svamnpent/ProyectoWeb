@@ -35,4 +35,12 @@ describe('VentaService', () => {
     expect(req.request.method).toBe('GET');
     req.flush({});
   });
+
+  it('mias consulta GET /ventas/mias', () => {
+    servicio.mias().subscribe();
+
+    const req = http.expectOne(`${environment.apiUrl}/ventas/mias`);
+    expect(req.request.method).toBe('GET');
+    req.flush([]);
+  });
 });

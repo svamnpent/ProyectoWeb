@@ -72,4 +72,20 @@ describe('AuthService', () => {
     expect(fallo).toBe(true);
     expect(service.token()).toBeNull();
   });
+
+  it('reemplazarUsuario y aplicarPerfil actualizan la sesión en memoria', () => {
+    hacerLogin();
+
+    service.reemplazarUsuario({ ...usuarioDemo, nombre: 'Ana López' });
+    expect(service.primerNombre()).toBe('Ana');
+
+    service.aplicarPerfil({
+      id: 4,
+      avatarUrl: 'https://cdn.example/ana.png',
+      biografia: 'Hola',
+      usuarioId: 1,
+    });
+    expect(service.usuario()?.perfil?.biografia).toBe('Hola');
+    expect(service.usuario()?.nombre).toBe('Ana López');
+  });
 });
