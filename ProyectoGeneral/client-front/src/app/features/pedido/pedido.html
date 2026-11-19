@@ -1,0 +1,49 @@
+<section class="pedido contenedor">
+  @if (cargando()) {
+    <p class="pedido__estado">Cargando pedido…</p>
+  } @else if (error(); as mensaje) {
+    <div class="alerta alerta--error" role="alert">{{ mensaje }}</div>
+    <a class="btn btn--contorno" routerLink="/">Volver al catálogo</a>
+  } @else if (venta(); as pedido) {
+    <div class="pedido__tarjeta">
+      <h1 class="pedido__titulo">¡Gracias por tu compra!</h1>
+      <p class="pedido__orden">
+        Pedido <strong>{{ pedido.numeroOrden }}</strong>
+      </p>
+      <p class="pedido__fecha">{{ pedido.fecha | date: 'dd/MM/yyyy HH:mm' }}</p>
+
+      <table class="pedido__tabla">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th class="numero">Cant.</th>
+            <th class="numero">Precio</th>
+            <th class="numero">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (detalle of pedido.detalles; track detalle.id) {
+            <tr>
+              <td>{{ detalle.productoNombre }}</td>
+              <td class="numero">{{ detalle.cantidad }}</td>
+              <td class="numero">
+                {{ detalle.precioUnitario | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+              </td>
+              <td class="numero">{{ detalle.subtotal | currency: 'PEN' : 'S/ ' : '1.2-2' }}</td>
+            </tr>
+          }
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">Total ({{ pedido.cantidadItems }} productos)</td>
+            <td class="numero pedido__total">
+              {{ pedido.total | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <a class="btn" routerLink="/">Seguir comprando</a>
+    </div>
+  }
+</section>

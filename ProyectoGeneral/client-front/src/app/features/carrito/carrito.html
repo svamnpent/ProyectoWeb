@@ -1,0 +1,112 @@
+<section class="carrito contenedor">
+  <h1 class="carrito__titulo">Tu carrito</h1>
+
+  @if (avisos().length > 0) {
+    <div class="alerta alerta--aviso" role="status">
+      <ul class="carrito__avisos">
+        @for (aviso of avisos(); track aviso) {
+          <li>{{ aviso }}</li>
+        }
+      </ul>
+    </div>
+  }
+
+  @if (error(); as mensaje) {
+    <div class="alerta alerta--error" role="alert">{{ mensaje }}</div>
+  }
+
+  @if (sincronizando()) {
+    <p class="carrito__estado">Verificando disponibilidad…</p>
+  } @else if (carrito.items().length === 0) {
+    <div class="carrito__vacio">
+      <p>Tu carrito está vacío.</p>
+      <a class="btn" routerLink="/">Ver catálogo</a>
+    </div>
+  } @else {
+    <div class="carrito__cuerpo">
+      <form class="carrito__lineas" [formGroup]="formulario" novalidate>
+        <div formArrayName="lineas">
+          @for (item of carrito.items(); track item.producto.id; let i = $index) {
+            <article class="linea" [formGroupName]="i">
+              <div class="linea__imagen">
+                @if (item.producto.imagenUrl) {
+                  <img [src]="item.producto.imagenUrl" [alt]="item.producto.nombre" />
+                } @else {
+                  <span class="linea__inicial" aria-hidden="true">
+                    {{ item.producto.nombre.charAt(0).toUpperCase() }}
+                  </span>
+                }
+              </div>
+
+              <div class="linea__datos">
+                <h3 class="linea__nombre">{{ item.producto.nombre }}</h3>
+                <p class="linea__detalle">
+                  {{ item.producto.precio | currency: 'PEN' : 'S/ ' : '1.2-2' }} c/u ·
+                  {{ item.producto.stock }} disponibles
+                </p>
+              </div>
+
+              <div class="linea__cantidad">
+                <div class="cantidad">
+                  <button
+                    type="button"
+                    class="cantidad__boton"
+                    aria-label="Quitar una unidad"
+                    (click)="cambiarPor(i, -1)"
+                  >
+                    −
+                  </button>
+                  <input
+                    type="number"
+                    class="cantidad__input"
+                    formControlName="cantidad"
+                    min="1"
+                    [attr.aria-label]="'Cantidad de ' + item.producto.nombre"
+                  />
+                  <button
+                    type="button"
+                    class="cantidad__boton"
+                    aria-label="Agregar una unidad"
+                    (click)="cambiarPor(i, 1)"
+                  >
+                    +
+                  </button>
+                </div>
+                @if (erroresLinea()[item.producto.id]; as mensaje) {
+                  <span class="campo__error">{{ mensaje }}</span>
+                }
+              </div>
+
+              <p class="linea__subtotal">
+                {{ item.producto.precio * item.cantidad | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+              </p>
+
+              <button type="button" class="linea__quitar" (click)="quitar(i)">Quitar</button>
+            </article>
+          }
+        </div>
+      </form>
+
+      <aside class="resumen">
+        <h2 class="resumen__titulo">Resumen</h2>
+        <dl class="resumen__datos">
+          <dt>Productos</dt>
+          <dd>{{ carrito.cantidadTotal() }}</dd>
+          <dt>Total</dt>
+          <dd class="resumen__total">{{ carrito.total() | currency: 'PEN' : 'S/ ' : '1.2-2' }}</dd>
+        </dl>
+        <button
+          type="button"
+          class="btn btn--acento btn--bloque"
+          [disabled]="enviando()"
+          (click)="comprar()"
+        >
+          {{ etiquetaCompra() }}
+        </button>
+        <button type="button" class="btn btn--contorno btn--bloque" (click)="vaciar()">
+          Vaciar carrito
+        </button>
+      </aside>
+    </div>
+  }
+</section>

@@ -15,10 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Reglas de negocio de ventas y stock contra PostgreSQL real: transacciones, rollback,
- * propiedad de los recursos y concurrencia.
- */
+/** Prueba transacciones, concurrencia y acceso a ventas. */
 class VentaFlowIT extends AbstractIntegrationIT {
 
     @Test

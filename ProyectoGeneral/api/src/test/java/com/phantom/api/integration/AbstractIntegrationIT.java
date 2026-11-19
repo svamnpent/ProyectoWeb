@@ -17,11 +17,7 @@ import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Base de los tests de integración: aplicación completa + PostgreSQL real + seguridad real
- * (JWT firmado de verdad). Cada test usa datos con nombres únicos, por lo que no dependen
- * del orden ni se estorban entre sí.
- */
+/** Base de integración con PostgreSQL y JWT. */
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")

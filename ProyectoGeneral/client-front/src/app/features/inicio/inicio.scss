@@ -1,0 +1,93 @@
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.portada {
+  padding-block: $espacio-8;
+  background: radial-gradient(
+    circle,
+    color.scale($color-primario, $lightness: 15%) 0%,
+    #000000 100%
+  );
+  text-align: center;
+
+  &__titulo {
+    color: #ffffff;
+    font-size: 2rem;
+
+    @include desde('md') {
+      font-size: 3rem;
+    }
+  }
+
+  &__texto {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.125rem;
+  }
+}
+
+.catalogo {
+  padding-block: $espacio-6;
+
+  &__filtros {
+    display: flex;
+    flex-direction: column;
+    gap: $espacio-4;
+    margin-bottom: $espacio-5;
+
+    @include desde('md') {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  &__categorias {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $espacio-2;
+  }
+
+  &__buscador {
+    width: 100%;
+
+    @include desde('md') {
+      max-width: 280px;
+    }
+  }
+
+  &__grilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: $espacio-5;
+  }
+
+  &__estado {
+    padding-block: $espacio-8;
+    text-align: center;
+    color: $color-texto-suave;
+  }
+
+  &__reintentar {
+    margin-left: $espacio-3;
+  }
+}
+
+.filtro {
+  padding: $espacio-1 $espacio-4;
+  border: 1px solid $color-primario;
+  border-radius: 20px;
+  background: transparent;
+  color: $color-primario;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover,
+  &--activo {
+    background: $color-primario;
+    color: #ffffff;
+  }
+}

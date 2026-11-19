@@ -31,12 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Matriz de autorización de TODOS los endpoints con la seguridad real, separada en las dos zonas
- * de la API (TIENDA y BACK-OFFICE): qué estado HTTP obtiene un anónimo, un comprador (ID 5),
- * un trabajador (ID 2) y un ADMIN (ID 1).
- * Los servicios están simulados: aquí solo se prueba la capa de seguridad.
- */
+/** Verifica los permisos de las rutas por rol. */
 @WebMvcTest
 @Import({GlobalExceptionHandler.class, WebMvcSecurityTestConfig.class})
 class SecurityEndpointsTest {
@@ -51,6 +46,7 @@ class SecurityEndpointsTest {
     @MockBean private ProductoService productoService;
     @MockBean private UsuarioService usuarioService;
     @MockBean private VentaService ventaService;
+    @MockBean private AuditoriaService auditoriaService;
     @MockBean private AuthService authService;
 
     private static final String PRODUCTO = "{\"nombre\":\"Laptop\",\"precio\":10.50,\"stock\":3,\"categoriaId\":1}";
@@ -73,7 +69,7 @@ class SecurityEndpointsTest {
         HttpMethod G = HttpMethod.GET, P = HttpMethod.POST, U = HttpMethod.PUT, D = HttpMethod.DELETE;
         String BO = "/api/v1/backoffice";
         return Stream.of(
-                // ===================== TIENDA: catálogo público (lectura)
+                // Tienda: catálogo público (lectura)
                 caso(G, "/api/v1/productos", null, 200, 200, 200, 200),
                 caso(G, "/api/v1/productos/1", null, 200, 200, 200, 200),
                 caso(G, "/api/v1/productos/buscar?keyword=x", null, 200, 200, 200, 200),
@@ -87,13 +83,13 @@ class SecurityEndpointsTest {
                 caso(D, "/api/v1/categorias/1", null, 401, 405, 405, 405),
                 caso(D, "/api/v1/ventas/1", null, 401, 405, 405, 405),
 
-                // ===================== TIENDA: autenticación
+                // Tienda: autenticación
                 caso(P, "/api/v1/auth/login", LOGIN, 200, 200, 200, 200),
                 caso(P, "/api/v1/auth/register",
                         "{\"nombre\":\"Ana\",\"email\":\"ana@x.com\",\"password\":\"Secreta123\"}", 201, 201, 201, 201),
                 caso(G, "/api/v1/auth/me", null, 401, 200, 200, 200),
 
-                // ===================== TIENDA: la cuenta del propio comprador
+                // Tienda: la cuenta del propio comprador
                 caso(G, "/api/v1/usuarios/5", null, 401, 200, 403, 403),
                 caso(G, "/api/v1/usuarios/6", null, 401, 403, 403, 403),
                 caso(U, "/api/v1/usuarios/5", USUARIO, 401, 200, 403, 403),
@@ -103,13 +99,13 @@ class SecurityEndpointsTest {
                 caso(U, "/api/v1/perfiles/1", PERFIL, 401, 200, 200, 200),
                 caso(D, "/api/v1/perfiles/1", null, 401, 204, 204, 204),
 
-                // ===================== TIENDA: compras del comprador
+                // Tienda: compras del comprador
                 caso(P, "/api/v1/ventas", VENTA, 401, 201, 201, 201),
                 caso(G, "/api/v1/ventas/mias", null, 401, 200, 200, 200),
                 caso(G, "/api/v1/ventas/1", null, 401, 200, 200, 200),
                 caso(G, "/api/v1/ventas/1/detalles", null, 401, 200, 200, 200),
 
-                // ===================== BACK-OFFICE: catálogo (crear/editar: personal; eliminar: ADMIN)
+                // Back-office: catálogo (crear/editar: personal; eliminar: admin)
                 caso(P, BO + "/productos", PRODUCTO, 401, 403, 201, 201),
                 caso(U, BO + "/productos/1", PRODUCTO, 401, 403, 200, 200),
                 caso(D, BO + "/productos/1", null, 401, 403, 403, 204),
@@ -120,7 +116,7 @@ class SecurityEndpointsTest {
                 caso(U, BO + "/etiquetas/1", ETIQUETA, 401, 403, 200, 200),
                 caso(D, BO + "/etiquetas/1", null, 401, 403, 403, 204),
 
-                // ===================== BACK-OFFICE: ventas (ver/registrar: personal; anular: ADMIN)
+                // Back-office: ventas (ver/registrar: personal; anular: admin)
                 caso(G, BO + "/ventas", null, 401, 403, 200, 200),
                 caso(G, BO + "/ventas/1", null, 401, 403, 200, 200),
                 caso(P, BO + "/ventas", VENTA, 401, 403, 201, 201),
@@ -129,13 +125,14 @@ class SecurityEndpointsTest {
                 caso(P, BO + "/ventas/1/detalles", DETALLE, 401, 403, 403, 201),
                 caso(D, BO + "/detalles/1", null, 401, 403, 403, 204),
 
-                // ===================== BACK-OFFICE: usuarios y perfiles (solo ADMIN)
+                // Back-office: usuarios y perfiles (solo admin)
                 caso(G, BO + "/usuarios", null, 401, 403, 403, 200),
                 caso(G, BO + "/usuarios/buscar?email=a@b.com", null, 401, 403, 403, 200),
                 caso(G, BO + "/usuarios/5", null, 401, 403, 403, 200),
                 caso(P, BO + "/usuarios", USUARIO, 401, 403, 403, 201),
                 caso(U, BO + "/usuarios/5", USUARIO, 401, 403, 403, 200),
                 caso(D, BO + "/usuarios/5", null, 401, 403, 403, 204),
+                caso(G, BO + "/auditoria?desde=2026-01-01&hasta=2026-01-31", null, 401, 403, 403, 200),
                 caso(G, BO + "/perfiles", null, 401, 403, 403, 200));
     }
 

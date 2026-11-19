@@ -1,0 +1,13 @@
+// Estilos globales de PHANTOM. Los parciales viven en src/styles/
+// (angular.json los resuelve con stylePreprocessorOptions.includePaths).
+@use 'base';
+@use 'botones';
+@use 'formularios';
+@use 'alertas';
+
+@media print {
+  body:has(.informe-comercial) {
+    .encabezado, .pie, .panel > h1, .panel > nav { display: none; }
+    .panel { padding: 0; max-width: none; }
+  }
+}

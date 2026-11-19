@@ -1,0 +1,98 @@
+<h2>Usuarios</h2>
+@if (error()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (aviso()) {
+  <p role="status">{{ aviso() }}</p>
+}
+@if (ocupado()) {
+  <p role="status">Procesando…</p>
+}
+<fieldset [disabled]="ocupado()" aria-label="Usuarios">
+  @if (!abierto) {
+  <div class="acciones">
+    <button class="principal" (click)="editar()">Crear usuario</button
+    ><button (click)="recargar()">Mostrar todos</button>
+  </div>
+  <form #busqueda="ngForm" (ngSubmit)="buscar()">
+    <label
+      >Buscar por correo electrónico<input
+        name="correo"
+        type="email"
+        email
+        required
+        [(ngModel)]="correo"
+    /></label>
+    <button type="submit" [disabled]="busqueda.invalid">Buscar</button>
+  </form>
+  } @else {
+    <form #f="ngForm" (ngSubmit)="f.valid && guardar()">
+      <h3>{{ id === null ? 'Crear' : 'Editar' }} usuario</h3>
+      <div class="campos">
+        <label
+          >Nombre<input name="nombre" [(ngModel)]="formulario.nombre" required maxlength="255"
+        /></label>
+        <label
+          >Correo<input
+            name="email"
+            [(ngModel)]="formulario.email"
+            type="email"
+            email
+            required
+            maxlength="255"
+        /></label>
+        <label
+          >Contraseña nueva (obligatoria al guardar)<input
+            name="password"
+            [(ngModel)]="formulario.password"
+            type="password"
+            autocomplete="new-password"
+            required
+            minlength="8"
+            maxlength="72"
+        /></label>
+        <label>DNI<input name="dni" [(ngModel)]="formulario.dni" pattern="[0-9]{8,20}" /></label>
+        <label
+          >Dirección<input name="direccion" [(ngModel)]="formulario.direccion" maxlength="255"
+        /></label>
+        <label
+          >Teléfono<input
+            name="numeroTelefono"
+            [(ngModel)]="formulario.numeroTelefono"
+            type="tel"
+            pattern="[+]?[0-9]{7,15}"
+        /></label>
+        <label
+          >Rol<select name="rol" [(ngModel)]="formulario.rol">
+            <option>USER</option>
+            <option>TRABAJADOR</option>
+            <option>ADMIN</option>
+          </select></label
+        >
+      </div>
+      <div class="acciones">
+        <button type="submit" [disabled]="f.invalid">Guardar</button
+        ><button type="button" (click)="abierto = false">Cancelar</button>
+      </div>
+    </form>
+  }
+  @if (!abierto) {
+  @for (fila of filas; track fila.id) {
+    <div class="fila">
+      <div>
+        <strong>{{ fila.nombre }}</strong> {{ fila.email }} · {{ fila.rol }}
+      </div>
+      <div class="acciones">
+        <button (click)="abrirUsuario(fila.id)">Editar</button>
+        @if (auth.esAdmin()) {
+          <button class="peligro" (click)="borrar(fila)">Eliminar</button>
+        }
+      </div>
+    </div>
+  } @empty {
+    @if (!ocupado() && !error()) {
+      <p>No hay registros.</p>
+    }
+  }
+  }
+</fieldset>

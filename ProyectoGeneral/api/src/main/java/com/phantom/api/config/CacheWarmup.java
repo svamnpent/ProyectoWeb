@@ -13,11 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/**
- * Precarga la caché local al arrancar con el catálogo (que es público y de lectura frecuente),
- * para que las primeras peticiones ya salgan de memoria. Se puede desactivar con
- * app.cache.warmup.enabled=false. Si falla, la aplicación arranca igual (solo se avisa).
- */
+/** Precarga el catálogo al arrancar si está habilitado. */
 @Slf4j
 @Component
 @ConditionalOnProperty(name = "app.cache.warmup.enabled", havingValue = "true", matchIfMissing = true)

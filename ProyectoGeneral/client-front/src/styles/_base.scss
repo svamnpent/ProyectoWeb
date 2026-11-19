@@ -1,0 +1,45 @@
+@use 'variables' as *;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: $fuente-base;
+  color: $color-texto;
+  background: $color-fondo;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 0 $espacio-3;
+  color: $color-primario;
+  line-height: 1.2;
+}
+
+a {
+  color: $color-primario;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-acento;
+  }
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.contenedor {
+  width: 100%;
+  max-width: $ancho-contenedor;
+  margin-inline: auto;
+  padding-inline: $espacio-4;
+}

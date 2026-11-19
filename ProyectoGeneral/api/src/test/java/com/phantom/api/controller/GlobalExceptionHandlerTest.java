@@ -29,10 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Verifica que cada tipo de error produce el estado HTTP correcto con el formato ErrorResponse.
- * Antes de la seguridad, un AccessDeniedException o un JSON mal formado acababan en HTTP 500.
- */
+/** Comprueba el estado HTTP y el cuerpo de los errores. */
 @WebMvcTest({VentaController.class, BackOfficeController.class})
 @Import({GlobalExceptionHandler.class, WebMvcSecurityTestConfig.class})
 class GlobalExceptionHandlerTest {

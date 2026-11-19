@@ -1,0 +1,114 @@
+<h2>Ventas</h2>
+@if (error()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (aviso()) {
+  <p role="status">{{ aviso() }}</p>
+}
+@if (ocupado()) {
+  <p role="status">Procesando…</p>
+}
+<fieldset [disabled]="ocupado()" aria-label="Operaciones de venta">
+  @if (!mostrador && !seleccion) {
+  <div class="acciones">
+    <button class="principal" (click)="nueva()">Venta de mostrador</button>
+    <button (click)="actualizar()">Actualizar</button>
+  </div>
+  } @else if (seleccion) {
+    <button (click)="seleccion = null">Volver a ventas</button>
+  }
+  @if (seleccion; as venta) {
+    <article>
+      <h3>Venta #{{ venta.numeroOrden || venta.id }}</h3>
+      <p>
+        {{ venta.usuario?.nombre || 'Sin cliente' }} ·
+        {{ venta.fecha | date: 'dd/MM/yyyy HH:mm' : '-0500' }} ·
+        {{ venta.total | currency: 'PEN' : 'S/ ' }}
+      </p>
+      @for (linea of lineas; track linea.id) {
+        <div class="fila">
+          <span
+            >{{ linea.productoNombre }} × {{ linea.cantidad }} ·
+            {{ linea.subtotal | currency: 'PEN' : 'S/ ' }}</span
+          >
+          @if (auth.esAdmin()) {
+            <button (click)="quitar(linea)">Quitar línea</button>
+          }
+        </div>
+      } @empty {
+        <p>Sin líneas.</p>
+      }
+      @if (auth.esAdmin()) {
+        <button class="peligro" (click)="anular(venta)">Anular venta</button>
+      }
+    </article>
+  }
+  @if (mostrador || (seleccion && auth.esAdmin())) {
+    <form #lineaForm="ngForm" (ngSubmit)="lineaForm.valid && agregar()">
+      <h3>{{ mostrador ? 'Nueva venta de mostrador' : 'Agregar producto a la venta' }}</h3>
+      <div class="campos">
+        <label
+          >Producto<select name="producto" required [(ngModel)]="producto">
+            <option [ngValue]="null" disabled>Seleccionar producto</option>
+            @for (p of productos; track p.id) {
+              <option [ngValue]="p.id" [disabled]="p.stock < 1">
+                {{ p.nombre }} · {{ p.stock }} disponibles
+              </option>
+            }
+          </select></label
+        >
+        <label
+          >Cantidad<input
+            name="cantidad"
+            type="number"
+            min="1"
+            step="1"
+            pattern="[0-9]+"
+            required
+            [(ngModel)]="cantidad"
+        /></label>
+      </div>
+      <button type="submit" [disabled]="lineaForm.invalid">Agregar línea</button>
+    </form>
+  }
+  @if (mostrador) {
+    <form #ventaForm="ngForm" (ngSubmit)="ventaForm.valid && registrar()">
+      <label
+        >ID del cliente (opcional)<input
+          name="cliente"
+          type="number"
+          min="1"
+          step="1"
+          pattern="[0-9]+"
+          [(ngModel)]="cliente"
+      /></label>
+      @for (d of borrador; track d.productoId) {
+        <div class="fila">
+          {{ nombre(d.productoId) }} × {{ d.cantidad }}
+          <button type="button" (click)="borrador.splice($index, 1)">Quitar</button>
+        </div>
+      }
+      <div class="acciones">
+        <button type="submit" [disabled]="ventaForm.invalid || !borrador.length">
+          Registrar venta
+        </button>
+        <button type="button" (click)="mostrador = false">Cancelar</button>
+      </div>
+    </form>
+  }
+  @if (!mostrador && !seleccion) {
+  @for (v of ventas; track v.id) {
+    <div class="fila">
+      <span
+        ><strong>#{{ v.numeroOrden || v.id }}</strong> · {{ v.usuario?.nombre || 'Sin cliente' }} ·
+        {{ v.total | currency: 'PEN' : 'S/ ' }}</span
+      >
+      <button (click)="ver(v.id)">Ver venta</button>
+    </div>
+  } @empty {
+    @if (!ocupado() && !error()) {
+      <p>No hay ventas registradas.</p>
+    }
+  }
+  }
+</fieldset>

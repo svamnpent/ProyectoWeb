@@ -1,0 +1,26 @@
+@use 'variables' as *;
+
+.alerta {
+  padding: $espacio-3 $espacio-4;
+  margin-bottom: $espacio-4;
+  border-radius: $radio-md;
+  border: 1px solid transparent;
+
+  &--error {
+    color: #842029;
+    background: #f8d7da;
+    border-color: #f5c2c7;
+  }
+
+  &--exito {
+    color: #0f5132;
+    background: #d1e7dd;
+    border-color: #badbcc;
+  }
+
+  &--aviso {
+    color: #664d03;
+    background: #fff3cd;
+    border-color: #ffecb5;
+  }
+}

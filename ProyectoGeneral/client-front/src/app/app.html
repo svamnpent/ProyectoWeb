@@ -1,151 +1,49 @@
-<header class="frame frame-barra">
-  <p class="marca">Phantom Store</p>
-  <div class="acciones-barra">
-    <button class="btn btn-fantasma" type="button">Catálogo</button>
-    <button class="btn btn-primario" type="button">Ingresar</button>
+<header class="encabezado">
+  <div class="contenedor encabezado__barra">
+    <a class="encabezado__marca" routerLink="/" aria-label="PHANTOM · Inicio">
+      @if (logoDisponible) {
+        <img src="phantom-logo.svg" alt="PHANTOM" (error)="logoDisponible = false">
+      } @else { PHANTOM }
+    </a>
+
+    <nav class="encabezado__nav" aria-label="Navegación principal">
+      <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">
+        Inicio
+      </a>
+      @if (auth.esStaff()) {
+        <a routerLink="/backoffice" routerLinkActive="activo">Back-office</a>
+      }
+    </nav>
+
+    <div class="encabezado__sesion">
+      <a
+        class="encabezado__carrito"
+        routerLink="/carrito"
+        routerLinkActive="activo"
+        aria-label="Ver carrito"
+      >
+        Carrito
+        <span class="encabezado__insignia">{{ carrito.cantidadTotal() }}</span>
+      </a>
+
+      @if (auth.estaAutenticado()) {
+        <span class="encabezado__saludo">
+          Hola, <strong>{{ auth.primerNombre() }}</strong>
+        </span>
+        <button type="button" class="btn btn--acento" (click)="cerrarSesion()">
+          Cerrar sesión
+        </button>
+      } @else {
+        <a class="btn btn--contorno encabezado__ingresar" routerLink="/login">Ingresar</a>
+      }
+    </div>
   </div>
 </header>
 
-<main class="plantilla__contenido">
-  <section class="plantilla__intro">
-    <h1 class="marca">Plantilla de diseño</h1>
-    <p class="texto-suave">Color, botones y frames de la tienda.</p>
-  </section>
-
-  <section class="plantilla__bloque" aria-labelledby="titulo-color">
-    <h2 id="titulo-color">Color</h2>
-    <ul class="muestras">
-      <li class="muestra">
-        <span class="muestra__color" style="background: var(--color-fondo)"></span>
-        <span class="muestra__meta">
-          <span class="muestra__nombre">Fondo</span>
-          <code>--color-fondo</code>
-        </span>
-      </li>
-      <li class="muestra">
-        <span class="muestra__color" style="background: var(--color-superficie)"></span>
-        <span class="muestra__meta">
-          <span class="muestra__nombre">Superficie</span>
-          <code>--color-superficie</code>
-        </span>
-      </li>
-      <li class="muestra">
-        <span class="muestra__color" style="background: var(--color-superficie-suave)"></span>
-        <span class="muestra__meta">
-          <span class="muestra__nombre">Superficie suave</span>
-          <code>--color-superficie-suave</code>
-        </span>
-      </li>
-      <li class="muestra">
-        <span class="muestra__color" style="background: var(--color-tinta)"></span>
-        <span class="muestra__meta">
-          <span class="muestra__nombre">Tinta</span>
-          <code>--color-tinta</code>
-        </span>
-      </li>
-      <li class="muestra">
-        <span class="muestra__color" style="background: var(--color-tinta-suave)"></span>
-        <span class="muestra__meta">
-          <span class="muestra__nombre">Tinta suave</span>
-          <code>--color-tinta-suave</code>
-        </span>
-      </li>
-      <li class="muestra">
-        <span class="muestra__color" style="background: var(--color-linea)"></span>
-        <span class="muestra__meta">
-          <span class="muestra__nombre">Línea</span>
-          <code>--color-linea</code>
-        </span>
-      </li>
-      <li class="muestra">
-        <span class="muestra__color" style="background: var(--color-primario)"></span>
-        <span class="muestra__meta">
-          <span class="muestra__nombre">Primario</span>
-          <code>--color-primario</code>
-        </span>
-      </li>
-      <li class="muestra">
-        <span class="muestra__color" style="background: var(--color-acento)"></span>
-        <span class="muestra__meta">
-          <span class="muestra__nombre">Acento</span>
-          <code>--color-acento</code>
-        </span>
-      </li>
-      <li class="muestra">
-        <span class="muestra__color" style="background: var(--color-exito)"></span>
-        <span class="muestra__meta">
-          <span class="muestra__nombre">Éxito</span>
-          <code>--color-exito</code>
-        </span>
-      </li>
-      <li class="muestra">
-        <span class="muestra__color" style="background: var(--color-aviso)"></span>
-        <span class="muestra__meta">
-          <span class="muestra__nombre">Aviso</span>
-          <code>--color-aviso</code>
-        </span>
-      </li>
-      <li class="muestra">
-        <span class="muestra__color" style="background: var(--color-peligro)"></span>
-        <span class="muestra__meta">
-          <span class="muestra__nombre">Peligro</span>
-          <code>--color-peligro</code>
-        </span>
-      </li>
-    </ul>
-  </section>
-
-  <section class="plantilla__bloque" aria-labelledby="titulo-botones">
-    <h2 id="titulo-botones">Botones</h2>
-    <div class="grupo-botones">
-      <button class="btn btn-primario" type="button">Primario</button>
-      <button class="btn btn-secundario" type="button">Secundario</button>
-      <button class="btn btn-fantasma" type="button">Fantasma</button>
-      <button class="btn btn-peligro" type="button">Peligro</button>
-      <button class="btn btn-primario" type="button" disabled>Deshabilitado</button>
-    </div>
-  </section>
-
-  <section class="plantilla__bloque" aria-labelledby="titulo-frames">
-    <h2 id="titulo-frames">Frames</h2>
-    <div class="rejilla-frames">
-      <article class="frame frame-tarjeta">
-        <div class="frame__cuerpo">
-          <p class="texto-suave">Tarjeta</p>
-          <h3>Audífonos inalámbricos</h3>
-          <p class="precio texto-acento">S/ 189.00</p>
-          <p class="texto-exito">En stock</p>
-        </div>
-        <div class="frame__pie">
-          <button class="btn btn-primario" type="button">Agregar</button>
-        </div>
-      </article>
-
-      <article class="frame">
-        <div class="frame__cabecera">Panel</div>
-        <div class="frame__cuerpo">
-          <p>Resumen del pedido</p>
-          <p class="texto-suave">2 productos · envío a Lima</p>
-          <p class="precio texto-acento">S/ 248.00</p>
-        </div>
-        <div class="frame__pie">
-          <button class="btn btn-secundario" type="button">Seguir</button>
-          <button class="btn btn-primario" type="button">Pagar</button>
-        </div>
-      </article>
-
-      <article class="frame frame-encajado">
-        <div class="frame__cabecera">Encajado</div>
-        <div class="frame__cuerpo">
-          <p class="texto-aviso">Quedan 3 unidades</p>
-          <p class="texto-suave">Este marco va dentro de otro bloque, por ejemplo un formulario o un aviso.</p>
-        </div>
-        <div class="frame__pie">
-          <button class="btn btn-peligro" type="button">Quitar</button>
-        </div>
-      </article>
-    </div>
-  </section>
+<main class="contenido">
+  <router-outlet />
 </main>
 
-<router-outlet />
+<footer class="pie">
+  <div class="contenedor">© {{ anio }} PHANTOM. Todos los derechos reservados.</div>
+</footer>

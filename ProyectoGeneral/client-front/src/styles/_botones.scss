@@ -1,0 +1,45 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.btn {
+  @include boton-variante($color-primario);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $espacio-2;
+  padding: $espacio-2 $espacio-5;
+  border: 2px solid transparent;
+  border-radius: $radio-md;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &--acento {
+    @include boton-variante($color-acento);
+  }
+
+  &--peligro {
+    @include boton-variante($color-peligro);
+  }
+
+  &--contorno {
+    background: transparent;
+    color: $color-primario;
+    border-color: $color-primario;
+
+    &:hover:not(:disabled) {
+      background: $color-primario;
+      color: #ffffff;
+    }
+  }
+
+  &--bloque {
+    width: 100%;
+  }
+}

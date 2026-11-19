@@ -1,0 +1,70 @@
+<section class="portada">
+  <div class="contenedor">
+    <h1 class="portada__titulo">Tu tienda gamer</h1>
+    <p class="portada__texto">Videojuegos, consolas, periféricos y coleccionables.</p>
+  </div>
+</section>
+
+<section class="catalogo contenedor">
+  <div class="catalogo__filtros">
+    <div class="catalogo__categorias" role="group" aria-label="Filtrar por categoría">
+      <button
+        type="button"
+        class="filtro"
+        [class.filtro--activo]="categoriaSeleccionada() === null"
+        (click)="seleccionarCategoria(null)"
+      >
+        Todas
+      </button>
+      @for (categoria of categorias(); track categoria.id) {
+        <button
+          type="button"
+          class="filtro"
+          [class.filtro--activo]="categoriaSeleccionada() === categoria.id"
+          (click)="seleccionarCategoria(categoria.id)"
+        >
+          {{ categoria.nombre }}
+        </button>
+      }
+    </div>
+
+    <input
+      class="campo__input catalogo__buscador"
+      type="search"
+      placeholder="Buscar por nombre o marca…"
+      aria-label="Buscar productos"
+      [value]="busqueda()"
+      (input)="alBuscar($event)"
+    />
+  </div>
+
+  @if (aviso(); as mensaje) {
+    <div
+      class="alerta"
+      [class.alerta--exito]="mensaje.tipo === 'exito'"
+      [class.alerta--error]="mensaje.tipo === 'error'"
+      role="status"
+    >
+      {{ mensaje.texto }}
+    </div>
+  }
+
+  @if (cargando()) {
+    <p class="catalogo__estado">Cargando productos…</p>
+  } @else if (error(); as mensajeError) {
+    <div class="alerta alerta--error" role="alert">
+      {{ mensajeError }}
+      <button type="button" class="btn btn--contorno catalogo__reintentar" (click)="cargar()">
+        Reintentar
+      </button>
+    </div>
+  } @else if (productosFiltrados().length === 0) {
+    <p class="catalogo__estado">No encontramos productos con esos filtros.</p>
+  } @else {
+    <div class="catalogo__grilla">
+      @for (producto of productosFiltrados(); track producto.id) {
+        <app-producto-card [producto]="producto" (agregar)="agregarAlCarrito($event)" />
+      }
+    </div>
+  }
+</section>

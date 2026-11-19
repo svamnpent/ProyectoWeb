@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="iconBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a0b3d"/>
+      <stop offset="100%" stop-color="#111111"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded square matching #111111, #1a0b3d and #cc0000 -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#iconBg)" stroke="#cc0000" stroke-width="2.2"/>
+
+  <!-- Phantom Silhouette (#ffffff) -->
+  <path d="M 32 9 L 51 24 L 47 52 L 39.5 45.5 L 32 53 L 24.5 45.5 L 17 52 L 13 24 Z" fill="#ffffff"/>
+
+  <!-- Visor (#111111) -->
+  <polygon points="18,27 32,32.5 46,27 43,36 32,39.5 21,36" fill="#111111"/>
+
+  <!-- Eyes (#cc0000) -->
+  <polygon points="21.5,29.5 30,32.5 22.5,34" fill="#cc0000"/>
+  <polygon points="42.5,29.5 34,32.5 41.5,34" fill="#cc0000"/>
+
+  <!-- Top Crest (#cc0000) -->
+  <polygon points="32,9 36.5,16 32,19.5 27.5,16" fill="#cc0000"/>
+</svg>

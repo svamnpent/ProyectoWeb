@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * TIENDA - el comprador compra y consulta SUS compras.
- * El listado global, la anulación de ventas y la venta de mostrador están en BackOfficeController.
- */
+/** Compras del usuario autenticado. */
 @RestController
 @RequestMapping("/api/v1/ventas")
 @RequiredArgsConstructor

@@ -1,0 +1,21 @@
+<div class="contenedor panel">
+  <aside>
+    <h1>
+      @if (icono) { <img src="phantom-icon.svg" alt="" (error)="icono = false"> }
+      Back-office
+    </h1>
+    <nav aria-label="Operaciones de tienda">
+      @for (grupo of grupos; track grupo.nombre) {
+        @if (!grupo.admin || auth.esAdmin()) {
+          <div class="grupo" role="group" [attr.aria-label]="grupo.nombre">
+            <span>{{ grupo.nombre }}</span>
+            @for (enlace of grupo.enlaces; track enlace.ruta) {
+              <a [routerLink]="enlace.ruta" routerLinkActive="actual" ariaCurrentWhenActive="page">{{ enlace.nombre }}</a>
+            }
+          </div>
+        }
+      }
+    </nav>
+  </aside>
+  <div class="area"><router-outlet /></div>
+</div>

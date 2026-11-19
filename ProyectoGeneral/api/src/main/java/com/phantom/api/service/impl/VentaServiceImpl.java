@@ -77,8 +77,7 @@ public class VentaServiceImpl implements VentaService {
         public VentaDTO crear(VentaRequestDTO request) {
                 Usuario comprador = resolverComprador(request);
 
-                // Unifica líneas repetidas del mismo producto y ordena por ID (orden estable de
-                // actualización = sin deadlocks entre compras concurrentes)
+                // Agrupa por producto y actualiza en orden de ID para reducir bloqueos.
                 Map<Long, Integer> cantidades = request.getDetalles().stream()
                                 .collect(Collectors.toMap(
                                                 DetalleVentaRequestDTO::getProductoId,
@@ -128,8 +127,7 @@ public class VentaServiceImpl implements VentaService {
                         cantidadItems += cantidad;
                 }
 
-                // Si algún producto no tenía stock se lanza la excepción y la transacción se revierte
-                // completa (incluidos los descuentos de los productos que sí tenían stock)
+                // Si falta stock, la transacción revierte todos los descuentos.
                 if (!errores.isEmpty()) {
                         throw new StockInsuficienteException(errores);
                 }
@@ -159,10 +157,7 @@ public class VentaServiceImpl implements VentaService {
                 ventaRepository.delete(venta);
         }
 
-        /**
-         * Un comprador siempre compra a su nombre. Solo el personal de la tienda (ADMIN o TRABAJADOR)
-         * puede registrar una venta de mostrador para otro usuario (usuarioId) o sin usuario.
-         */
+        /** Asocia la compra al comprador o al cliente indicado por el personal. */
         private Usuario resolverComprador(VentaRequestDTO request) {
                 Long usuarioId;
                 if (currentUser.isStaff()) {
@@ -181,7 +176,7 @@ public class VentaServiceImpl implements VentaService {
         private void verificarAcceso(Venta venta) {
                 Long duenoId = venta.getUsuario() != null ? venta.getUsuario().getId() : null;
                 if (duenoId == null) {
-                        // Venta sin usuario (anónima): solo visible para administradores
+                        // Venta sin usuario (anónima): solo visible para el personal
                         if (!currentUser.isStaff()) {
                                 throw new AccessDeniedException("No tienes permiso para acceder a esta venta");
                         }

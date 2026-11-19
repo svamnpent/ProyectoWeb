@@ -9,10 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * TIENDA - el comprador gestiona SU propia cuenta (ver y editar sus datos).
- * La gestión de todos los usuarios (listar, crear, cambiar roles, eliminar) está en BackOfficeController.
- */
+/** Consulta y edición de la cuenta propia. */
 @RestController
 @RequestMapping("/api/v1/usuarios")
 @RequiredArgsConstructor

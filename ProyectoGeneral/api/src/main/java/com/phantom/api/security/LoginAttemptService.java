@@ -9,15 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
-/**
- * Limita los intentos de login fallidos por email (en memoria, con Caffeine).
- * Tras {@code maxAttempts} fallos la cuenta queda bloqueada {@code lockMinutes} minutos
- * desde el último fallo; un login correcto reinicia el contador.
- *
- * Limitación conocida: el estado es local a cada instancia de la API (si escalas a varias
- * réplicas, cada una cuenta por separado) y un atacante podría bloquear temporalmente
- * a un usuario concreto. Para producción multi-instancia conviene mover esto a Redis.
- */
+/** Limita los intentos fallidos por correo en esta instancia. */
 @Component
 public class LoginAttemptService {
 
