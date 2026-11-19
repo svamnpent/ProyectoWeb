@@ -103,6 +103,9 @@
         >
           {{ etiquetaCompra() }}
         </button>
+        @if (!auth.estaAutenticado()) {
+          <a routerLink="/registro" [queryParams]="{returnUrl:'/carrito'}">Crear cuenta y volver al carrito</a>
+        }
         <button type="button" class="btn btn--contorno btn--bloque" (click)="vaciar()">
           Vaciar carrito
         </button>

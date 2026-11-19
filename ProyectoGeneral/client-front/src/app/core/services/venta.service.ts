@@ -2,12 +2,20 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Venta, VentaRequest } from '../models/venta.model';
+import { DetalleVenta, Venta, VentaRequest } from '../models/venta.model';
 
 @Injectable({ providedIn: 'root' })
 export class VentaService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/ventas`;
+
+  mias(): Observable<Venta[]> {
+    return this.http.get<Venta[]>(this.apiUrl + '/mias');
+  }
+
+  detalles(id: number): Observable<DetalleVenta[]> {
+    return this.http.get<DetalleVenta[]>(this.apiUrl + '/' + id + '/detalles');
+  }
 
   /** Registra la compra. El servidor descuenta el stock y calcula precios y total. */
   crear(solicitud: VentaRequest): Observable<Venta> {

@@ -1,0 +1,77 @@
+<h1>Mi cuenta</h1>
+@if (error()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (aviso()) {
+  <p role="status">{{ aviso() }}</p>
+}
+@if (cargando()) {
+  <p role="status">Procesando…</p>
+}
+@if (usuario; as u) {
+  <fieldset [disabled]="cargando()">
+    <div class="acciones">
+      <button [attr.aria-pressed]="vista === 'datos'" (click)="vista = 'datos'">
+        Datos personales
+      </button>
+      <button [attr.aria-pressed]="vista === 'perfil'" (click)="abrirPerfil()">Perfil</button>
+    </div>
+    @if (vista === 'datos') {
+      <form #f="ngForm" (ngSubmit)="f.valid && guardarDatos(u)">
+        <h2>Datos personales</h2>
+        <div class="campos">
+          <label
+            >Nombre<input required maxlength="255" name="nombre" [(ngModel)]="u.nombre"
+          /></label>
+          <label
+            >Correo electrónico<input
+              required
+              email
+              maxlength="255"
+              type="email"
+              name="email"
+              [(ngModel)]="u.email"
+          /></label>
+          <label>DNI<input name="dni" pattern="[0-9]{8,20}" [(ngModel)]="u.dni" /></label>
+          <label
+            >Teléfono<input
+              type="tel"
+              name="telefono"
+              pattern="[+]?[0-9]{7,15}"
+              [(ngModel)]="u.numeroTelefono"
+          /></label>
+          <label
+            >Dirección<input name="direccion" maxlength="255" [(ngModel)]="u.direccion"
+          /></label>
+        </div>
+        <div class="acciones">
+          <button type="submit" [disabled]="f.invalid">Guardar datos</button>
+        </div>
+      </form>
+    } @else {
+      <form #f="ngForm" (ngSubmit)="f.valid && guardarPerfil()">
+        <h2>{{ perfil ? 'Editar perfil' : 'Crear perfil' }}</h2>
+        <div class="campos">
+          <label
+            >URL del avatar<input name="avatar" type="url" maxlength="1000" [(ngModel)]="avatar"
+          /></label>
+          <label
+            >Biografía<textarea
+              name="biografia"
+              maxlength="1000"
+              [(ngModel)]="biografia"
+            ></textarea>
+          </label>
+        </div>
+        <div class="acciones">
+          <button type="submit" [disabled]="f.invalid">Guardar perfil</button>
+          @if (perfil) {
+            <button type="button" (click)="eliminarPerfil()">Eliminar perfil</button>
+          }
+        </div>
+      </form>
+    }
+  </fieldset>
+} @else if (!cargando()) {
+  <button (click)="cargar()">Reintentar</button>
+}

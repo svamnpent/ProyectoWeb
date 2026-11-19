@@ -1,0 +1,41 @@
+<h1>Mis pedidos</h1>
+<button (click)="cargar()" [disabled]="cargando()">Actualizar</button>
+@if (error()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (cargando()) {
+  <p role="status">Consultando…</p>
+}
+@for (v of ventas; track v.id) {
+  <article>
+    <h2>Pedido {{ v.numeroOrden || v.id }}</h2>
+    <p>
+      {{ v.fecha | date: 'dd/MM/yyyy HH:mm' : '-0500' }} · {{ v.cantidadItems }} unidades ·
+      {{ v.total | currency: 'PEN' : 'S/ ' }}
+    </p>
+    <div class="acciones">
+      <a [routerLink]="['/pedido', v.id]">Ver pedido</a>
+      <button
+        (click)="consultarLineas(v.id)"
+        [disabled]="cargando()"
+        [attr.aria-expanded]="seleccion === v.id"
+      >
+        {{ seleccion === v.id ? 'Ocultar productos' : 'Ver productos' }}
+      </button>
+    </div>
+    @if (seleccion === v.id) {
+      @for (d of lineas; track d.id) {
+        <div class="fila">
+          <a [routerLink]="['/producto', d.productoId]">{{ d.productoNombre }}</a
+          ><span>{{ d.cantidad }} × {{ d.precioUnitario | currency: 'PEN' : 'S/ ' }}</span>
+        </div>
+      } @empty {
+        <p>Este pedido no tiene productos.</p>
+      }
+    }
+  </article>
+} @empty {
+  @if (!cargando() && !error()) {
+    <p>Aún no tienes pedidos. <a routerLink="/">Ver catálogo</a></p>
+  }
+}

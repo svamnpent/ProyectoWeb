@@ -42,6 +42,7 @@
   &__nav {
     display: flex;
     flex: 1;
+    flex-wrap: wrap;
     gap: $espacio-4;
 
     a {

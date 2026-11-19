@@ -36,7 +36,7 @@ const entero = (control: AbstractControl): ValidationErrors | null =>
 })
 export class Carrito {
   private readonly fb = inject(NonNullableFormBuilder);
-  private readonly auth = inject(AuthService);
+  protected readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly productoService = inject(ProductoService);
   private readonly ventaService = inject(VentaService);

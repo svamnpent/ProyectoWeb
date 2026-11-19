@@ -1,0 +1,56 @@
+<h1>Crear cuenta</h1>
+<form #f="ngForm" (ngSubmit)="f.valid && registrar()">
+  <fieldset [disabled]="cargando()">
+    <div class="campos">
+      <label
+        >Nombre<input
+          required
+          maxlength="255"
+          autocomplete="name"
+          name="nombre"
+          [(ngModel)]="datos.nombre"
+      /></label>
+      <label
+        >Correo electrónico<input
+          required
+          email
+          maxlength="255"
+          autocomplete="email"
+          type="email"
+          name="email"
+          [(ngModel)]="datos.email"
+      /></label>
+      <label
+        >Contraseña (8 a 72 caracteres)<input
+          required
+          minlength="8"
+          maxlength="72"
+          autocomplete="new-password"
+          type="password"
+          name="clave"
+          [(ngModel)]="datos.password"
+      /></label>
+      <label
+        >Repite la contraseña<input
+          required
+          maxlength="72"
+          autocomplete="new-password"
+          type="password"
+          name="confirmar"
+          [(ngModel)]="confirmar"
+      /></label>
+    </div>
+    @if (confirmar && datos.password !== confirmar) {
+      <p role="alert">Las contraseñas deben coincidir.</p>
+    }
+    @if (error()) {
+      <p role="alert">{{ error() }}</p>
+    }
+    <div class="acciones">
+      <button type="submit" [disabled]="f.invalid || confirmar !== datos.password">
+        {{ cargando() ? 'Creando cuenta…' : 'Crear cuenta' }}
+      </button>
+      <a routerLink="/login" [queryParams]="{ returnUrl: returnUrl() }">Ya tengo cuenta</a>
+    </div>
+  </fieldset>
+</form>

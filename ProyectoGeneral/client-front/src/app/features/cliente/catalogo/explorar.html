@@ -1,0 +1,53 @@
+@if (buscando) {
+  <form (ngSubmit)="buscar()">
+    <label
+      >Buscar productos y categorías<input
+        name="q"
+        [(ngModel)]="texto"
+        type="search"
+        placeholder="Nombre, marca o descripción"
+    /></label>
+    <div class="acciones"><button type="submit">Buscar</button></div>
+  </form>
+}
+@if (error()) {
+  <p role="alert">{{ error() }}</p>
+} @else if (resultado(); as r) {
+  <h1>{{ r.titulo }}</h1>
+  @if (r.descripcion) {
+    <p>{{ r.descripcion }}</p>
+  }
+  @if (r.categorias.length) {
+    <h2>Categorías</h2>
+    <div class="acciones">
+      @for (c of r.categorias; track c.id) {
+        <a [routerLink]="['/categoria', c.id]">{{ c.nombre }}</a>
+      }
+    </div>
+  }
+  @if (r.productos.length) {
+    <section class="listado">
+      <h2>Productos ({{ r.productos.length }})</h2>
+      @for (p of r.productos.slice((pagina - 1) * 10, pagina * 10); track p.id) {
+        <div class="fila">
+          <a [routerLink]="['/producto', p.id]">{{ p.nombre }}</a
+          ><span>{{ p.precio | currency: 'PEN' : 'S/ ' }}</span>
+        </div>
+      }
+      @if (r.productos.length > 10) {
+        <div class="acciones">
+          <button (click)="pagina = pagina - 1" [disabled]="pagina === 1">Anterior</button>
+          <span>Página {{ pagina }}</span
+          ><button (click)="pagina = pagina + 1" [disabled]="pagina * 10 >= r.productos.length">
+            Siguiente
+          </button>
+        </div>
+      }
+    </section>
+  } @else if (!buscando || terminoConsultado) {
+    <p>Sin productos para esta consulta.</p>
+  }
+} @else {
+  <p role="status">Consultando catálogo…</p>
+}
+<a routerLink="/">Volver al inicio</a>

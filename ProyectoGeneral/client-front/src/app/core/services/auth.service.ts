@@ -39,6 +39,11 @@ export class AuthService {
       .pipe(switchMap((respuesta) => this.iniciarSesion(respuesta)));
   }
 
+  actualizarCuenta(id: number, datos: Pick<Usuario, 'nombre' | 'email' | 'dni' | 'direccion' | 'numeroTelefono'>): Observable<Usuario> {
+    return this.http.put<Usuario>(environment.apiUrl + '/usuarios/' + id, datos)
+      .pipe(tap(usuario => this._usuario.set(usuario)));
+  }
+
   cerrarSesion(): void {
     this._token.set(null);
     this._usuario.set(null);

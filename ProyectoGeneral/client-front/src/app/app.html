@@ -10,6 +10,10 @@
       <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">
         Inicio
       </a>
+      <a routerLink="/buscar" routerLinkActive="activo">Buscar</a>
+      @if (auth.estaAutenticado()) {
+        <a routerLink="/mis-pedidos" routerLinkActive="activo">Mis pedidos</a>
+      }
       @if (auth.esStaff()) {
         <a routerLink="/backoffice" routerLinkActive="activo">Back-office</a>
       }
@@ -27,9 +31,7 @@
       </a>
 
       @if (auth.estaAutenticado()) {
-        <span class="encabezado__saludo">
-          Hola, <strong>{{ auth.primerNombre() }}</strong>
-        </span>
+        <a class="encabezado__saludo" routerLink="/mi-cuenta" routerLinkActive="activo">Mi cuenta</a>
         <button type="button" class="btn btn--acento" (click)="cerrarSesion()">
           Cerrar sesión
         </button>

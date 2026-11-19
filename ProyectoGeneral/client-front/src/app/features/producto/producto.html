@@ -3,7 +3,7 @@
     <a routerLink="/" class="detalle__miga-enlace">Inicio</a>
     <span class="detalle__miga-separador">/</span>
     @if (producto(); as prod) {
-      <span class="detalle__miga-categoria">{{ prod.categoria.nombre }}</span>
+      <a class="detalle__miga-categoria" [routerLink]="['/categoria',prod.categoria.id]">{{ prod.categoria.nombre }}</a>
       <span class="detalle__miga-separador">/</span>
       <span class="detalle__miga-actual" aria-current="page">{{ prod.nombre }}</span>
     } @else {
@@ -67,7 +67,7 @@
         @if (prod.etiquetas.length > 0) {
           <div class="detalle__etiquetas">
             @for (etiqueta of prod.etiquetas; track etiqueta.id) {
-              <span class="detalle__etiqueta">#{{ etiqueta.nombre }}</span>
+              <a class="detalle__etiqueta" [routerLink]="['/etiqueta',etiqueta.id]">#{{ etiqueta.nombre }}</a>
             }
           </div>
         }

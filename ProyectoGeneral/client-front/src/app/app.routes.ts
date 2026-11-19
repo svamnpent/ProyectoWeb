@@ -40,11 +40,12 @@ export const routes: Routes = [
     loadChildren: () => import('./features/backoffice/routes').then((m) => m.backofficeRoutes),
   },
 
-  // Rutas previstas (se agregan al construir cada pantalla):
-  //   { path: 'registro', ... }                                → formulario reactivo
-  //   { path: 'producto/:id', ... }                            → :id llega como input()
-  //   { path: 'categoria/:id', ... }
-  //   { path: 'perfil', canActivate: [authGuard], ... }
+  { path: 'registro', loadComponent: () => import('./features/cliente/registro/registro').then(m => m.Registro) },
+  { path: 'mis-pedidos', canActivate: [authGuard], loadComponent: () => import('./features/cliente/pedidos/pedidos').then(m => m.Pedidos) },
+  { path: 'mi-cuenta', canActivate: [authGuard], loadComponent: () => import('./features/cliente/cuenta/cuenta').then(m => m.Cuenta) },
+  { path: 'buscar', data: {tipo: 'buscar'}, loadComponent: () => import('./features/cliente/catalogo/explorar').then(m => m.Explorar) },
+  { path: 'categoria/:id', data: {tipo: 'categoria'}, loadComponent: () => import('./features/cliente/catalogo/explorar').then(m => m.Explorar) },
+  { path: 'etiqueta/:id', data: {tipo: 'etiqueta'}, loadComponent: () => import('./features/cliente/catalogo/explorar').then(m => m.Explorar) },
 
   { path: '**', redirectTo: '' },
 ];

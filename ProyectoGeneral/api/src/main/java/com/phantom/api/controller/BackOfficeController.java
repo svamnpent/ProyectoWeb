@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -165,7 +166,7 @@ public class BackOfficeController {
     /** Crea usuarios con cualquier rol (USER, TRABAJADOR o ADMIN): así se da de alta al personal. */
     @PreAuthorize(SOLO_ADMIN)
     @PostMapping("/usuarios")
-    public ResponseEntity<UsuarioDTO> crearUsuario(@Valid @RequestBody UsuarioRequestDTO request) {
+    public ResponseEntity<UsuarioDTO> crearUsuario(@Validated(UsuarioRequestDTO.ConPassword.class) @RequestBody UsuarioRequestDTO request) {
         return new ResponseEntity<>(usuarioService.crear(request), HttpStatus.CREATED);
     }
 
@@ -173,7 +174,7 @@ public class BackOfficeController {
     @PreAuthorize(SOLO_ADMIN)
     @PutMapping("/usuarios/{id}")
     public ResponseEntity<UsuarioDTO> actualizarUsuario(@PathVariable Long id,
-                                                        @Valid @RequestBody UsuarioRequestDTO request) {
+                                                        @Validated(UsuarioRequestDTO.ConPassword.class) @RequestBody UsuarioRequestDTO request) {
         return ResponseEntity.ok(usuarioService.actualizar(id, request));
     }
 

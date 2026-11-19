@@ -25,7 +25,10 @@ public class UsuarioRequestDTO {
     @Size(max = 255, message = "El email no puede exceder los 255 caracteres")
     private String email;
 
-    @NotBlank(message = "La contraseña es obligatoria")
+    public interface ConPassword extends jakarta.validation.groups.Default {}
+
+    @NotBlank(groups = ConPassword.class, message = "La contraseña es obligatoria")
+    @Pattern(regexp = "(?s).*\\S.*", message = "La contraseña no puede estar en blanco")
     @Size(min = 8, max = 72, message = "La contraseña debe tener entre 8 y 72 caracteres")
     private String password;
 

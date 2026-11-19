@@ -61,5 +61,6 @@
         {{ enviando() ? 'Ingresando…' : 'Ingresar' }}
       </button>
     </form>
+    <a routerLink="/registro" [queryParams]="{returnUrl:returnUrl()}">Crear cuenta</a>
   </div>
 </section>

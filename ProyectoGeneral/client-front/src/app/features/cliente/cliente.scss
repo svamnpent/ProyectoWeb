@@ -1,0 +1,83 @@
+@use 'variables' as *;
+:host {
+  display: block;
+  max-width: 64rem;
+  margin: auto;
+  padding: clamp(1rem, 4vw, 2.5rem) 1rem;
+}
+h1,
+h2 {
+  color: $color-primario;
+}
+h1 {
+  font-size: clamp(1.6rem, 4vw, 2.25rem);
+}
+form,
+article,
+.listado {
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border: 1px solid $color-borde;
+  border-radius: $radio-md;
+  background: $color-superficie;
+  margin: 1rem 0;
+}
+.campos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+}
+label {
+  display: grid;
+  gap: 0.25rem;
+  font-weight: 600;
+}
+input,
+textarea,
+button,
+select {
+  padding: 0.55rem 0.75rem;
+  font: inherit;
+  border: 1px solid #aaa;
+  border-radius: $radio-sm;
+  min-width: 0;
+}
+button {
+  cursor: pointer;
+  color: $color-primario;
+  background: white;
+}
+button[type='submit'] {
+  background: $color-primario;
+  color: white;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.acciones,
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.acciones {
+  margin-top: 1rem;
+}
+.fila {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid $color-borde;
+  justify-content: space-between;
+}
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+[role='alert'] {
+  color: #a11020;
+}
+a {
+  text-decoration: underline;
+}

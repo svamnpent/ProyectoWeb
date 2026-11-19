@@ -136,6 +136,14 @@ class SecurityEndpointsTest {
                 caso(G, BO + "/perfiles", null, 401, 403, 403, 200));
     }
 
+    @Test
+    void editarContactoSinPasswordConservaValidacionDelBackOffice() throws Exception {
+        String contacto = "{\"nombre\":\"Ana\",\"email\":\"ana@example.org\"}";
+        assertEquals(200, ejecutar(HttpMethod.PUT, "/api/v1/usuarios/5", contacto, user(5L)));
+        assertEquals(400, ejecutar(HttpMethod.POST, "/api/v1/backoffice/usuarios", contacto, admin()));
+        assertEquals(400, ejecutar(HttpMethod.PUT, "/api/v1/backoffice/usuarios/5", contacto, admin()));
+    }
+
     private int ejecutar(HttpMethod metodo, String ruta, String cuerpo, RequestPostProcessor identidad)
             throws Exception {
         MockHttpServletRequestBuilder req = request(metodo, ruta);
