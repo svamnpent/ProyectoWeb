@@ -6,7 +6,7 @@
 #   docker compose up -d db
 services:
   db:
-    image: postgres:16-alpine
+    image: postgres:15-alpine
     container_name: phantom-db
     restart: unless-stopped
     # Zona horaria de Perú (se aplica siempre, aunque el volumen ya exista)
@@ -27,7 +27,7 @@ services:
       start_period: 10s
 
   api:
-    build: .
+    build: ./api
     container_name: phantom-api
     restart: unless-stopped
     depends_on:
@@ -52,6 +52,16 @@ services:
       timeout: 5s
       retries: 10
       start_period: 40s
+
+  front:
+    build: ./client-front
+    container_name: phantom-front
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "4200:80"
 
 volumes:
   phantom-db-data:

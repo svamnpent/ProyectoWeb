@@ -2,17 +2,7 @@ package com.phantom.api.security;
 
 import java.util.Set;
 
-/**
- * Única fuente de verdad de los roles. Antes los textos "USER", "ADMIN" y "TRABAJADOR" estaban
- * repetidos en servicios, DTOs, seguridad y seeders.
- *
- *  USER        comprador de la tienda
- *  TRABAJADOR  personal con acceso limitado al back-office
- *  ADMIN       administrador (acceso total)
- *
- * En la BD el rol se guarda como texto y la restricción chk_usuarios_rol (V4) admite estos tres
- * valores. En el JWT viaja en el claim "roles" y Spring lo convierte en la autoridad ROLE_<rol>.
- */
+/** Roles compartidos por la API, la persistencia y los tokens. */
 public final class Roles {
 
     public static final String USER = "USER";

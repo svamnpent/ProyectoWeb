@@ -10,11 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.oauth2.jwt.BadJwtException;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 
-/**
- * Carga la seguridad REAL de la aplicación dentro de los tests @WebMvcTest
- * (los slices no escanean @Configuration ni @Component).
- * El JwtDecoder rechaza cualquier token: los tests se autentican con JwtTestUtils.
- */
+/** Carga la configuración de seguridad en las pruebas MVC. */
 @TestConfiguration
 @Import({SecurityConfig.class, RestAuthenticationEntryPoint.class, RestAccessDeniedHandler.class,
         CurrentUser.class})

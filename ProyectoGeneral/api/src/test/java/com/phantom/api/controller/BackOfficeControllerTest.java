@@ -31,10 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Comportamiento del back-office. La matriz completa de permisos está en SecurityEndpointsTest;
- * aquí se comprueba lo que hace cada operación y que el servicio NO se ejecuta si no hay permiso.
- */
+/** Comprueba las operaciones internas y el rechazo antes de invocar el servicio. */
 @WebMvcTest(BackOfficeController.class)
 @Import({GlobalExceptionHandler.class, WebMvcSecurityTestConfig.class})
 class BackOfficeControllerTest {

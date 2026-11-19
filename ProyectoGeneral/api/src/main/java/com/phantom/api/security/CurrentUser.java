@@ -9,10 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-/**
- * Acceso al usuario autenticado de la petición actual (el "sub" del JWT es el ID del usuario).
- * También se usa desde expresiones SpEL: {@code @PreAuthorize("hasRole('ADMIN') or @currentUser.isSelf(#id)")}.
- */
+/** Identidad y permisos del usuario de la petición. */
 @Component("currentUser")
 public class CurrentUser {
 
@@ -55,10 +52,7 @@ public class CurrentUser {
         return id != null && findId().filter(id::equals).isPresent();
     }
 
-    /**
-     * Permite el acceso si el usuario actual es personal de la tienda (ADMIN o TRABAJADOR)
-     * o es el dueño del recurso. Se usa en ventas: el personal atiende a los clientes.
-     */
+    /** Autoriza al titular de la venta o al personal. */
     public void requireSelfOrStaff(Long ownerId) {
         if (isStaff()) {
             return;
@@ -68,10 +62,7 @@ public class CurrentUser {
         }
     }
 
-    /**
-     * Permite el acceso si el usuario actual es ADMIN o es el dueño del recurso
-     * (datos personales: usuarios y perfiles; un TRABAJADOR no los ve).
-     */
+    /** Autoriza al titular de los datos personales o a un administrador. */
     public void requireSelfOrAdmin(Long ownerId) {
         if (isAdmin()) {
             return;

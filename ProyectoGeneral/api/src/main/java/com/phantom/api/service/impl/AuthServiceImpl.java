@@ -30,10 +30,7 @@ public class AuthServiceImpl implements AuthService {
     private final LoginAttemptService loginAttemptService;
     private final CurrentUser currentUser;
 
-    /**
-     * Hash de relleno: se compara contra él cuando el email no existe para que el tiempo de
-     * respuesta no revele qué emails están registrados.
-     */
+    /** Iguala el coste de la comparación cuando el correo no existe. */
     private final String hashRelleno;
 
     public AuthServiceImpl(UsuarioRepository usuarioRepository,

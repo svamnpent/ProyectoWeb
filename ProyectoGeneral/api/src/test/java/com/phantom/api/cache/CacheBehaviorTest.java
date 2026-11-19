@@ -42,11 +42,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * Pruebas LOCALES de la caché (Caffeine real, repositorios simulados, sin BD ni Docker):
- * verifican que las lecturas repetidas no vuelven a la BD y que cada escritura invalida
- * las cachés correctas.
- */
+/** Verifica la caché Caffeine con repositorios simulados. */
 @SpringBootTest(classes = CacheBehaviorTest.TestConfig.class)
 class CacheBehaviorTest {
 

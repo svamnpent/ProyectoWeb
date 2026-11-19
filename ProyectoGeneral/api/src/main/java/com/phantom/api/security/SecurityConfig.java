@@ -21,20 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Seguridad stateless con JWT.
- *
- * La API tiene DOS zonas bien separadas:
- *
- *  - TIENDA (compradores):  /api/v1/{auth, productos, categorias, etiquetas, usuarios/{id},
- *                           perfiles, ventas, ...}  -> público (catálogo, login, registro) o
- *                           usuario autenticado sobre SUS propios recursos.
- *  - BACK-OFFICE (personal): /api/v1/backoffice/**  -> solo ADMIN o TRABAJADOR (ver BackOfficeController,
- *                           que define además qué operaciones son solo de ADMIN).
- *
- * Las reglas de "dueño del recurso" (un usuario solo ve SUS ventas) se aplican con @PreAuthorize
- * y en la capa de servicio.
- */
+/** Configura el acceso a la tienda y al back-office mediante JWT. */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
