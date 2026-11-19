@@ -1,0 +1,54 @@
+<h2>Categorías</h2>
+@if (error()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (aviso()) {
+  <p role="status">{{ aviso() }}</p>
+}
+@if (ocupado()) {
+  <p role="status">Procesando…</p>
+}
+<fieldset [disabled]="ocupado()" aria-label="Categorías">
+  <div class="acciones">
+    <button class="principal" (click)="editar()">Crear categoría</button
+    ><button (click)="recargar()">Mostrar todos</button>
+  </div>
+
+  @if (abierto) {
+    <form #f="ngForm" (ngSubmit)="f.valid && guardar()">
+      <h3>{{ id === null ? 'Crear' : 'Editar' }} categoría</h3>
+      <div class="campos">
+        <label
+          >Nombre<input name="nombre" [(ngModel)]="formulario.nombre" required maxlength="100"
+        /></label>
+        <label
+          >Descripción<input
+            name="descripcion"
+            [(ngModel)]="formulario.descripcion"
+            maxlength="255"
+        /></label>
+      </div>
+      <div class="acciones">
+        <button type="submit" [disabled]="f.invalid">Guardar</button
+        ><button type="button" (click)="abierto = false">Cancelar</button>
+      </div>
+    </form>
+  }
+  @for (fila of filas; track fila.id) {
+    <div class="fila">
+      <div>
+        <strong>{{ fila.nombre }}</strong> {{ fila.descripcion }}
+      </div>
+      <div class="acciones">
+        <button (click)="editar(fila)">Editar</button>
+        @if (auth.esAdmin()) {
+          <button class="peligro" (click)="borrar(fila)">Eliminar</button>
+        }
+      </div>
+    </div>
+  } @empty {
+    @if (!ocupado() && !error()) {
+      <p>No hay registros.</p>
+    }
+  }
+</fieldset>

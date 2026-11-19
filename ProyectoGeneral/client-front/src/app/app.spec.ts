@@ -23,7 +23,7 @@ describe('App', () => {
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(compiled.querySelector('.encabezado__marca')?.textContent).toContain('PHANTOM');
+    expect(compiled.querySelector('.encabezado__marca')?.getAttribute('aria-label')).toContain('PHANTOM');
     expect(compiled.querySelector('.encabezado__ingresar')?.textContent).toContain('Ingresar');
   });
 });

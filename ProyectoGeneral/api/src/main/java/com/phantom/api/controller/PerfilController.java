@@ -10,10 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-/**
- * TIENDA - el comprador gestiona SU perfil (el servicio valida que sea el dueño).
- * El listado de todos los perfiles está en BackOfficeController.
- */
+/** Gestión del perfil propio. */
 @RestController
 @RequestMapping("/api/v1/perfiles")
 @RequiredArgsConstructor

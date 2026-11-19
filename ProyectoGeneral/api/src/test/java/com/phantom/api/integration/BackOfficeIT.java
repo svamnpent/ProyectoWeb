@@ -13,10 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * La zona BACK-OFFICE contra la aplicación real y PostgreSQL: qué puede y qué NO puede hacer
- * un TRABAJADOR frente a un ADMIN y frente a un comprador.
- */
+/** Comprueba el acceso al back-office por rol. */
 class BackOfficeIT extends AbstractIntegrationIT {
 
     private static final String BO = "/api/v1/backoffice";

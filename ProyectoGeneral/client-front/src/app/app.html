@@ -1,11 +1,18 @@
 <header class="encabezado">
   <div class="contenedor encabezado__barra">
-    <a class="encabezado__marca" routerLink="/">PHANTOM</a>
+    <a class="encabezado__marca" routerLink="/" aria-label="PHANTOM · Inicio">
+      @if (logoDisponible) {
+        <img src="phantom-logo.svg" alt="PHANTOM" (error)="logoDisponible = false">
+      } @else { PHANTOM }
+    </a>
 
     <nav class="encabezado__nav" aria-label="Navegación principal">
       <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">
         Inicio
       </a>
+      @if (auth.esStaff()) {
+        <a routerLink="/backoffice" routerLinkActive="activo">Back-office</a>
+      }
     </nav>
 
     <div class="encabezado__sesion">

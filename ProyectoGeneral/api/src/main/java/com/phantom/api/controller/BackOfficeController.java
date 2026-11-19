@@ -14,27 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * BACK-OFFICE: todas las operaciones INTERNAS de la tienda, separadas de lo que hace el comprador.
- *
- * Todo cuelga de /api/v1/backoffice y exige ser personal de la tienda (ADMIN o TRABAJADOR);
- * SecurityConfig lo valida por URL y aquí, por método, se afina quién puede cada cosa:
- *
- * <pre>
- *  Recurso                         TRABAJADOR   ADMIN
- *  ------------------------------  -----------  -----
- *  Catálogo: crear / editar            si         si
- *  Catálogo: eliminar                  no         si
- *  Ventas: listar / ver / mostrador    si         si     (venta de mostrador = POST /ventas)
- *  Ventas: anular (repone stock)       no         si
- *  Líneas de venta: ver                si         si
- *  Líneas de venta: agregar / quitar   no         si
- *  Usuarios (todo) y perfiles          no         si     (datos personales y roles)
- * </pre>
- *
- * Para cambiar un permiso basta con cambiar la constante de la anotación de ese método.
- * Lo que hace el comprador (catálogo, su cuenta, sus compras) está en los demás controllers.
- */
+/** Operaciones internas del personal. Los permisos por operación se resumen en BACKEND.md. */
 @Tag(name = "Back-office", description = "Operaciones internas: solo ADMIN o TRABAJADOR")
 @RestController
 @RequestMapping("/api/v1/backoffice")
@@ -55,7 +35,7 @@ public class BackOfficeController {
     private final VentaService ventaService;
     private final DetalleVentaService detalleVentaService;
 
-    // ======================================================================= PRODUCTOS
+    // Productos
 
     @PostMapping("/productos")
     public ResponseEntity<ProductoDTO> crearProducto(@Valid @RequestBody ProductoRequestDTO request) {
@@ -75,7 +55,7 @@ public class BackOfficeController {
         return ResponseEntity.noContent().build();
     }
 
-    // ======================================================================= CATEGORÍAS
+    // Categorías
 
     @PostMapping("/categorias")
     public ResponseEntity<CategoriaDTO> crearCategoria(@Valid @RequestBody CategoriaRequestDTO request) {
@@ -95,7 +75,7 @@ public class BackOfficeController {
         return ResponseEntity.noContent().build();
     }
 
-    // ======================================================================= ETIQUETAS
+    // Etiquetas
 
     @PostMapping("/etiquetas")
     public ResponseEntity<EtiquetaDTO> crearEtiqueta(@Valid @RequestBody EtiquetaRequestDTO request) {
@@ -115,7 +95,7 @@ public class BackOfficeController {
         return ResponseEntity.noContent().build();
     }
 
-    // ======================================================================= VENTAS
+    // Ventas
 
     @GetMapping("/ventas")
     public ResponseEntity<List<VentaDTO>> listarVentas() {
@@ -127,10 +107,7 @@ public class BackOfficeController {
         return ResponseEntity.ok(ventaService.obtenerPorId(id));
     }
 
-    /**
-     * Venta de mostrador: el personal registra la compra de un cliente (usuarioId) o una venta sin
-     * cliente (usuarioId omitido). Descuenta stock igual que una compra online.
-     */
+    /** Registra una venta de mostrador con cliente opcional. */
     @PostMapping("/ventas")
     public ResponseEntity<VentaDTO> registrarVenta(@Valid @RequestBody VentaRequestDTO request) {
         return new ResponseEntity<>(ventaService.crear(request), HttpStatus.CREATED);
@@ -144,7 +121,7 @@ public class BackOfficeController {
         return ResponseEntity.noContent().build();
     }
 
-    // ======================================================================= LÍNEAS DE VENTA
+    // Líneas de venta
 
     @GetMapping("/ventas/{ventaId}/detalles")
     public ResponseEntity<List<DetalleVentaDTO>> listarDetalles(@PathVariable Long ventaId) {
@@ -165,7 +142,7 @@ public class BackOfficeController {
         return ResponseEntity.noContent().build();
     }
 
-    // ======================================================================= USUARIOS (solo ADMIN)
+    // Usuarios (solo admin)
 
     @PreAuthorize(SOLO_ADMIN)
     @GetMapping("/usuarios")
@@ -207,7 +184,7 @@ public class BackOfficeController {
         return ResponseEntity.noContent().build();
     }
 
-    // ======================================================================= PERFILES (solo ADMIN)
+    // Perfiles (solo admin)
 
     @PreAuthorize(SOLO_ADMIN)
     @GetMapping("/perfiles")

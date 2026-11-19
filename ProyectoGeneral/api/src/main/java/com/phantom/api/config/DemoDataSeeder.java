@@ -19,13 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-/**
- * Datos FALSOS de demostración (categorías, etiquetas, productos, usuarios, un trabajador, perfiles y ventas).
- * Solo existe con app.seed.enabled=true (perfil "demo"). NUNCA lo actives en producción:
- * crea usuarios con una contraseña conocida.
- *
- * Es idempotente: si ya hay categorías no hace nada.
- */
+/** Carga datos de demostración en una tienda sin categorías. */
 @Slf4j
 @Component
 @ConditionalOnProperty(name = "app.seed.enabled", havingValue = "true")

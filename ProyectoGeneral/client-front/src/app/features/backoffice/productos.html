@@ -1,0 +1,92 @@
+<h2>Productos</h2>
+@if (error()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (aviso()) {
+  <p role="status">{{ aviso() }}</p>
+}
+@if (ocupado()) {
+  <p role="status">Procesando…</p>
+}
+<fieldset [disabled]="ocupado()" aria-label="Productos">
+  <div class="acciones">
+    <button class="principal" (click)="editar()">Crear producto</button
+    ><button (click)="recargar()">Mostrar todos</button>
+  </div>
+
+  @if (abierto) {
+    <form #f="ngForm" (ngSubmit)="f.valid && guardar()">
+      <h3>{{ id === null ? 'Crear' : 'Editar' }} producto</h3>
+      <div class="campos">
+        <label
+          >Nombre<input name="nombre" [(ngModel)]="formulario.nombre" required maxlength="150"
+        /></label>
+        <label
+          >Descripción<input
+            name="descripcion"
+            [(ngModel)]="formulario.descripcion"
+            maxlength="1000"
+        /></label>
+        <label
+          >Precio (S/)<input
+            name="precio"
+            [(ngModel)]="formulario.precio"
+            type="number"
+            min="0.01"
+            max="99999999.99"
+            step="0.01"
+            required
+        /></label>
+        <label
+          >Stock<input
+            name="stock"
+            [(ngModel)]="formulario.stock"
+            type="number"
+            min="0"
+            pattern="[0-9]+"
+            required
+        /></label>
+        <label>Marca<input name="marca" [(ngModel)]="formulario.marca" maxlength="100" /></label>
+        <label
+          >URL de imagen<input name="imagenUrl" [(ngModel)]="formulario.imagenUrl" maxlength="1000"
+        /></label>
+        <label
+          >Categoría<select name="categoria" [(ngModel)]="formulario.categoriaId" required>
+            <option [ngValue]="0" disabled>Seleccionar categoría</option>
+            @for (c of categorias; track c.id) {
+              <option [ngValue]="c.id">{{ c.nombre }}</option>
+            }
+          </select></label
+        >
+        <label
+          >Etiquetas<select multiple name="etiquetas" [(ngModel)]="formulario.etiquetaIds">
+            @for (e of etiquetas; track e.id) {
+              <option [ngValue]="e.id">{{ e.nombre }}</option>
+            }
+          </select></label
+        >
+      </div>
+      <div class="acciones">
+        <button type="submit" [disabled]="f.invalid || !formulario.categoriaId">Guardar</button
+        ><button type="button" (click)="abierto = false">Cancelar</button>
+      </div>
+    </form>
+  }
+  @for (fila of filas; track fila.id) {
+    <div class="fila">
+      <div>
+        <strong>{{ fila.nombre }}</strong> S/ {{ fila.precio }} · Stock {{ fila.stock }}
+      </div>
+      <div class="acciones">
+        <button (click)="editar(fila)">Editar</button>
+        @if (auth.esAdmin()) {
+          <button class="peligro" (click)="borrar(fila)">Eliminar</button>
+        }
+      </div>
+    </div>
+  } @empty {
+    @if (!ocupado() && !error()) {
+      <p>No hay registros.</p>
+    }
+  }
+</fieldset>

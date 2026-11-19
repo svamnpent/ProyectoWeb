@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 72" width="340" height="72">
+  <defs>
+    <linearGradient id="shieldFill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a0b3d"/>
+      <stop offset="100%" stop-color="#111111"/>
+    </linearGradient>
+    <linearGradient id="accentRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e00000"/>
+      <stop offset="100%" stop-color="#cc0000"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Hexagonal Emblem matching #111111, #1a0b3d and #cc0000 -->
+  <g transform="translate(6, 4)">
+    <polygon points="32,2 60,18 60,46 32,62 4,46 4,18" fill="url(#shieldFill)" stroke="#cc0000" stroke-width="2.2"/>
+    <!-- Phantom Hood / Geometric Silhouette -->
+    <path d="M 32 10 L 50 24 L 46 50 L 39 44 L 32 51 L 25 44 L 18 50 L 14 24 Z" fill="#ffffff"/>
+    <!-- Dark Visor (#111111) -->
+    <polygon points="19,27 32,32 45,27 42,35 32,38 22,35" fill="#111111"/>
+    <!-- Glowing Crimson Eyes (#cc0000) -->
+    <polygon points="22,29 30,32 23,33" fill="#cc0000"/>
+    <polygon points="42,29 34,32 41,33" fill="#cc0000"/>
+    <!-- Top Crimson Accent Notch (#cc0000) -->
+    <polygon points="32,10 36,16 32,19 28,16" fill="url(#accentRed)"/>
+  </g>
+
+  <!-- Vector Wordmark: PHANTOM (#ffffff) -->
+  <g fill="#ffffff" transform="translate(80, 17)">
+    <!-- P -->
+    <path d="M0,0 H18 C23,0 26,3 26,8.5 C26,14 23,17 18,17 H7 V27 H0 Z M7,5.5 V11.5 H16.5 C18.5,11.5 19.5,10.5 19.5,8.5 C19.5,6.5 18.5,5.5 16.5,5.5 Z"/>
+    <!-- H -->
+    <path d="M32,0 H39 V10.5 H51 V0 H58 V27 H51 V16.5 H39 V27 H32 Z"/>
+    <!-- A -->
+    <path d="M74,0 H82 L93,27 H85.5 L83.5,21.5 H72.5 L70.5,27 H63 Z M74.5,16 H81.5 L78,6.5 Z"/>
+    <!-- N -->
+    <path d="M98,0 H105 L117,16.5 V0 H124 V27 H117.5 L105,10 V27 H98 Z"/>
+    <!-- T -->
+    <path d="M130,0 H154 V6 H145.5 V27 H138.5 V6 H130 Z"/>
+    <!-- O -->
+    <path d="M172,0 C181,0 186,5.5 186,13.5 C186,21.5 181,27 172,27 C163,27 158,21.5 158,13.5 C158,5.5 163,0 172,0 Z M172,6 C167,6 165,9 165,13.5 C165,18 167,21 172,21 C177,21 179,18 179,13.5 C179,9 177,6 172,6 Z"/>
+    <!-- M -->
+    <path d="M192,0 H199.5 L207.5,13 L215.5,0 H223 V27 H216 V11 L207.5,24 L199,11 V27 H192 Z"/>
+  </g>
+
+  <!-- Accent Bar strictly in #cc0000 + subtle #ffffff -->
+  <rect x="80" y="51" width="52" height="3.5" rx="1.5" fill="#cc0000"/>
+  <rect x="138" y="51" width="12" height="3.5" rx="1.5" fill="#ffffff" opacity="0.35"/>
+</svg>

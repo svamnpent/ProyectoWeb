@@ -14,11 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Verifica la conexión REAL con PostgreSQL: que la aplicación arranca contra una BD real,
- * que Flyway aplica TODAS las migraciones y que Hibernate (ddl-auto=validate) confirma que
- * las entidades coinciden con el esquema (si no coincidieran, el contexto ni siquiera cargaría).
- */
+/** Comprueba el arranque y la compatibilidad del esquema con las entidades. */
 class DatabaseConnectionIT extends AbstractIntegrationIT {
 
     @Autowired

@@ -37,6 +37,8 @@
     }
   }
 
+  &__marca img { display: block; width: auto; max-width: 9rem; height: 2.25rem; object-fit: contain; }
+
   &__nav {
     display: flex;
     flex: 1;

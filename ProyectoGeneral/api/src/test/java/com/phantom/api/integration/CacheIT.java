@@ -14,12 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * La caché local funcionando junto a la BD real. Truco de las pruebas: se modifica la fila
- * DIRECTAMENTE por JDBC (saltándose la API). Si la API sigue devolviendo el valor antiguo, la
- * respuesta salió de la caché; si tras una escritura por la API devuelve el nuevo, la invalidación
- * funciona.
- */
+/** Comprueba la lectura e invalidación de la caché con PostgreSQL. */
 class CacheIT extends AbstractIntegrationIT {
 
     @Autowired

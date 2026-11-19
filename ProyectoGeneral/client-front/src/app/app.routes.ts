@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
+import { authGuard, staffGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -28,12 +28,18 @@ export const routes: Routes = [
     loadComponent: () => import('./features/pedido/pedido').then((m) => m.Pedido),
   },
 
+  {
+    path: 'backoffice',
+    canActivate: [staffGuard],
+    canActivateChild: [staffGuard],
+    loadChildren: () => import('./features/backoffice/routes').then((m) => m.backofficeRoutes),
+  },
+
   // Rutas previstas (se agregan al construir cada pantalla):
   //   { path: 'registro', ... }                                → formulario reactivo
   //   { path: 'producto/:id', ... }                            → :id llega como input()
   //   { path: 'categoria/:id', ... }
   //   { path: 'perfil', canActivate: [authGuard], ... }
-  //   { path: 'admin/productos', canActivate: [staffGuard], ... }
 
   { path: '**', redirectTo: '' },
 ];

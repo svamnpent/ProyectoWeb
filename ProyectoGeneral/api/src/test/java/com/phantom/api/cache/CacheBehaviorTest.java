@@ -42,11 +42,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * Pruebas LOCALES de la caché (Caffeine real, repositorios simulados, sin BD ni Docker):
- * verifican que las lecturas repetidas no vuelven a la BD y que cada escritura invalida
- * las cachés correctas.
- */
+/** Verifica la caché Caffeine con repositorios simulados. */
 @SpringBootTest(classes = CacheBehaviorTest.TestConfig.class)
 class CacheBehaviorTest {
 
@@ -90,13 +86,15 @@ class CacheBehaviorTest {
     void cacheManagerEsCaffeine() {
         assertInstanceOf(CaffeineCacheManager.class, cacheManager);
 
+        CaffeineCache cache = (CaffeineCache) cacheManager.getCache(CacheNames.CATEGORIAS);
+        var antes = cache.getNativeCache().stats();
         when(categoriaRepository.findAll()).thenReturn(List.of(categoria));
         categoriaService.obtenerTodas();
         categoriaService.obtenerTodas();
 
-        CaffeineCache cache = (CaffeineCache) cacheManager.getCache(CacheNames.CATEGORIAS);
-        assertEquals(1, cache.getNativeCache().stats().hitCount());
-        assertEquals(1, cache.getNativeCache().stats().missCount());
+        var incremento = cache.getNativeCache().stats().minus(antes);
+        assertEquals(1, incremento.hitCount());
+        assertEquals(1, incremento.missCount());
     }
 
     // ------------------------------------------------------------ categorías
