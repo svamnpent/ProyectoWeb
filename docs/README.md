@@ -31,11 +31,12 @@ docs/
 
 ## 📈 Índice de Entregables (Control de Avances)
 
-| Documento                            | Descripción                              |    Estado    | Enlace al Archivo                    |
-| :----------------------------------- | :--------------------------------------- | :----------: | :----------------------------------- |
-| **Especificación de Requerimientos** | Detalle de funciones del sistema         | ⏳ Pendiente | `[Ver archivo](./01_planificacion/)` |
-| **Diagrama de Base de Datos**        | Modelo Entidad-Relación de la aplicación | ⏳ Pendiente | `[Ver archivo](./03_arquitectura/)`  |
-| **Arquitectura de Software**         | Tecnologías, capas y flujo de datos      | ⏳ Pendiente | `[Ver archivo](./03_arquitectura/)`  |
-| **Manual de Usuario**                | Guía paso a paso para el cliente final   | ⏳ Pendiente | `[Ver archivo](./04_manuales/)`      |
+| Documento                            | Descripción                              |    Estado    | Enlace al Archivo                                      |
+| :----------------------------------- | :--------------------------------------- | :----------: | :----------------------------------------------------- |
+| **Plantilla de diseño**              | Color, botones y frames de la interfaz   | 🟢 Completado | `[Ver archivo](./02_diseño/plantilla-basica.md)`      |
+| **Especificación de Requerimientos** | Detalle de funciones del sistema         | ⏳ Pendiente | `[Ver archivo](./01_planificacion/)`                   |
+| **Diagrama de Base de Datos**        | Modelo Entidad-Relación de la aplicación | ⏳ Pendiente | `[Ver archivo](./03_arquitectura/)`                    |
+| **Arquitectura de Software**         | Tecnologías, capas y flujo de datos      | ⏳ Pendiente | `[Ver archivo](./03_arquitectura/)`                    |
+| **Manual de Usuario**                | Guía paso a paso para el cliente final   | ⏳ Pendiente | `[Ver archivo](./04_manuales/)`                        |
 
 _Nota: Actualiza el estado a 🟢 **Completado** o 🟡 **En revisión** conforme avance el ciclo académico._

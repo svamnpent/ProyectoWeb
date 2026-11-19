@@ -38,6 +38,8 @@ Recuerda que toda la documentación formal, reportes de avance, diagramas de arq
 - Todo archivo documental debe ser subido estrictamente a la carpeta **`/docs`** ubicada en la raíz del repositorio.
 - Puedes enlazar los documentos aquí abajo para un acceso rápido si lo deseas (ejemplo: `[Plan de Proyecto](../docs/plan.pdf)`).
 
+- [Plantilla de diseño](../docs/02_diseño/plantilla-basica.md) — color, botones y frames. Sale de `client-front/src/styles/`.
+
 ---
 
 ## 💻 Flujo de Trabajo y Ramas (Git)

@@ -37,6 +37,8 @@ npm start
 
 Abre <http://localhost:4200> (usa `localhost`, no `127.0.0.1`: CORS los trata como orígenes distintos).
 
+La pantalla de inicio es la plantilla de diseño (color, botones y frames). La configuración está en `src/styles/colores.css`, `botones.css` y `frames.css`. El documento que la describe está en [`docs/02_diseño/plantilla-basica.md`](../../docs/02_diseño/plantilla-basica.md).
+
 ### 3. Usuarios de prueba
 
 Con `SPRING_PROFILES_ACTIVE=demo` en el `.env` se cargan datos falsos. Clave de todos: `Demo12345`.
