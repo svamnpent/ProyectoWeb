@@ -10,11 +10,10 @@
 }
 <fieldset [disabled]="ocupado()" aria-label="Categorías">
   @if (!abierto) {
-  <div class="acciones">
-    <button class="principal" (click)="editar()">Crear categoría</button
-    ><button (click)="recargar()">Mostrar todos</button>
-  </div>
-
+    <div class="acciones">
+      <button class="principal" (click)="editar()">Crear categoría</button
+      ><button (click)="recargar()">Recargar</button>
+    </div>
   } @else {
     <form #f="ngForm" (ngSubmit)="f.valid && guardar()">
       <h3>{{ id === null ? 'Crear' : 'Editar' }} categoría</h3>
@@ -36,22 +35,22 @@
     </form>
   }
   @if (!abierto) {
-  @for (fila of filas; track fila.id) {
-    <div class="fila">
-      <div>
-        <strong>{{ fila.nombre }}</strong> {{ fila.descripcion }}
+    @for (fila of filas; track fila.id) {
+      <div class="fila">
+        <div>
+          <strong>{{ fila.nombre }}</strong> {{ fila.descripcion }}
+        </div>
+        <div class="acciones">
+          <button (click)="editar(fila)">Editar</button>
+          @if (auth.esAdmin()) {
+            <button class="peligro" (click)="borrar(fila)">Eliminar</button>
+          }
+        </div>
       </div>
-      <div class="acciones">
-        <button (click)="editar(fila)">Editar</button>
-        @if (auth.esAdmin()) {
-          <button class="peligro" (click)="borrar(fila)">Eliminar</button>
-        }
-      </div>
-    </div>
-  } @empty {
-    @if (!ocupado() && !error()) {
-      <p>No hay registros.</p>
+    } @empty {
+      @if (!ocupado() && !error()) {
+        <p>No hay registros.</p>
+      }
     }
-  }
   }
 </fieldset>
