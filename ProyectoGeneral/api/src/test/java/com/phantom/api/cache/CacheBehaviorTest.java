@@ -86,13 +86,15 @@ class CacheBehaviorTest {
     void cacheManagerEsCaffeine() {
         assertInstanceOf(CaffeineCacheManager.class, cacheManager);
 
+        CaffeineCache cache = (CaffeineCache) cacheManager.getCache(CacheNames.CATEGORIAS);
+        var antes = cache.getNativeCache().stats();
         when(categoriaRepository.findAll()).thenReturn(List.of(categoria));
         categoriaService.obtenerTodas();
         categoriaService.obtenerTodas();
 
-        CaffeineCache cache = (CaffeineCache) cacheManager.getCache(CacheNames.CATEGORIAS);
-        assertEquals(1, cache.getNativeCache().stats().hitCount());
-        assertEquals(1, cache.getNativeCache().stats().missCount());
+        var incremento = cache.getNativeCache().stats().minus(antes);
+        assertEquals(1, incremento.hitCount());
+        assertEquals(1, incremento.missCount());
     }
 
     // ------------------------------------------------------------ categorías
