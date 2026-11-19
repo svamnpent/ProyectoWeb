@@ -1,0 +1,40 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.registro {
+  @include centrar-flex;
+  padding: $espacio-8 $espacio-4;
+
+  &__tarjeta {
+    @include tarjeta;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  &__titulo {
+    margin-bottom: $espacio-5;
+    text-align: center;
+  }
+
+  &__fila {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $espacio-3;
+
+    @media (max-width: 540px) {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+
+  &__pie {
+    margin-top: $espacio-4;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  &__enlace {
+    font-weight: 600;
+    text-decoration: underline;
+  }
+}
