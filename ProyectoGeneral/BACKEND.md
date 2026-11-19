@@ -2,56 +2,56 @@
 
 ## Uso desde Angular
 
-El cliente utiliza 6 de los 44 endpoints (13,6 %). Otros 2 tienen un método HTTP implementado sin una pantalla que lo invoque y 36 carecen de llamada en los servicios del cliente. Se cuenta cada combinación de verbo y ruta de los controladores bajo `/api/v1` una vez. La revisión sigue el código desde las rutas, los componentes y el inicializador de sesión hasta `HttpClient`. Las pruebas, Swagger y Actuator quedan fuera del recuento.
+El cliente utiliza 30 de los 44 endpoints (68,2 %). Otros 2 tienen un método HTTP implementado sin una pantalla que lo invoque y 12 carecen de llamada en los servicios del cliente. Se cuenta cada combinación de verbo y ruta de los controladores bajo `/api/v1` una vez. La revisión sigue el código desde las rutas, los componentes y el inicializador de sesión hasta `HttpClient`. Las pruebas, Swagger y Actuator quedan fuera del recuento.
 
 Inicio filtra por categoría, nombre o marca sobre los productos ya descargados. Pedido recibe los detalles dentro de la venta. Estas dos pantallas cubren sus funciones sin llamar a las rutas específicas de búsqueda ni de líneas de venta.
 
-| Método | Ruta relativa a `/api/v1` | Uso en Angular |
-|---|---|---|
-| POST | `/auth/register` | Solo servicio · `AuthService.registrar` |
-| POST | `/auth/login` | Login inicia la sesión. |
-| GET | `/auth/me` | Carga el usuario tras el login o al restaurar un token vigente. |
-| POST | `/backoffice/productos` | Sin llamada |
-| PUT | `/backoffice/productos/{id}` | Sin llamada |
-| DELETE | `/backoffice/productos/{id}` | Sin llamada |
-| POST | `/backoffice/categorias` | Sin llamada |
-| PUT | `/backoffice/categorias/{id}` | Sin llamada |
-| DELETE | `/backoffice/categorias/{id}` | Sin llamada |
-| POST | `/backoffice/etiquetas` | Sin llamada |
-| PUT | `/backoffice/etiquetas/{id}` | Sin llamada |
-| DELETE | `/backoffice/etiquetas/{id}` | Sin llamada |
-| GET | `/backoffice/ventas` | Sin llamada |
-| GET | `/backoffice/ventas/{id}` | Sin llamada |
-| POST | `/backoffice/ventas` | Sin llamada |
-| DELETE | `/backoffice/ventas/{id}` | Sin llamada |
-| GET | `/backoffice/ventas/{ventaId}/detalles` | Sin llamada |
-| POST | `/backoffice/ventas/{ventaId}/detalles` | Sin llamada |
-| DELETE | `/backoffice/detalles/{id}` | Sin llamada |
-| GET | `/backoffice/usuarios` | Sin llamada |
-| GET | `/backoffice/usuarios/buscar` | Sin llamada |
-| GET | `/backoffice/usuarios/{id}` | Sin llamada |
-| POST | `/backoffice/usuarios` | Sin llamada |
-| PUT | `/backoffice/usuarios/{id}` | Sin llamada |
-| DELETE | `/backoffice/usuarios/{id}` | Sin llamada |
-| GET | `/backoffice/perfiles` | Sin llamada |
-| GET | `/categorias` | Inicio carga las opciones del filtro por categoría. |
-| GET | `/categorias/{id}` | Sin llamada |
-| GET | `/categorias/buscar` | Sin llamada |
-| GET | `/ventas/{ventaId}/detalles` | Sin llamada |
-| GET | `/etiquetas` | Sin llamada |
-| GET | `/etiquetas/{id}` | Sin llamada |
-| GET | `/perfiles/{id}` | Sin llamada |
-| POST | `/perfiles` | Sin llamada |
-| PUT | `/perfiles/{id}` | Sin llamada |
-| DELETE | `/perfiles/{id}` | Sin llamada |
-| GET | `/productos` | Inicio carga el catálogo y Carrito sincroniza las existencias. |
-| GET | `/productos/{id}` | Solo servicio · `ProductoService.obtener` |
-| GET | `/productos/buscar` | Sin llamada |
-| GET | `/usuarios/{id}` | Sin llamada |
-| PUT | `/usuarios/{id}` | Sin llamada |
-| GET | `/ventas/mias` | Sin llamada |
-| GET | `/ventas/{id}` | Pedido recupera la compra por su ID. |
-| POST | `/ventas` | Carrito confirma la compra y abre el pedido creado. |
+| Método | Ruta relativa a `/api/v1`               | Uso en Angular                                                  |
+| ------ | --------------------------------------- | --------------------------------------------------------------- |
+| POST   | `/auth/register`                        | Solo servicio · `AuthService.registrar`                         |
+| POST   | `/auth/login`                           | Login inicia la sesión.                                         |
+| GET    | `/auth/me`                              | Carga el usuario tras el login o al restaurar un token vigente. |
+| POST   | `/backoffice/productos`                 | Catálogo interno de productos.                                  |
+| PUT    | `/backoffice/productos/{id}`            | Catálogo interno de productos.                                  |
+| DELETE | `/backoffice/productos/{id}`            | Catálogo interno de productos.                                  |
+| POST   | `/backoffice/categorias`                | Mantenimiento de categorías.                                    |
+| PUT    | `/backoffice/categorias/{id}`           | Mantenimiento de categorías.                                    |
+| DELETE | `/backoffice/categorias/{id}`           | Mantenimiento de categorías.                                    |
+| POST   | `/backoffice/etiquetas`                 | Mantenimiento de etiquetas.                                     |
+| PUT    | `/backoffice/etiquetas/{id}`            | Mantenimiento de etiquetas.                                     |
+| DELETE | `/backoffice/etiquetas/{id}`            | Mantenimiento de etiquetas.                                     |
+| GET    | `/backoffice/ventas`                    | Gestión de ventas de mostrador y sus líneas.                    |
+| GET    | `/backoffice/ventas/{id}`               | Gestión de ventas de mostrador y sus líneas.                    |
+| POST   | `/backoffice/ventas`                    | Gestión de ventas de mostrador y sus líneas.                    |
+| DELETE | `/backoffice/ventas/{id}`               | Gestión de ventas de mostrador y sus líneas.                    |
+| GET    | `/backoffice/ventas/{ventaId}/detalles` | Gestión de ventas de mostrador y sus líneas.                    |
+| POST   | `/backoffice/ventas/{ventaId}/detalles` | Gestión de ventas de mostrador y sus líneas.                    |
+| DELETE | `/backoffice/detalles/{id}`             | El administrador retira una línea de la venta.                  |
+| GET    | `/backoffice/usuarios`                  | Administración de usuarios.                                     |
+| GET    | `/backoffice/usuarios/buscar`           | Administración de usuarios.                                     |
+| GET    | `/backoffice/usuarios/{id}`             | Administración de usuarios.                                     |
+| POST   | `/backoffice/usuarios`                  | Administración de usuarios.                                     |
+| PUT    | `/backoffice/usuarios/{id}`             | Administración de usuarios.                                     |
+| DELETE | `/backoffice/usuarios/{id}`             | Administración de usuarios.                                     |
+| GET    | `/backoffice/perfiles`                  | El administrador consulta los perfiles.                         |
+| GET    | `/categorias`                           | Inicio carga las opciones del filtro por categoría.             |
+| GET    | `/categorias/{id}`                      | Sin llamada                                                     |
+| GET    | `/categorias/buscar`                    | Sin llamada                                                     |
+| GET    | `/ventas/{ventaId}/detalles`            | Sin llamada                                                     |
+| GET    | `/etiquetas`                            | El personal lista las etiquetas y las asigna a productos.       |
+| GET    | `/etiquetas/{id}`                       | Sin llamada                                                     |
+| GET    | `/perfiles/{id}`                        | Sin llamada                                                     |
+| POST   | `/perfiles`                             | Sin llamada                                                     |
+| PUT    | `/perfiles/{id}`                        | Sin llamada                                                     |
+| DELETE | `/perfiles/{id}`                        | Sin llamada                                                     |
+| GET    | `/productos`                            | Inicio carga el catálogo y Carrito sincroniza las existencias.  |
+| GET    | `/productos/{id}`                       | Solo servicio · `ProductoService.obtener`                       |
+| GET    | `/productos/buscar`                     | Sin llamada                                                     |
+| GET    | `/usuarios/{id}`                        | Sin llamada                                                     |
+| PUT    | `/usuarios/{id}`                        | Sin llamada                                                     |
+| GET    | `/ventas/mias`                          | Sin llamada                                                     |
+| GET    | `/ventas/{id}`                          | Pedido recupera la compra por su ID.                            |
+| POST   | `/ventas`                               | Carrito confirma la compra y abre el pedido creado.             |
 
 ## Acceso a la tienda y al back-office
 
@@ -59,14 +59,14 @@ El catálogo admite lectura pública. El registro público asigna el rol `USER`.
 
 `SecurityConfig` restringe el prefijo `/api/v1/backoffice` al personal. Las anotaciones de `BackOfficeController` precisan los permisos de cada operación.
 
-| Operación interna | TRABAJADOR | ADMIN |
-|---|---|---|
-| Crear o editar productos, categorías y etiquetas | Sí | Sí |
-| Eliminar productos, categorías y etiquetas | No | Sí |
-| Listar ventas, consultar una venta y ver sus líneas | Sí | Sí |
-| Registrar una venta de mostrador | Sí | Sí |
-| Anular una venta o agregar y quitar líneas | No | Sí |
-| Gestionar usuarios y listar perfiles | No | Sí |
+| Operación interna                                   | TRABAJADOR | ADMIN |
+| --------------------------------------------------- | ---------- | ----- |
+| Crear o editar productos, categorías y etiquetas    | Sí         | Sí    |
+| Eliminar productos, categorías y etiquetas          | No         | Sí    |
+| Listar ventas, consultar una venta y ver sus líneas | Sí         | Sí    |
+| Registrar una venta de mostrador                    | Sí         | Sí    |
+| Anular una venta o agregar y quitar líneas          | No         | Sí    |
+| Gestionar usuarios y listar perfiles                | No         | Sí    |
 
 `CurrentUser` permite comprobar la titularidad desde los servicios y desde expresiones de autorización. Los compradores consultan sus propias ventas y el personal puede atender ventas de clientes. Para acceder a datos personales de usuarios y perfiles se requiere ser el titular o administrador. El resumen de cliente incluido en una venta omite DNI, dirección y teléfono.
 
@@ -88,10 +88,10 @@ El arranque crea al administrador inicial cuando están definidos `ADMIN_EMAIL` 
 
 El perfil `demo` activa `app.seed.enabled`. Si ya hay categorías, el cargador omite la siembra. En una tienda vacía crea categorías, etiquetas, productos, usuarios, perfiles y ventas. Las cuentas de demostración usan una contraseña conocida y están destinadas al entorno local.
 
-| Rol | Cuentas de demostración |
-|---|---|
-| Comprador | `maria.quispe@demo.local`, `carlos.huaman@demo.local`, `lucia.torres@demo.local` |
-| Trabajador | `trabajador@demo.local` |
+| Rol        | Cuentas de demostración                                                          |
+| ---------- | -------------------------------------------------------------------------------- |
+| Comprador  | `maria.quispe@demo.local`, `carlos.huaman@demo.local`, `lucia.torres@demo.local` |
+| Trabajador | `trabajador@demo.local`                                                          |
 
 La contraseña de estas cuentas es `Demo12345`. El administrador usa las variables de arranque indicadas arriba.
 
