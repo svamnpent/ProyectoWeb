@@ -1,0 +1,73 @@
+/* Configuración de diseño: color, tipografía, espacio y radios.
+   Botones, frames y la plantilla leen solo estas variables. */
+
+:root {
+  --color-fondo: #f3f5f8;
+  --color-superficie: #ffffff;
+  --color-superficie-suave: #e8edf3;
+  --color-tinta: #121826;
+  --color-tinta-suave: #5b677a;
+  --color-linea: #d7dee7;
+
+  --color-primario: #2f3e8f;
+  --color-primario-hover: #243273;
+  --color-primario-suave: #e8ebf8;
+  --color-sobre-primario: #ffffff;
+
+  --color-acento: #0e7490;
+  --color-peligro: #b42318;
+  --color-peligro-hover: #912018;
+  --color-sobre-peligro: #ffffff;
+  --color-exito: #067647;
+  --color-aviso: #b54708;
+
+  --fuente-base: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --texto-sm: 0.875rem;
+  --texto-md: 1rem;
+  --texto-lg: 1.25rem;
+  --texto-xl: 1.75rem;
+
+  --espacio-xs: 4px;
+  --espacio-sm: 8px;
+  --espacio-md: 16px;
+  --espacio-lg: 24px;
+  --espacio-xl: 40px;
+
+  --radio-sm: 6px;
+  --radio-md: 12px;
+
+  --sombra-frame: 0 8px 24px rgba(18, 24, 38, 0.08);
+}
+
+body {
+  margin: 0;
+  background: var(--color-fondo);
+  color: var(--color-tinta);
+  font-family: var(--fuente-base);
+  font-size: var(--texto-md);
+  line-height: 1.5;
+}
+
+.texto-suave {
+  color: var(--color-tinta-suave);
+}
+
+.texto-acento {
+  color: var(--color-acento);
+  font-weight: 700;
+}
+
+.texto-exito {
+  color: var(--color-exito);
+  font-weight: 600;
+}
+
+.texto-aviso {
+  color: var(--color-aviso);
+  font-weight: 600;
+}
+
+.texto-peligro {
+  color: var(--color-peligro);
+  font-weight: 600;
+}

@@ -1,0 +1,48 @@
+/* Configuración de diseño: frames (contenedores).
+   Variantes: barra, tarjeta, panel y encajado. */
+
+.frame {
+  background: var(--color-superficie);
+  color: var(--color-tinta);
+  border: 1px solid var(--color-linea);
+  border-radius: var(--radio-md);
+}
+
+.frame-barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-md);
+  padding: var(--espacio-sm) var(--espacio-lg);
+  border-radius: 0;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+}
+
+.frame-tarjeta {
+  box-shadow: var(--sombra-frame);
+}
+
+.frame-encajado {
+  background: var(--color-superficie-suave);
+  border-style: dashed;
+}
+
+.frame__cabecera,
+.frame__cuerpo,
+.frame__pie {
+  padding: var(--espacio-md);
+}
+
+.frame__cabecera {
+  border-bottom: 1px solid var(--color-linea);
+  font-weight: 600;
+}
+
+.frame__pie {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--espacio-sm);
+  border-top: 1px solid var(--color-linea);
+}
