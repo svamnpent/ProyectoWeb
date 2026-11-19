@@ -15,6 +15,8 @@ export class App {
   private readonly router = inject(Router);
   protected readonly anio = new Date().getFullYear();
 
+  protected logoDisponible = true;
+
   protected cerrarSesion(): void {
     this.auth.cerrarSesion();
     void this.router.navigateByUrl('/');
