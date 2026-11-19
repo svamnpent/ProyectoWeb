@@ -42,6 +42,7 @@ src/
 | Ruta | Pantalla | Acceso |
 |---|---|---|
 | `/` | Catálogo con filtro por categoría y búsqueda | Público |
+| `/producto/:id` | Detalle del producto (`:id` llega como `input()`) | Público |
 | `/login` | Inicio de sesión (formulario template-driven) | Público |
 | `/carrito` | Carrito: cantidades (FormArray), total y compra | Público; para comprar pide iniciar sesión |
 | `/pedido/:id` | Comprobante de la compra (`:id` llega como `input()`) | Con sesión (`authGuard`) |
@@ -86,6 +87,6 @@ Cualquier otra ruta redirige a `/`.
 
 ## Pendiente
 
-- Registro (formulario reactivo) y `/producto/:id` (detalle).
+- Registro (formulario reactivo).
 - Perfil e historial (`GET /ventas/mias`); desde el historial se puede enlazar a `/pedido/:id`.
 - Panel de administración (CRUD en `/backoffice/**`), con `staffGuard` y `adminGuard`.

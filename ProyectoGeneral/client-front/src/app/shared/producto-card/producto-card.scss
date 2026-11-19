@@ -28,6 +28,21 @@
     text-transform: uppercase;
   }
 
+  &__enlace-imagen {
+    display: block;
+    text-decoration: none;
+  }
+
+  &__enlace-titulo {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s;
+
+    &:hover {
+      color: $color-acento;
+    }
+  }
+
   &__imagen {
     @include centrar-flex;
     height: 180px;

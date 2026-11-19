@@ -1,15 +1,21 @@
 <article class="tarjeta">
   <span class="tarjeta__categoria">{{ producto().categoria.nombre }}</span>
 
-  <div class="tarjeta__imagen">
-    @if (producto().imagenUrl) {
-      <img [src]="producto().imagenUrl" [alt]="producto().nombre" loading="lazy" />
-    } @else {
-      <span class="tarjeta__inicial" aria-hidden="true">{{ inicial() }}</span>
-    }
-  </div>
+  <a [routerLink]="['/producto', producto().id]" class="tarjeta__enlace-imagen">
+    <div class="tarjeta__imagen">
+      @if (producto().imagenUrl) {
+        <img [src]="producto().imagenUrl" [alt]="producto().nombre" loading="lazy" />
+      } @else {
+        <span class="tarjeta__inicial" aria-hidden="true">{{ inicial() }}</span>
+      }
+    </div>
+  </a>
 
-  <h3 class="tarjeta__nombre">{{ producto().nombre }}</h3>
+  <h3 class="tarjeta__nombre">
+    <a [routerLink]="['/producto', producto().id]" class="tarjeta__enlace-titulo">
+      {{ producto().nombre }}
+    </a>
+  </h3>
   @if (producto().marca) {
     <p class="tarjeta__marca">{{ producto().marca }}</p>
   }

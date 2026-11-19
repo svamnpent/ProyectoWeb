@@ -1,0 +1,204 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.detalle {
+  padding-block: $espacio-6;
+
+  &__migas {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: $espacio-2;
+    margin-bottom: $espacio-5;
+    font-size: 0.9rem;
+    color: $color-texto-suave;
+  }
+
+  &__miga-enlace {
+    color: $color-primario;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__miga-separador {
+    color: $color-borde;
+  }
+
+  &__miga-actual {
+    color: $color-texto;
+    font-weight: 600;
+  }
+
+  &__estado {
+    color: $color-texto-suave;
+    text-align: center;
+    padding-block: $espacio-8;
+  }
+
+  &__tarjeta {
+    @include tarjeta;
+    display: flex;
+    flex-direction: column;
+    gap: $espacio-6;
+
+    @include desde('md') {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: $espacio-8;
+      align-items: start;
+    }
+  }
+
+  &__galeria {
+    position: relative;
+    border-radius: $radio-md;
+    overflow: hidden;
+    background: $color-fondo;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $color-borde;
+  }
+
+  &__imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__imagen-vacia {
+    width: 100%;
+    height: 100%;
+    @include centrar-flex;
+    background: linear-gradient(135deg, $color-primario, #3a1b7a);
+    color: #ffffff;
+    font-size: 5rem;
+    font-weight: 800;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: $espacio-4;
+  }
+
+  &__metas {
+    display: flex;
+    align-items: center;
+    gap: $espacio-2;
+  }
+
+  &__categoria {
+    display: inline-block;
+    padding: $espacio-1 $espacio-3;
+    border-radius: $radio-sm;
+    background: rgba($color-primario, 0.08);
+    color: $color-primario;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  &__marca {
+    display: inline-block;
+    padding: $espacio-1 $espacio-3;
+    border-radius: $radio-sm;
+    background: rgba($color-texto-suave, 0.12);
+    color: $color-texto-suave;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  &__titulo {
+    font-size: 1.75rem;
+    color: $color-oscuro;
+    margin: 0;
+    line-height: 1.25;
+
+    @include desde('md') {
+      font-size: 2.1rem;
+    }
+  }
+
+  &__precio-fila {
+    display: flex;
+    align-items: baseline;
+    gap: $espacio-4;
+    padding-bottom: $espacio-3;
+    border-bottom: 1px solid $color-borde;
+  }
+
+  &__precio {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: $color-acento;
+  }
+
+  &__stock {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $color-exito;
+
+    &--bajo {
+      color: #e67e22;
+    }
+
+    &--agotado {
+      color: $color-peligro;
+    }
+  }
+
+  &__etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $espacio-2;
+  }
+
+  &__etiqueta {
+    font-size: 0.8rem;
+    color: $color-texto-suave;
+    background: $color-fondo;
+    border: 1px solid $color-borde;
+    padding: $espacio-1 $espacio-2;
+    border-radius: $radio-sm;
+  }
+
+  &__descripcion {
+    display: flex;
+    flex-direction: column;
+    gap: $espacio-2;
+    color: $color-texto;
+    line-height: 1.6;
+
+    p {
+      margin: 0;
+      white-space: pre-line;
+    }
+  }
+
+  &__subtitulo {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $color-oscuro;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $espacio-3;
+    margin-top: $espacio-4;
+  }
+
+  &__btn-agregar {
+    min-width: 180px;
+  }
+}

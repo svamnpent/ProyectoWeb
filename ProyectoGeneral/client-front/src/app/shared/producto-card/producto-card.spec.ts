@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { Producto } from '../../core/models/catalogo.model';
 import { ProductoCard } from './producto-card';
 
@@ -18,6 +19,10 @@ describe('ProductoCard', () => {
   let fixture: ComponentFixture<ProductoCard>;
 
   async function crear(producto: Producto): Promise<HTMLElement> {
+    await TestBed.configureTestingModule({
+      imports: [ProductoCard],
+      providers: [provideRouter([])],
+    }).compileComponents();
     fixture = TestBed.createComponent(ProductoCard);
     fixture.componentRef.setInput('producto', producto);
     await fixture.whenStable();

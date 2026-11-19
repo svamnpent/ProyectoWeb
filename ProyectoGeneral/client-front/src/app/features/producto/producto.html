@@ -1,0 +1,96 @@
+<section class="detalle contenedor">
+  <nav class="detalle__migas" aria-label="Navegación">
+    <a routerLink="/" class="detalle__miga-enlace">Inicio</a>
+    <span class="detalle__miga-separador">/</span>
+    @if (producto(); as prod) {
+      <span class="detalle__miga-categoria">{{ prod.categoria.nombre }}</span>
+      <span class="detalle__miga-separador">/</span>
+      <span class="detalle__miga-actual" aria-current="page">{{ prod.nombre }}</span>
+    } @else {
+      <span class="detalle__miga-actual">Producto</span>
+    }
+  </nav>
+
+  @if (aviso(); as mensaje) {
+    <div
+      class="alerta"
+      [class.alerta--exito]="mensaje.tipo === 'exito'"
+      [class.alerta--error]="mensaje.tipo === 'error'"
+      role="status"
+    >
+      {{ mensaje.texto }}
+    </div>
+  }
+
+  @if (cargando()) {
+    <p class="detalle__estado">Cargando información del producto…</p>
+  } @else if (error(); as mensajeError) {
+    <div class="alerta alerta--error" role="alert">
+      {{ mensajeError }}
+    </div>
+    <a class="btn btn--contorno" routerLink="/">Volver al catálogo</a>
+  } @else if (producto(); as prod) {
+    <article class="detalle__tarjeta">
+      <div class="detalle__galeria">
+        @if (prod.imagenUrl) {
+          <img class="detalle__imagen" [src]="prod.imagenUrl" [alt]="prod.nombre" />
+        } @else {
+          <div class="detalle__imagen-vacia" aria-hidden="true">
+            <span>{{ inicial() }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="detalle__info">
+        <div class="detalle__metas">
+          <span class="detalle__categoria">{{ prod.categoria.nombre }}</span>
+          @if (prod.marca) {
+            <span class="detalle__marca">{{ prod.marca }}</span>
+          }
+        </div>
+
+        <h1 class="detalle__titulo">{{ prod.nombre }}</h1>
+
+        <div class="detalle__precio-fila">
+          <span class="detalle__precio">
+            {{ prod.precio | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+          </span>
+          <span
+            class="detalle__stock"
+            [class.detalle__stock--agotado]="agotado()"
+            [class.detalle__stock--bajo]="!agotado() && prod.stock <= 5"
+          >
+            {{ avisoStock() }}
+          </span>
+        </div>
+
+        @if (prod.etiquetas.length > 0) {
+          <div class="detalle__etiquetas">
+            @for (etiqueta of prod.etiquetas; track etiqueta.id) {
+              <span class="detalle__etiqueta">#{{ etiqueta.nombre }}</span>
+            }
+          </div>
+        }
+
+        <div class="detalle__descripcion">
+          <h2 class="detalle__subtitulo">Descripción</h2>
+          <p>{{ prod.descripcion || 'Sin descripción detallada disponible.' }}</p>
+        </div>
+
+        <div class="detalle__acciones">
+          <button
+            type="button"
+            class="btn btn--acento detalle__btn-agregar"
+            [disabled]="agotado()"
+            (click)="agregarAlCarrito()"
+          >
+            {{ agotado() ? 'Agotado' : 'Agregar al carrito' }}
+          </button>
+
+          <a class="btn btn--contorno" routerLink="/carrito">Ver carrito</a>
+          <a class="btn btn--plano" routerLink="/">Volver al catálogo</a>
+        </div>
+      </div>
+    </article>
+  }
+</section>

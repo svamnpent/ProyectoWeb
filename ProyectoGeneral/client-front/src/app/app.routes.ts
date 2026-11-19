@@ -27,6 +27,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./features/pedido/pedido').then((m) => m.Pedido),
   },
+  {
+    path: 'producto/:id',
+    title: 'PHANTOM | Detalle de Producto',
+    loadComponent: () => import('./features/producto/producto').then((m) => m.ProductoComponent),
+  },
 
   {
     path: 'backoffice',
