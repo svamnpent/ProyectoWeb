@@ -116,3 +116,8 @@ th {
     break-after: avoid;
   }
 }
+
+.vistas { display:flex; flex-wrap:wrap; gap:.4rem; margin:0 0 .8rem; }
+.vistas button[aria-pressed='true'] { background:#1a0b3d; color:white; border-color:#1a0b3d; }
+@media screen { .secundaria { display:none; } }
+@media print { .vistas { display:none; } }

@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { Categoria, Etiqueta, Producto, ProductoRequest } from '../../core/models/catalogo.model';
-import { Mantenimiento } from './operaciones';
+import { Categoria, Etiqueta, Producto, ProductoRequest } from '../../../../core/models/catalogo.model';
+import { Mantenimiento } from '../../compartido/operaciones';
 
 @Component({
   imports: [FormsModule],
   templateUrl: './productos.html',
-  styleUrl: './pagina.scss',
+  styleUrl: '../../compartido/pagina.scss',
 })
 export class Productos extends Mantenimiento<ProductoRequest, Producto> {
   protected readonly recurso = 'productos';

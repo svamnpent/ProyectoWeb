@@ -1,4 +1,4 @@
-<h2>Categorías</h2>
+<h2>Etiquetas</h2>
 @if (error()) {
   <p role="alert">{{ error() }}</p>
 }
@@ -8,24 +8,19 @@
 @if (ocupado()) {
   <p role="status">Procesando…</p>
 }
-<fieldset [disabled]="ocupado()" aria-label="Categorías">
+<fieldset [disabled]="ocupado()" aria-label="Etiquetas">
+  @if (!abierto) {
   <div class="acciones">
-    <button class="principal" (click)="editar()">Crear categoría</button
+    <button class="principal" (click)="editar()">Crear etiqueta</button
     ><button (click)="recargar()">Mostrar todos</button>
   </div>
 
-  @if (abierto) {
+  } @else {
     <form #f="ngForm" (ngSubmit)="f.valid && guardar()">
-      <h3>{{ id === null ? 'Crear' : 'Editar' }} categoría</h3>
+      <h3>{{ id === null ? 'Crear' : 'Editar' }} etiqueta</h3>
       <div class="campos">
         <label
-          >Nombre<input name="nombre" [(ngModel)]="formulario.nombre" required maxlength="100"
-        /></label>
-        <label
-          >Descripción<input
-            name="descripcion"
-            [(ngModel)]="formulario.descripcion"
-            maxlength="255"
+          >Nombre<input name="nombre" [(ngModel)]="formulario.nombre" required maxlength="50"
         /></label>
       </div>
       <div class="acciones">
@@ -34,10 +29,11 @@
       </div>
     </form>
   }
+  @if (!abierto) {
   @for (fila of filas; track fila.id) {
     <div class="fila">
       <div>
-        <strong>{{ fila.nombre }}</strong> {{ fila.descripcion }}
+        <strong>{{ fila.nombre }}</strong>
       </div>
       <div class="acciones">
         <button (click)="editar(fila)">Editar</button>
@@ -50,5 +46,6 @@
     @if (!ocupado() && !error()) {
       <p>No hay registros.</p>
     }
+  }
   }
 </fieldset>

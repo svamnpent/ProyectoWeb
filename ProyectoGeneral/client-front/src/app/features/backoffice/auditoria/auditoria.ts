@@ -2,7 +2,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, computed, ElementRef, signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { Operaciones } from '../operaciones';
+import { Operaciones } from '../compartido/operaciones';
 import { diaLima, Informe, Movimiento, resumen } from './informe';
 
 @Component({
@@ -11,6 +11,8 @@ import { diaLima, Informe, Movimiento, resumen } from './informe';
   styleUrl: './auditoria.scss',
 })
 export class Auditoria extends Operaciones {
+  protected vista: 'Resumen' | 'Movimientos' | 'Inventario' = 'Resumen';
+  protected readonly vistas = ['Resumen', 'Movimientos', 'Inventario'] as const;
   protected hasta = diaLima(new Date());
   protected desde = this.hasta.slice(0, 8) + '01';
   protected readonly informe = signal<Informe | null>(null);

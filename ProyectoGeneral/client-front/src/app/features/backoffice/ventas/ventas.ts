@@ -2,19 +2,19 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { Producto } from '../../core/models/catalogo.model';
+import { Producto } from '../../../core/models/catalogo.model';
 import {
   DetalleVenta,
   DetalleVentaRequest,
   Venta,
   VentaRequest,
-} from '../../core/models/venta.model';
-import { Operaciones } from './operaciones';
+} from '../../../core/models/venta.model';
+import { Operaciones } from '../compartido/operaciones';
 
 @Component({
   imports: [FormsModule, CurrencyPipe, DatePipe],
   templateUrl: './ventas.html',
-  styleUrl: './pagina.scss',
+  styleUrl: '../compartido/pagina.scss',
 })
 export class Ventas extends Operaciones {
   private readonly url = this.oficina + '/ventas';

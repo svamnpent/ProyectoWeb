@@ -9,12 +9,13 @@
   <p role="status">Procesando…</p>
 }
 <fieldset [disabled]="ocupado()" aria-label="Productos">
+  @if (!abierto) {
   <div class="acciones">
     <button class="principal" (click)="editar()">Crear producto</button
     ><button (click)="recargar()">Mostrar todos</button>
   </div>
 
-  @if (abierto) {
+  } @else {
     <form #f="ngForm" (ngSubmit)="f.valid && guardar()">
       <h3>{{ id === null ? 'Crear' : 'Editar' }} producto</h3>
       <div class="campos">
@@ -72,10 +73,13 @@
       </div>
     </form>
   }
+  @if (!abierto) {
   @for (fila of filas; track fila.id) {
     <div class="fila">
       <div>
-        <strong>{{ fila.nombre }}</strong> S/ {{ fila.precio }} · Stock {{ fila.stock }}
+        <strong>{{ fila.nombre }}</strong>
+        <small>{{ fila.categoria.nombre }} · S/ {{ fila.precio }}</small>
+        <span class="existencias" [class.agotado]="fila.stock === 0">{{ fila.stock === 0 ? 'Agotado' : fila.stock + ' en stock' }}</span>
       </div>
       <div class="acciones">
         <button (click)="editar(fila)">Editar</button>
@@ -88,5 +92,6 @@
     @if (!ocupado() && !error()) {
       <p>No hay registros.</p>
     }
+  }
   }
 </fieldset>

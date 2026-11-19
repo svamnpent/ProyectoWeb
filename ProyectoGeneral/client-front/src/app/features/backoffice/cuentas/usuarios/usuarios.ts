@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { Usuario } from '../../core/models/usuario.model';
-import { Rol } from '../../core/models/rol';
-import { Mantenimiento } from './operaciones';
+import { Usuario } from '../../../../core/models/usuario.model';
+import { Rol } from '../../../../core/models/rol';
+import { Mantenimiento } from '../../compartido/operaciones';
 
 interface UsuarioRequest {
   nombre: string;
@@ -18,7 +18,7 @@ interface UsuarioRequest {
 @Component({
   imports: [FormsModule],
   templateUrl: './usuarios.html',
-  styleUrl: './pagina.scss',
+  styleUrl: '../../compartido/pagina.scss',
 })
 export class Usuarios extends Mantenimiento<UsuarioRequest, Usuario> {
   protected readonly recurso = 'usuarios';

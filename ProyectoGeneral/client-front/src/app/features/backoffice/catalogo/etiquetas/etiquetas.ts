@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { Etiqueta, EtiquetaRequest } from '../../core/models/catalogo.model';
-import { Mantenimiento } from './operaciones';
+import { Etiqueta, EtiquetaRequest } from '../../../../core/models/catalogo.model';
+import { Mantenimiento } from '../../compartido/operaciones';
 
 @Component({
   imports: [FormsModule],
   templateUrl: './etiquetas.html',
-  styleUrl: './pagina.scss',
+  styleUrl: '../../compartido/pagina.scss',
 })
 export class Etiquetas extends Mantenimiento<EtiquetaRequest, Etiqueta> {
   protected readonly recurso = 'etiquetas';

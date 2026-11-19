@@ -19,9 +19,15 @@
 }
 @if (informe(); as r) {
   @if (cifras(); as c) {
+    <div class="vistas" role="group" aria-label="Vista del informe">
+      @for (opcion of vistas; track opcion) {
+        <button type="button" [attr.aria-pressed]="vista === opcion" (click)="vista = opcion">{{ opcion }}</button>
+      }
+    </div>
     <article #contenido class="informe-comercial">
       <h2>Auditoría comercial</h2>
       <p>{{ r.desde }} al {{ r.hasta }} · Hora de Perú</p>
+      <section [class.secundaria]="vista !== 'Resumen'">
       <dl>
         <div>
           <dt>Ventas netas del período</dt>
@@ -61,6 +67,8 @@
       } @empty {
         <p>Sin ventas ni ajustes en el período.</p>
       }
+      </section>
+      <section [class.secundaria]="vista !== 'Movimientos'">
       <h3>Movimientos del período</h3>
       <p>
         Los importes son variaciones de la venta. Las filas de inventario muestran el cambio en
@@ -102,6 +110,8 @@
         Las ventas históricas reflejan el importe que conservaba cada orden al activar la auditoría.
         Los ajustes, anulaciones y cambios de stock se registran a partir de su activación.
       </p>
+      </section>
+      <section [class.secundaria]="vista !== 'Inventario'">
       <h3>Inventario al {{ r.consulta | date: 'dd/MM/yyyy HH:mm' : '-0500' }}</h3>
       <p>Existencias actuales, ordenadas de menor a mayor.</p>
       <div class="tabla">
@@ -128,6 +138,7 @@
           </tbody>
         </table>
       </div>
+      </section>
     </article>
   }
 }
