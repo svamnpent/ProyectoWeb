@@ -15,4 +15,14 @@
     margin-bottom: $espacio-5;
     text-align: center;
   }
+  &__pie {
+    margin-top: $espacio-4;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  &__enlace {
+    font-weight: 600;
+    text-decoration: underline;
+  }
 }
