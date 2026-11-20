@@ -1,0 +1,193 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.perfil {
+  padding-block: $espacio-6;
+
+  &__identidad {
+    display: flex;
+    gap: $espacio-5;
+    align-items: center;
+    margin-bottom: $espacio-5;
+  }
+
+  &__avatar {
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    width: 5.5rem;
+    height: 5.5rem;
+    overflow: hidden;
+    border-radius: 50%;
+    background: $color-primario;
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 700;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__rol {
+    margin: 0;
+    color: $color-acento;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  &__nombre {
+    margin-bottom: $espacio-1;
+  }
+
+  &__correo,
+  &__desde,
+  &__bio {
+    margin: 0;
+  }
+
+  &__correo,
+  &__desde {
+    color: $color-texto-suave;
+    font-size: 0.9rem;
+  }
+
+  &__bio {
+    margin-top: $espacio-3;
+    max-width: 42rem;
+    white-space: pre-wrap;
+  }
+
+  &__formularios {
+    display: grid;
+    gap: $espacio-5;
+    margin-bottom: $espacio-6;
+
+    @include desde('lg') {
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: start;
+    }
+  }
+
+  &__tarjeta {
+    @include tarjeta;
+  }
+
+  &__fila {
+    display: grid;
+    gap: $espacio-3;
+
+    @include desde('sm') {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__ayuda {
+    color: $color-texto-suave;
+    font-size: 0.8125rem;
+  }
+
+  &__bio-input {
+    min-height: 8rem;
+    resize: vertical;
+  }
+
+  &__estado {
+    color: $color-texto-suave;
+  }
+
+  &__vacio {
+    @include tarjeta;
+    text-align: center;
+
+    p {
+      margin-bottom: $espacio-4;
+      color: $color-texto-suave;
+    }
+  }
+
+  &__compras {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: $espacio-3;
+  }
+
+  &__compra {
+    @include tarjeta;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  &__compra-cabecera {
+    display: grid;
+    gap: $espacio-1 $espacio-4;
+    width: 100%;
+    padding: $espacio-4;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+
+    @include desde('md') {
+      grid-template-columns: 1.4fr 1fr auto auto;
+      align-items: center;
+    }
+
+    &:hover {
+      background: $color-fondo;
+    }
+  }
+
+  &__orden {
+    font-weight: 700;
+    color: $color-primario;
+  }
+
+  &__total {
+    font-weight: 700;
+  }
+
+  &__detalle {
+    overflow-x: auto;
+    padding: 0 $espacio-4 $espacio-4;
+    border-top: 1px solid $color-borde;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: $espacio-2 $espacio-3;
+      border-bottom: 1px solid $color-borde;
+      text-align: left;
+    }
+
+    th {
+      font-size: 0.8125rem;
+      color: $color-texto-suave;
+      text-transform: uppercase;
+    }
+
+    .numero {
+      text-align: right;
+      white-space: nowrap;
+    }
+  }
+
+  &__ver {
+    display: inline-block;
+    margin-top: $espacio-3;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+}

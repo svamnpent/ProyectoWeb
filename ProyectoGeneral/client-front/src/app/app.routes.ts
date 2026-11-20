@@ -38,6 +38,12 @@ export const routes: Routes = [
     title: 'PHANTOM | Detalle de Producto',
     loadComponent: () => import('./features/producto/producto').then((m) => m.ProductoComponent),
   },
+  {
+    path: 'perfil',
+    title: 'PHANTOM | Mi perfil',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/perfil/perfil').then((m) => m.PerfilUsuario),
+  },
 
   {
     path: 'backoffice',
@@ -48,7 +54,6 @@ export const routes: Routes = [
 
   // Rutas previstas (se agregan al construir cada pantalla):
   //   { path: 'categoria/:id', ... }
-  //   { path: 'perfil', canActivate: [authGuard], ... }
 
   { path: '**', redirectTo: '' },
 ];
