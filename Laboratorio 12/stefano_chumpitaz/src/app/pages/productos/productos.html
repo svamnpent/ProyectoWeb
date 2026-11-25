@@ -1,0 +1,16 @@
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">CATÁLOGO</p>
+    <h1>Productos</h1>
+  </div>
+  <p>Favoritos seleccionados: <strong>{{ favoritos() }}</strong></p>
+</section>
+
+<div class="grid">
+  @for (producto of productos(); track producto.id) {
+    <app-producto-card
+      [producto]="producto"
+      (verDetalle)="irDetalle($event)"
+      (favorito)="registrarFavorito($event)" />
+  }
+</div>

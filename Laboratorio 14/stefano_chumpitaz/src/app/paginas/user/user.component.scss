@@ -1,0 +1,117 @@
+$navy: #0d2042;
+$blue: #14569b;
+$teal: #008491;
+$danger: #b23a3a;
+
+@mixin card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 26px rgba(13, 32, 66, 0.10);
+}
+
+.panel {
+  @include card;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  h2 {
+    margin: 0 0 1rem;
+    color: $navy;
+    font-size: 1.25rem;
+  }
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    h2 { margin: 0; }
+  }
+}
+
+.tabla-wrap {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: .65rem .75rem;
+    text-align: left;
+    border-bottom: 1px solid #e3e8ef;
+    font-size: .92rem;
+  }
+
+  th {
+    color: white;
+    background: $blue;
+  }
+
+  tbody tr:hover { background: #f1f6fb; }
+}
+
+.acciones {
+  display: flex;
+  gap: .4rem;
+  white-space: nowrap;
+}
+
+button {
+  padding: .5rem .85rem;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  color: white;
+  background: $blue;
+
+  &.sec { background: #e8eef5; color: $navy; }
+  &.peligro { background: $danger; }
+}
+
+.aviso {
+  padding: .7rem 1rem;
+  border-radius: 8px;
+  margin: 1rem 0 0;
+
+  &--ok { color: #166534; background: #dcfce7; }
+  &--error { color: $danger; background: #fde8e8; }
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+
+  label {
+    display: grid;
+    gap: .35rem;
+    font-weight: 700;
+  }
+
+  input {
+    padding: .65rem;
+    border: 1px solid #9ca3af;
+    border-radius: 8px;
+    font: inherit;
+
+    &.ng-invalid.ng-touched { border-color: $danger; }
+  }
+}
+
+.error {
+  color: $danger;
+  font-weight: 400;
+}
+
+.acciones-form {
+  display: flex;
+  gap: .75rem;
+  margin-top: 1rem;
+}
+
+.detalle p { margin: .3rem 0; }

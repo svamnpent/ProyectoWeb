@@ -1,0 +1,115 @@
+<section class="panel">
+  <div class="panel__head">
+    <h2>Usuarios</h2>
+    <button type="button" (click)="cargarUsuarios()">Recargar (GET /users)</button>
+  </div>
+
+  @if (mensaje()) {
+    <p class="aviso aviso--ok" role="status">{{ mensaje() }}</p>
+  }
+  @if (error()) {
+    <p class="aviso aviso--error" role="alert">{{ error() }}</p>
+  }
+
+  @if (cargando()) {
+    <p>Cargando usuarios…</p>
+  } @else {
+    <div class="tabla-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of users(); track u.id) {
+            <tr>
+              <td>{{ u.id }}</td>
+              <td>{{ u.name }}</td>
+              <td>{{ u.username }}</td>
+              <td>{{ u.email }}</td>
+              <td>{{ u.phone }}</td>
+              <td class="acciones">
+                <button type="button" class="sec" (click)="verDetalle(u.id)">Ver</button>
+                <button type="button" class="sec" (click)="editar(u)">Editar</button>
+                <button type="button" class="peligro" (click)="eliminar(u)">Eliminar</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6">No hay usuarios para mostrar.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
+
+@if (detalle(); as d) {
+  <section class="panel detalle">
+    <div class="panel__head">
+      <h2>Detalle (GET /users/{{ d.id }})</h2>
+      <button type="button" class="sec" (click)="cerrarDetalle()">Cerrar</button>
+    </div>
+    <p><strong>{{ d.name }}</strong> ({{ d.username }})</p>
+    <p>{{ d.email }} · {{ d.phone }}</p>
+  </section>
+}
+
+<section class="panel">
+  <h2>
+    @if (editandoId() === null) {
+      Crear usuario (POST /users)
+    } @else {
+      Editar usuario {{ editandoId() }} (PUT /users/{{ editandoId() }})
+    }
+  </h2>
+
+  <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+    <div class="rejilla">
+      <label>
+        Nombre
+        <input type="text" formControlName="name">
+        @if (form.controls.name.invalid && form.controls.name.touched) {
+          <small class="error">Ingrese al menos 3 caracteres.</small>
+        }
+      </label>
+
+      <label>
+        Usuario
+        <input type="text" formControlName="username">
+        @if (form.controls.username.invalid && form.controls.username.touched) {
+          <small class="error">El usuario es obligatorio.</small>
+        }
+      </label>
+
+      <label>
+        Correo
+        <input type="email" formControlName="email">
+        @if (form.controls.email.invalid && form.controls.email.touched) {
+          <small class="error">Ingrese un correo válido.</small>
+        }
+      </label>
+
+      <label>
+        Teléfono
+        <input type="tel" formControlName="phone">
+      </label>
+    </div>
+
+    <div class="acciones-form">
+      <button type="submit">
+        {{ editandoId() === null ? 'Crear' : 'Guardar cambios' }}
+      </button>
+      @if (editandoId() !== null) {
+        <button type="button" class="sec" (click)="cancelar()">Cancelar</button>
+      }
+    </div>
+  </form>
+</section>

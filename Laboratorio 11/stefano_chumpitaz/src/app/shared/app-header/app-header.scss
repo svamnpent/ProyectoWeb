@@ -1,0 +1,11 @@
+$navy: #0d2042;
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  border-radius: 14px;
+  color: white;
+  background: $navy;
+}

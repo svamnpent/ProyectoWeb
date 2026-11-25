@@ -1,0 +1,102 @@
+.tarjeta {
+  max-width: 720px;
+  margin: auto;
+  padding: 1.5rem;
+  background: white;
+  border-radius: .8rem;
+  box-shadow: 0 8px 24px rgba(31, 78, 121, .12);
+}
+
+h2 {
+  margin-top: 0;
+  color: #1f4e79;
+}
+
+.introduccion {
+  color: #555;
+}
+
+.campo {
+  display: grid;
+  gap: .4rem;
+  margin-bottom: 1rem;
+}
+
+label {
+  font-weight: 700;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: .7rem;
+  border: 1px solid #9ca3af;
+  border-radius: .4rem;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid rgba(31, 78, 121, .18);
+  border-color: #1f4e79;
+}
+
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border-color: #b91c1c;
+}
+
+.campo-check {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.campo-check input {
+  width: auto;
+}
+
+.error {
+  display: grid;
+  gap: .2rem;
+  color: #b91c1c;
+  font-size: .9rem;
+}
+
+.exito {
+  padding: .8rem;
+  color: #166534;
+  background: #dcfce7;
+  border-radius: .4rem;
+}
+
+.acciones {
+  display: flex;
+  gap: .75rem;
+  margin-top: 1.2rem;
+}
+
+button {
+  padding: .7rem 1rem;
+  color: white;
+  cursor: pointer;
+  background: #1f4e79;
+  border: 0;
+  border-radius: .4rem;
+}
+
+button.secundario {
+  color: #1f4e79;
+  background: #e8eef5;
+}
+
+.depuracion {
+  margin-top: 1.5rem;
+  padding: .8rem;
+  background: #f4f7fb;
+  border-radius: .4rem;
+}
+
+pre {
+  overflow: auto;
+}
