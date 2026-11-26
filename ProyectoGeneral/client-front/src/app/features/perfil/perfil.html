@@ -1,0 +1,274 @@
+<section class="perfil contenedor">
+  @if (usuario(); as cuenta) {
+    <header class="perfil__identidad">
+      <div class="perfil__avatar" aria-hidden="true">
+        @if (perfilForm.controls.avatarUrl.value && !avatarFallido()) {
+          <img
+            [src]="perfilForm.controls.avatarUrl.value"
+            alt=""
+            (error)="avatarFallido.set(true)"
+          />
+        } @else {
+          <span>{{ iniciales() }}</span>
+        }
+      </div>
+      <div>
+        <p class="perfil__rol">{{ etiquetaRol(cuenta.rol) }}</p>
+        <h1 class="perfil__nombre">{{ cuenta.nombre }}</h1>
+        <p class="perfil__correo">{{ cuenta.email }}</p>
+        <p class="perfil__desde">Cliente desde {{ cuenta.fechaRegistro | date: 'dd/MM/yyyy' }}</p>
+        @if (cuenta.perfil?.biografia; as bio) {
+          <p class="perfil__bio">{{ bio }}</p>
+        }
+      </div>
+    </header>
+
+    <div class="perfil__formularios">
+      <form
+        class="perfil__tarjeta"
+        [formGroup]="cuentaForm"
+        (ngSubmit)="guardarCuenta()"
+        novalidate
+      >
+        <h2>Datos de la cuenta</h2>
+
+        @if (mensajeCuenta(); as mensaje) {
+          <div class="alerta alerta--exito" role="status">{{ mensaje }}</div>
+        }
+        @if (errorCuenta(); as mensaje) {
+          <div class="alerta alerta--error" role="alert">{{ mensaje }}</div>
+        }
+
+        <div class="campo" [class.campo--invalido]="campoInvalido('cuenta', 'nombre')">
+          <label class="campo__etiqueta" for="cuenta-nombre">Nombre completo</label>
+          <input
+            id="cuenta-nombre"
+            class="campo__input"
+            type="text"
+            maxlength="255"
+            formControlName="nombre"
+          />
+          @if (campoInvalido('cuenta', 'nombre')) {
+            <span class="campo__error"
+              >El nombre es obligatorio y no puede exceder 255 caracteres.</span
+            >
+          }
+        </div>
+
+        <div class="campo" [class.campo--invalido]="campoInvalido('cuenta', 'email')">
+          <label class="campo__etiqueta" for="cuenta-email">Correo electrónico</label>
+          <input
+            id="cuenta-email"
+            class="campo__input"
+            type="email"
+            maxlength="255"
+            autocomplete="email"
+            formControlName="email"
+          />
+          @if (campoInvalido('cuenta', 'email')) {
+            <span class="campo__error">Ingresa un correo electrónico válido.</span>
+          }
+        </div>
+
+        <div class="perfil__fila">
+          <div class="campo" [class.campo--invalido]="campoInvalido('cuenta', 'dni')">
+            <label class="campo__etiqueta" for="cuenta-dni">DNI</label>
+            <input
+              id="cuenta-dni"
+              class="campo__input"
+              type="text"
+              inputmode="numeric"
+              maxlength="20"
+              formControlName="dni"
+            />
+            @if (campoInvalido('cuenta', 'dni')) {
+              <span class="campo__error">Debe contener entre 8 y 20 dígitos.</span>
+            }
+          </div>
+
+          <div class="campo" [class.campo--invalido]="campoInvalido('cuenta', 'numeroTelefono')">
+            <label class="campo__etiqueta" for="cuenta-telefono">Teléfono</label>
+            <input
+              id="cuenta-telefono"
+              class="campo__input"
+              type="tel"
+              maxlength="16"
+              autocomplete="tel"
+              formControlName="numeroTelefono"
+            />
+            @if (campoInvalido('cuenta', 'numeroTelefono')) {
+              <span class="campo__error">Ingresa entre 7 y 15 dígitos (puede iniciar con +).</span>
+            }
+          </div>
+        </div>
+
+        <div class="campo" [class.campo--invalido]="campoInvalido('cuenta', 'direccion')">
+          <label class="campo__etiqueta" for="cuenta-direccion">Dirección</label>
+          <input
+            id="cuenta-direccion"
+            class="campo__input"
+            type="text"
+            maxlength="255"
+            autocomplete="street-address"
+            formControlName="direccion"
+          />
+          @if (campoInvalido('cuenta', 'direccion')) {
+            <span class="campo__error">La dirección no puede exceder los 255 caracteres.</span>
+          }
+        </div>
+
+        <div class="campo" [class.campo--invalido]="campoInvalido('cuenta', 'password')">
+          <label class="campo__etiqueta" for="cuenta-password">Contraseña</label>
+          <input
+            id="cuenta-password"
+            class="campo__input"
+            type="password"
+            maxlength="72"
+            autocomplete="new-password"
+            formControlName="password"
+          />
+          <span class="perfil__ayuda">
+            Confirma tu contraseña para guardar. Si escribes una distinta, quedará como la nueva.
+          </span>
+          @if (campoInvalido('cuenta', 'password')) {
+            <span class="campo__error">La contraseña debe tener entre 8 y 72 caracteres.</span>
+          }
+        </div>
+
+        <button type="submit" class="btn" [disabled]="guardandoCuenta()">
+          {{ guardandoCuenta() ? 'Guardando…' : 'Guardar cuenta' }}
+        </button>
+      </form>
+
+      <form
+        class="perfil__tarjeta"
+        [formGroup]="perfilForm"
+        (ngSubmit)="guardarPerfil()"
+        novalidate
+      >
+        <h2>Perfil público</h2>
+
+        @if (mensajePerfil(); as mensaje) {
+          <div class="alerta alerta--exito" role="status">{{ mensaje }}</div>
+        }
+        @if (errorPerfil(); as mensaje) {
+          <div class="alerta alerta--error" role="alert">{{ mensaje }}</div>
+        }
+
+        <div class="campo" [class.campo--invalido]="campoInvalido('perfil', 'avatarUrl')">
+          <label class="campo__etiqueta" for="perfil-avatar">URL del avatar</label>
+          <input
+            id="perfil-avatar"
+            class="campo__input"
+            type="url"
+            maxlength="1000"
+            placeholder="https://…"
+            formControlName="avatarUrl"
+            (input)="avatarFallido.set(false)"
+          />
+          @if (campoInvalido('perfil', 'avatarUrl')) {
+            <span class="campo__error">La URL no puede exceder los 1000 caracteres.</span>
+          }
+        </div>
+
+        <div class="campo" [class.campo--invalido]="campoInvalido('perfil', 'biografia')">
+          <label class="campo__etiqueta" for="perfil-bio">Biografía</label>
+          <textarea
+            id="perfil-bio"
+            class="campo__input perfil__bio-input"
+            rows="5"
+            maxlength="1000"
+            formControlName="biografia"
+          ></textarea>
+          @if (campoInvalido('perfil', 'biografia')) {
+            <span class="campo__error">La biografía no puede exceder los 1000 caracteres.</span>
+          }
+        </div>
+
+        <button type="submit" class="btn btn--contorno" [disabled]="guardandoPerfil()">
+          {{ guardandoPerfil() ? 'Guardando…' : 'Guardar perfil' }}
+        </button>
+      </form>
+    </div>
+
+    <section class="perfil__historial" aria-labelledby="titulo-compras">
+      <h2 id="titulo-compras">Historial de compras</h2>
+
+      @if (cargandoCompras()) {
+        <p class="perfil__estado">Cargando compras…</p>
+      } @else if (errorCompras(); as mensaje) {
+        <div class="alerta alerta--error" role="alert">{{ mensaje }}</div>
+        <button type="button" class="btn btn--contorno" (click)="reintentarCompras()">
+          Reintentar
+        </button>
+      } @else if (ventas().length === 0) {
+        <div class="perfil__vacio">
+          <p>Todavía no tienes compras.</p>
+          <a class="btn" routerLink="/">Ir al catálogo</a>
+        </div>
+      } @else {
+        <ul class="perfil__compras">
+          @for (venta of ventas(); track venta.id) {
+            <li class="perfil__compra">
+              <button
+                type="button"
+                class="perfil__compra-cabecera"
+                [attr.aria-expanded]="pedidoAbierto() === venta.id"
+                [attr.aria-controls]="'compra-' + venta.id"
+                (click)="alternarPedido(venta.id)"
+              >
+                <span class="perfil__orden">{{ venta.numeroOrden }}</span>
+                <span>{{ venta.fecha | date: 'dd/MM/yyyy HH:mm' }}</span>
+                <span>{{ venta.cantidadItems }} productos</span>
+                <span class="perfil__total">{{
+                  venta.total | currency: 'PEN' : 'S/ ' : '1.2-2'
+                }}</span>
+              </button>
+
+              @if (pedidoAbierto() === venta.id) {
+                <div class="perfil__detalle" [id]="'compra-' + venta.id">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Producto</th>
+                        <th class="numero">Cant.</th>
+                        <th class="numero">Precio</th>
+                        <th class="numero">Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (detalle of venta.detalles; track detalle.id) {
+                        <tr>
+                          <td>
+                            <a [routerLink]="['/producto', detalle.productoId]">{{
+                              detalle.productoNombre
+                            }}</a>
+                          </td>
+                          <td class="numero">{{ detalle.cantidad }}</td>
+                          <td class="numero">
+                            {{ detalle.precioUnitario | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+                          </td>
+                          <td class="numero">
+                            {{ detalle.subtotal | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                  <a class="perfil__ver" [routerLink]="['/pedido', venta.id]"
+                    >Ver pedido completo</a
+                  >
+                </div>
+              }
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  } @else {
+    <div class="perfil__vacio">
+      <p>Inicia sesión para ver tu perfil y tus compras.</p>
+      <a class="btn" routerLink="/login">Ingresar</a>
+    </div>
+  }
+</section>

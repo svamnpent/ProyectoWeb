@@ -3,7 +3,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, catchError, map, of, switchMap, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.model';
-import { Usuario } from '../models/usuario.model';
+import { Perfil, Usuario } from '../models/usuario.model';
 
 const CLAVE_TOKEN = 'phantom.token';
 const CLAVE_EXPIRA = 'phantom.expira';
@@ -43,6 +43,19 @@ export class AuthService {
     this._token.set(null);
     this._usuario.set(null);
     this.borrarTokenGuardado();
+  }
+
+  /** Sustituye al usuario en memoria tras guardar la cuenta (la respuesta ya trae el perfil). */
+  reemplazarUsuario(usuario: Usuario): void {
+    this._usuario.set(usuario);
+  }
+
+  /** Conserva la cuenta y actualiza solo el perfil público (avatar y biografía). */
+  aplicarPerfil(perfil: Perfil): void {
+    const actual = this._usuario();
+    if (actual !== null) {
+      this._usuario.set({ ...actual, perfil });
+    }
   }
 
   /** Se ejecuta al arrancar la app: si hay token guardado, recupera al usuario. */

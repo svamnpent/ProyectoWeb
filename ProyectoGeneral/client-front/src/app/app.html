@@ -2,8 +2,10 @@
   <div class="contenedor encabezado__barra">
     <a class="encabezado__marca" routerLink="/" aria-label="PHANTOM · Inicio">
       @if (logoDisponible) {
-        <img src="phantom-logo.svg" alt="PHANTOM" (error)="logoDisponible = false">
-      } @else { PHANTOM }
+        <img src="phantom-logo.svg" alt="PHANTOM" (error)="logoDisponible = false" />
+      } @else {
+        PHANTOM
+      }
     </a>
 
     <nav class="encabezado__nav" aria-label="Navegación principal">
@@ -27,9 +29,14 @@
       </a>
 
       @if (auth.estaAutenticado()) {
-        <span class="encabezado__saludo">
+        <a
+          class="encabezado__saludo"
+          routerLink="/perfil"
+          routerLinkActive="activo"
+          title="Ver mi perfil"
+        >
           Hola, <strong>{{ auth.primerNombre() }}</strong>
-        </span>
+        </a>
         <button type="button" class="btn btn--acento" (click)="cerrarSesion()">
           Cerrar sesión
         </button>

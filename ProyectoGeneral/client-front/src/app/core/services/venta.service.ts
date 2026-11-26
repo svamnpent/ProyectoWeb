@@ -18,4 +18,9 @@ export class VentaService {
   obtener(id: number): Observable<Venta> {
     return this.http.get<Venta>(`${this.apiUrl}/${id}`);
   }
+
+  /** Historial de compras del usuario autenticado, de la más reciente a la más antigua. */
+  mias(): Observable<Venta[]> {
+    return this.http.get<Venta[]>(`${this.apiUrl}/mias`);
+  }
 }
