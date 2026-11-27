@@ -1,0 +1,15 @@
+$navy: #0d2042;
+$surface: #f6f8fb;
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: min(1100px, 92%);
+  margin: 0 auto 32px;
+  padding: 14px 24px;
+  border-radius: 14px;
+  color: $surface;
+  background: $navy;
+  font-size: 0.9rem;
+}
