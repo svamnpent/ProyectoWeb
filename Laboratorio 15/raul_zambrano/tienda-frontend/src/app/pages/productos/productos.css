@@ -1,0 +1,62 @@
+.pagina {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: end;
+}
+
+form,
+label {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+input {
+  width: 7rem;
+  padding: 0.45rem;
+  border: 1px solid #a9bdc9;
+  border-radius: 0.4rem;
+}
+
+button,
+a {
+  border-radius: 0.4rem;
+}
+
+button {
+  border: 0;
+  padding: 0.5rem 0.75rem;
+  background: #0f4c66;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button.secundario {
+  background: #5d7380;
+}
+
+table {
+  width: 100%;
+  margin-top: 1rem;
+  border-collapse: collapse;
+  background: white;
+}
+
+th,
+td {
+  padding: 0.7rem;
+  border-bottom: 1px solid #d8e5ea;
+  text-align: left;
+}
+
+.error {
+  color: #b42318;
+}

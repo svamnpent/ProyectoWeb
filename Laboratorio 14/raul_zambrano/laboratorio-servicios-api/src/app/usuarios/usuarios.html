@@ -1,0 +1,131 @@
+<section class="pagina">
+  <header class="titulo-seccion">
+    <div>
+      <p class="etiqueta">Angular 22 + HttpClient</p>
+      <h1>Gestión de usuarios</h1>
+      <p>Datos obtenidos desde una API REST pública mediante un servicio Angular.</p>
+    </div>
+    <button type="button" class="secundario" (click)="cargarUsuarios()" [disabled]="cargando()">
+      {{ cargando() ? 'Cargando...' : 'Recargar usuarios' }}
+    </button>
+  </header>
+
+  <p class="contador">Solicitudes exitosas: {{ exitosas() }}</p>
+
+  @if (mensaje()) {
+    <div class="alerta exito" role="status">{{ mensaje() }}</div>
+  }
+  @if (error()) {
+    <div class="alerta error" role="alert">{{ error() }}</div>
+  }
+
+  <section class="tarjeta formulario-tarjeta">
+    <h2>{{ usuarioEditandoId() === null ? 'Crear usuario' : 'Editar usuario' }}</h2>
+    <form [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+      <div class="rejilla-formulario">
+        <label>
+          Nombre completo
+          <input type="text" formControlName="name" />
+          @if (formulario.controls.name.touched && formulario.controls.name.invalid) {
+            <small>Ingrese al menos 3 caracteres.</small>
+          }
+        </label>
+        <label>
+          Nombre de usuario
+          <input type="text" formControlName="username" />
+          @if (formulario.controls.username.touched && formulario.controls.username.invalid) {
+            <small>Ingrese al menos 3 caracteres.</small>
+          }
+        </label>
+        <label>
+          Correo electrónico
+          <input type="email" formControlName="email" />
+          @if (formulario.controls.email.touched && formulario.controls.email.invalid) {
+            <small>Ingrese un correo válido.</small>
+          }
+        </label>
+        <label>
+          Teléfono
+          <input type="text" formControlName="phone" />
+          @if (formulario.controls.phone.touched && formulario.controls.phone.invalid) {
+            <small>Ingrese al menos 7 caracteres.</small>
+          }
+        </label>
+        <label class="ancho-completo">
+          Sitio web
+          <input type="text" formControlName="website" />
+        </label>
+      </div>
+      <div class="acciones-formulario">
+        <button type="submit" [disabled]="guardando()">
+          @if (guardando()) {
+            Procesando...
+          } @else if (usuarioEditandoId() === null) {
+            Crear usuario
+          } @else {
+            Guardar cambios
+          }
+        </button>
+        @if (usuarioEditandoId() !== null) {
+          <button type="button" class="secundario" (click)="cancelarEdicion()">Cancelar edición</button>
+        }
+      </div>
+    </form>
+  </section>
+
+  <section class="tarjeta">
+    <div class="encabezado-lista">
+      <h2>Usuarios obtenidos</h2>
+      <label class="busqueda">
+        Buscar
+        <input
+          type="search"
+          placeholder="Nombre o correo"
+          [value]="busqueda()"
+          (input)="busqueda.set($any($event.target).value)"
+        />
+      </label>
+      <span>{{ visibles().length }} registro(s)</span>
+    </div>
+    @if (cargando()) {
+      <p class="estado">Consultando la API...</p>
+    } @else {
+      <div class="tabla-contenedor">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Usuario</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (usuario of visibles(); track usuario.id) {
+              <tr>
+                <td>{{ usuario.id }}</td>
+                <td>
+                  <a [routerLink]="['/usuarios', usuario.id]">{{ usuario.name }}</a>
+                </td>
+                <td>{{ usuario.username }}</td>
+                <td>{{ usuario.email }}</td>
+                <td>{{ usuario.phone }}</td>
+                <td class="acciones-tabla">
+                  <button type="button" class="editar" (click)="editar(usuario)">Editar</button>
+                  <button type="button" class="secundario" (click)="cambiarCorreo(usuario)">PATCH</button>
+                  <button type="button" class="eliminar" (click)="eliminar(usuario)">Eliminar</button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="estado">No hay usuarios para mostrar.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</section>

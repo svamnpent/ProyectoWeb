@@ -1,0 +1,45 @@
+.panel {
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border: 1px solid #d8e1ea;
+  border-radius: 14px;
+  background: #ffffff;
+  font-family: system-ui, sans-serif;
+}
+
+form {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+input {
+  padding: 0.6rem;
+  border: 1px solid #a9bbc7;
+  border-radius: 6px;
+}
+
+button {
+  padding: 0.7rem 1rem;
+  background: #163652;
+  color: white;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.error,
+small {
+  color: #b42318;
+}
+
+.exito {
+  color: #067647;
+  font-weight: 600;
+}

@@ -1,0 +1,29 @@
+<section class="tarjeta">
+  <h1>Registrar salida de inventario</h1>
+  <p>Disponible únicamente para administradores.</p>
+  @if (cargando()) {
+    <p>Cargando datos del producto…</p>
+  } @else if (producto(); as p) {
+    <h2>{{ p.nombre }}</h2>
+    <p>Stock actual: <strong>{{ p.stock }}</strong> unidades</p>
+    <form [formGroup]="form" (ngSubmit)="registrar()">
+      <label for="cantidad">Cantidad a descontar</label>
+      <input id="cantidad" type="number" min="1" step="1" [max]="p.stock" formControlName="cantidad" />
+      @if (form.controls.cantidad.touched && form.controls.cantidad.invalid) {
+        <small class="error">Ingresa una cantidad mayor que cero.</small>
+      }
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+      }
+      <div class="acciones">
+        <button type="submit" [disabled]="procesando() || p.stock === 0">
+          {{ procesando() ? 'Registrando…' : 'Confirmar salida' }}
+        </button>
+        <a routerLink="/productos">Volver al catálogo</a>
+      </div>
+    </form>
+  } @else {
+    <p class="error" role="alert">{{ error() }}</p>
+    <a routerLink="/productos">Volver al catálogo</a>
+  }
+</section>

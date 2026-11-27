@@ -1,0 +1,60 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f3f7f8;
+  color: #16303a;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.4rem;
+  background: #0f4c66;
+  color: white;
+}
+
+.marca {
+  color: white;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+}
+
+nav a.activo,
+nav a:hover {
+  text-decoration: underline;
+}
+
+.sesion {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+button {
+  border: 0;
+  border-radius: 0.45rem;
+  padding: 0.45rem 0.8rem;
+  background: white;
+  color: #0f4c66;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+main {
+  padding: 1.25rem;
+}

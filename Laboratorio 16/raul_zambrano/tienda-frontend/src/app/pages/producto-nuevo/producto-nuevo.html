@@ -1,0 +1,26 @@
+<section class="tarjeta">
+  <h1>Nuevo producto</h1>
+  <p>Solo un administrador puede registrar productos.</p>
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+  <form [formGroup]="formulario" (ngSubmit)="guardar()">
+    <label for="nombre">Nombre</label>
+    <input id="nombre" formControlName="nombre" />
+    @if (formulario.controls.nombre.touched && formulario.controls.nombre.invalid) {
+      <small class="error">El nombre es obligatorio.</small>
+    }
+    <label for="categoria">Categoría</label>
+    <input id="categoria" formControlName="categoria" />
+    <label for="precio">Precio</label>
+    <input id="precio" type="number" min="0.01" step="0.01" formControlName="precio" />
+    <label for="stock">Stock</label>
+    <input id="stock" type="number" min="0" step="1" formControlName="stock" />
+    <div class="acciones">
+      <button type="submit" [disabled]="enviando()">
+        {{ enviando() ? 'Guardando…' : 'Crear producto' }}
+      </button>
+      <a routerLink="/productos">Cancelar</a>
+    </div>
+  </form>
+</section>

@@ -1,0 +1,57 @@
+<section class="pagina">
+  <header>
+    <h1>Catálogo</h1>
+    <form [formGroup]="filtro" (ngSubmit)="filtrar()">
+      <label>
+        Mínimo
+        <input type="number" min="0" step="0.01" formControlName="min" />
+      </label>
+      <label>
+        Máximo
+        <input type="number" min="0" step="0.01" formControlName="max" />
+      </label>
+      <button type="submit">Filtrar por precio</button>
+      <button type="button" class="secundario" (click)="cargar()">Ver todos</button>
+    </form>
+  </header>
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+  @if (cargando()) {
+    <p>Cargando inventario…</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of productos(); track p.id) {
+          <tr>
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.categoria }}</td>
+            <td>{{ p.precio | currency: 'PEN' : 'S/ ' : '1.2-2' }}</td>
+            <td>{{ p.stock }}</td>
+            <td>
+              @if (sesion.esAdmin()) {
+                <a [routerLink]="['/inventario/salida', p.id]">Registrar salida</a>
+              } @else {
+                <span>Solo lectura</span>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5">No hay productos para mostrar.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>
