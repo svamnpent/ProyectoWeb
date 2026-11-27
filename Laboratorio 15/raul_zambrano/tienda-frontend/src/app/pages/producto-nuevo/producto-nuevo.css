@@ -1,0 +1,40 @@
+.tarjeta {
+  max-width: 640px;
+  margin: 1.5rem auto;
+  padding: 1.5rem;
+  background: white;
+  border: 1px solid #d8e5ea;
+  border-radius: 1rem;
+}
+
+form {
+  display: grid;
+  gap: 0.55rem;
+}
+
+input {
+  padding: 0.7rem;
+  border: 1px solid #a9bdc9;
+  border-radius: 0.45rem;
+}
+
+.acciones {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+button {
+  padding: 0.7rem 1rem;
+  border: 0;
+  border-radius: 0.45rem;
+  background: #0f4c66;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.error {
+  color: #b42318;
+}

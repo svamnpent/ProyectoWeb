@@ -1,0 +1,15 @@
+<section class="panel">
+  <h1>Indicadores</h1>
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  } @else if (resumen(); as datos) {
+    <ul>
+      <li>Productos: {{ datos.totalProductos }}</li>
+      <li>Con stock bajo: {{ datos.productosConStockBajo }}</li>
+      <li>Movimientos: {{ datos.totalMovimientos }}</li>
+      <li>Estado: {{ datos.estado }}</li>
+    </ul>
+  } @else {
+    <p>Cargando resumen…</p>
+  }
+</section>

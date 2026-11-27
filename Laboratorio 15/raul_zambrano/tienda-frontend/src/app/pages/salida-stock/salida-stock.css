@@ -1,0 +1,55 @@
+.tarjeta {
+  max-width: 640px;
+  margin: 1.5rem auto;
+  padding: 2rem;
+  border: 1px solid #d8e5ea;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 6px 22px #0f4c6612;
+}
+
+form,
+label {
+  display: grid;
+  gap: 0.55rem;
+}
+
+form {
+  gap: 1rem;
+}
+
+input {
+  padding: 0.75rem;
+  border: 1px solid #a9bdc9;
+  border-radius: 0.5rem;
+  font: inherit;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+button {
+  padding: 0.75rem 1.1rem;
+  color: #fff;
+  background: #0f4c66;
+  border: 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+a {
+  color: #0f4c66;
+}
+
+.error {
+  color: #b42318;
+}

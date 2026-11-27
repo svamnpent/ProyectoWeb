@@ -1,0 +1,20 @@
+<header class="barra">
+  <a class="marca" routerLink="/productos">Tienda UTP</a>
+  @if (sesion.autenticado()) {
+    <nav aria-label="Principal">
+      <a routerLink="/productos" routerLinkActive="activo">Catálogo</a>
+      <a routerLink="/diagnostico" routerLinkActive="activo">Diagnóstico</a>
+      @if (sesion.esAdmin()) {
+        <a routerLink="/admin/resumen" routerLinkActive="activo">Resumen</a>
+        <a routerLink="/productos/nuevo" routerLinkActive="activo">Nuevo producto</a>
+      }
+    </nav>
+    <div class="sesion">
+      <span>{{ sesion.perfil()?.username }}</span>
+      <button type="button" (click)="salir()">Cerrar sesión</button>
+    </div>
+  }
+</header>
+<main>
+  <router-outlet />
+</main>

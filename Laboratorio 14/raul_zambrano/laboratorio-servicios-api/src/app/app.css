@@ -1,0 +1,43 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f4f6f8;
+  color: #1f2937;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background: #123b62;
+  color: white;
+}
+
+.encabezado div {
+  display: flex;
+  flex-direction: column;
+}
+
+.encabezado span {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.encabezado a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.35rem;
+}
+
+.encabezado a:hover,
+.encabezado a.activo {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+main {
+  padding: 1.5rem;
+}

@@ -1,0 +1,35 @@
+<section class="panel">
+  <h1>Diagnóstico de integración</h1>
+  <p>Angular ↔ Spring Boot · JWT · JSON · LocalDate</p>
+  <button type="button" (click)="consultar()" [disabled]="cargando()">Consultar estado de la API</button>
+  @if (estado(); as s) {
+    <p>API: <strong>{{ s.estado }}</strong> · {{ s.servicio }}</p>
+    <p>Fecha del servidor: {{ s.fecha }}</p>
+  }
+  <form [formGroup]="formulario" (ngSubmit)="enviar()">
+    <label for="nombre">Nombre</label>
+    <input id="nombre" formControlName="nombre" />
+    @if (formulario.controls.nombre.touched && formulario.controls.nombre.invalid) {
+      <small>Ingrese al menos 3 caracteres.</small>
+    }
+    <label for="monto">Monto (S/)</label>
+    <input id="monto" type="number" min="0.01" step="0.01" formControlName="monto" />
+    <label for="fecha">Fecha</label>
+    <input id="fecha" type="date" formControlName="fecha" />
+    <label for="correo">Correo (opcional)</label>
+    <input id="correo" type="email" formControlName="correo" />
+    @if (formulario.controls.correo.touched && formulario.controls.correo.invalid) {
+      <small>El correo no tiene un formato válido.</small>
+    }
+    <button type="submit" [disabled]="cargando()">Enviar JSON</button>
+  </form>
+  @if (cargando()) {
+    <p>Procesando solicitud...</p>
+  }
+  @if (respuesta(); as r) {
+    <p class="exito">{{ r.mensaje }}: {{ r.nombre }} / {{ r.fecha }}</p>
+  }
+  @if (error()) {
+    <p role="alert" class="error">{{ error() }}</p>
+  }
+</section>
